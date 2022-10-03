@@ -70,7 +70,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git brew history kubectl history-substring-search node go rust zsh-autosuggestion)
+plugins=(git gh brew history minikube kubectl helm history-substring-search node npm yarn nvm python pip golang rust flutter docker ansible terraform vagrant vscode xcode tmux httpie zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -99,6 +99,10 @@ source $ZSH/oh-my-zsh.sh
 
 # Custom $PATH with extra locations.
 export PATH=$HOME/Library/Python/3.8/bin:/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:$HOME/bin:$HOME/go/bin:/usr/local/git/bin:$HOME/.composer/vendor/bin:$PATH
+
+# Load NVM 
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # Include alias file (if present) containing aliases for ssh, etc.
 if [ -f ~/.aliases ]
