@@ -1,0 +1,8 @@
+nvim/plugin/packer_compiled.lua
+nvim/lazy-lock.json
+lvim/lazy-lock.json
+.git
+.DS_Store
+LazyVim/lazy-lock.json
+.config/nvim/lazy-lock.json
+.config/nvim/lazy-lock.json
