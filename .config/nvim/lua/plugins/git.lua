@@ -1,38 +1,38 @@
 return {
   {
-    'sindrets/diffview.nvim',
+    "sindrets/diffview.nvim",
     cmd = {
-      'DiffviewOpen',
-      'DiffviewClose',
-      'DiffviewToggleFiles',
-      'DiffviewFocusFiles',
-      'DiffviewRefresh',
+      "DiffviewOpen",
+      "DiffviewClose",
+      "DiffviewToggleFiles",
+      "DiffviewFocusFiles",
+      "DiffviewRefresh",
     },
-    event = 'VeryLazy',
+    event = "VeryLazy",
     opts = {
       view = {
         merge_tool = {
-          layout = 'diff3_mixed',
+          layout = "diff3_mixed",
         },
       },
     },
     keys = {
-      { '<leader>gd', '<cmd>DiffviewOpen<cr>', desc = 'DiffView' },
-      { '<leader>gD', '<cmd>DiffviewOpen origin/develop...HEAD<cr>', desc = 'DiffView against develop' },
+      { "<leader>gd", "<cmd>DiffviewOpen<cr>",                       desc = "DiffView" },
+      { "<leader>gD", "<cmd>DiffviewOpen origin/develop...HEAD<cr>", desc = "DiffView against develop" },
     },
   },
-  { 'numToStr/Comment.nvim', opts = {} },
+  { "numToStr/Comment.nvim", opts = {} },
   {
-    'lewis6991/gitsigns.nvim',
-    event = 'VeryLazy',
+    "lewis6991/gitsigns.nvim",
+    event = "VeryLazy",
     opts = {
       signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-        untracked = { text = ' ' },
+        add = { text = "+" },
+        change = { text = "~" },
+        delete = { text = "_" },
+        topdelete = { text = "‾" },
+        changedelete = { text = "~" },
+        untracked = { text = " " },
       },
       on_attach = function(buffer)
         local gs = package.loaded.gitsigns
@@ -51,24 +51,24 @@ return {
         map("n", "<leader>gu", gs.undo_stage_hunk, "Undo Stage Hunk")
         map("n", "<leader>gp", gs.preview_hunk, "Preview Hunk")
         map("n", "<leader>gl", function() gs.blame_line({ full = true }) end, "Blame Line")
-        map("n", "<leader>gb", "<cmd>Telescope git_branches theme=dropdown previewer=false<cr>", "branch" )
+        map("n", "<leader>gb", "<cmd>Telescope git_branches theme=dropdown previewer=false<cr>", "branch")
         map({ "o", "x" }, "ih", "<cmd><C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
         -- stylua: ignore end
       end,
     },
   },
   {
-    'kdheepak/lazygit.nvim',
+    "kdheepak/lazygit.nvim",
     cmd = {
-      'LazyGit',
-      'LazyGitConfig',
-      'LazyGitCurrentFile',
-      'LazyGitFilter',
-      'LazyGitFilterCurrentFile',
+      "LazyGit",
+      "LazyGitConfig",
+      "LazyGitCurrentFile",
+      "LazyGitFilter",
+      "LazyGitFilterCurrentFile",
     },
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    dependencies = { "nvim-lua/plenary.nvim" },
     keys = {
-      { '<leader>lg', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
+      { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
     },
   },
 }

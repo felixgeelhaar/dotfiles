@@ -1,13 +1,13 @@
 -- -- Catppuccin Theme
 return {
-  'catppuccin/nvim',
-  name = 'catppuccin',
+  "catppuccin/nvim",
+  name = "catppuccin",
   lazy = false,
   priority = 1000,
   opts = {
-    flavour = 'mocha', -- "latte, frappe, macchiato, mocha"
+    flavour = "mocha", -- "latte, frappe, macchiato, mocha"
     background = {
-      dark = 'mocha',
+      dark = "mocha",
     },
     transparent_background = true,
     integrations = {
@@ -23,17 +23,17 @@ return {
       mason = true,
       mini = {
         enabled = true,
-        indentscope_color = 'surface2',
+        indentscope_color = "surface2",
       },
       neotree = true,
       neotest = true,
       native_lsp = {
         enabled = true,
         underlines = {
-          errors = { 'undercurl' },
-          hints = { 'undercurl' },
-          warnings = { 'undercurl' },
-          information = { 'undercurl' },
+          errors = { "undercurl" },
+          hints = { "undercurl" },
+          warnings = { "undercurl" },
+          information = { "undercurl" },
         },
         inlay_hints = {
           background = true,
@@ -67,8 +67,8 @@ return {
     end,
   },
   config = function(_, opts)
-    require('catppuccin').setup(opts)
-    vim.cmd 'colorscheme catppuccin'
+    require("catppuccin").setup(opts)
+    vim.cmd("colorscheme catppuccin")
   end,
 }
 
