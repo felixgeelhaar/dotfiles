@@ -1,18 +1,18 @@
 return {
-  'kdheepak/lazygit.nvim',
+  "kdheepak/lazygit.nvim",
   -- optional for floating window border decoration
   dependencies = {
-    'nvim-lua/plenary.nvim',
+    "nvim-lua/plenary.nvim",
   },
   cmd = {
-    'LazyGit',
-    'LazyGitConfig',
-    'LazyGitCurrentFile',
-    'LazyGitFilter',
-    'LazyGitFilterCurrentFile',
+    "LazyGit",
+    "LazyGitConfig",
+    "LazyGitCurrentFile",
+    "LazyGitFilter",
+    "LazyGitFilterCurrentFile",
   },
   keys = {
-    { '<leader>lg', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
+    { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
   },
   -- opts = {
   -- -- your configuration comes here

@@ -1,29 +1,29 @@
 return {
-  {
-    'folke/which-key.nvim',
-    event = 'VeryLazy',
-    config = function()
-      local wk = require 'which-key'
-      wk.setup {
-        preset = 'modern',
-        spec = {
-          { '<leader>c', group = 'code' },
-          { '<leader>d', group = 'debug' },
-          { '<leader>f', group = 'file' },
-          { '<leader>g', group = 'git' },
-          { '<leader>q', group = 'quit' },
-          { '<leader>x', group = 'quickfix' },
-          { '<leader>o', group = 'overseer' },
-        },
-        win = {
-          title = false,
-        },
-        icons = {
-          rules = false,
-        },
-      }
-    end,
-  },
+	{
+		"folke/which-key.nvim",
+		event = "VeryLazy",
+		config = function()
+			local wk = require("which-key")
+			wk.setup({
+				preset = "modern",
+				spec = {
+					{ "<leader>c", group = "code" },
+					{ "<leader>d", group = "debug" },
+					{ "<leader>f", group = "file" },
+					{ "<leader>g", group = "git" },
+					{ "<leader>q", group = "quit" },
+					{ "<leader>x", group = "quickfix" },
+					{ "<leader>o", group = "overseer" },
+				},
+				win = {
+					title = false,
+				},
+				icons = {
+					rules = false,
+				},
+			})
+		end,
+	},
 }
 
 -- {
