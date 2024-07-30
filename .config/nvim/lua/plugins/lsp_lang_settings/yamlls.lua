@@ -3,7 +3,7 @@ return {
     yaml = {
       schemaStore = {
         enable = false, -- this plugin and its advanced options like `ignore`.
-        url = '', -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+        url = "",   -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
       },
       redhat = { telemetry = { enabled = false } },
       yaml = {
@@ -12,7 +12,7 @@ return {
           enable = true,
         },
         validate = true,
-        schemas = require('schemastore').yaml.schemas(),
+        schemas = require("schemastore").yaml.schemas(),
       },
       capabilities = {
         textDocument = {
