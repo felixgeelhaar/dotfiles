@@ -12,6 +12,21 @@ return {
       -- },
       -- scope marks the scope level in a defined highlighted color
       -- scope = { highlight = highlight },
+      exclude = {
+        filetypes = {
+          "help",
+          "alpha",
+          "dashboard",
+          "neo-tree",
+          "Trouble",
+          "trouble",
+          "lazy",
+          "mason",
+          "notify",
+          "toggleterm",
+          "lazyterm",
+        },
+      },
     },
   },
 }
