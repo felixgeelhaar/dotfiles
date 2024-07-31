@@ -43,8 +43,6 @@ return {
 				none_ls.builtins.formatting.golines,
 				-- Formats Rust programs.
 				require("none-ls.formatting.rustfmt"),
-				-- Fix common misspellings in text files.
-				none_ls.builtins.formatting.codespell,
 				-- A pluggable linter and fixer to enforce Protocol Buffer style and conventions.
 				none_ls.builtins.formatting.protolint,
 				-- A shell parser, formatter, and interpreter with bash support.
@@ -65,8 +63,6 @@ return {
 				none_ls.builtins.diagnostics.vale,
 				-- A Go linter aggregator.
 				none_ls.builtins.diagnostics.golangci_lint,
-				-- Lightning-fast linter for .env files.
-				none_ls.builtins.diagnostics.dotenv_linter,
 				-- Codespell finds common misspellings in text files.
 				none_ls.builtins.diagnostics.codespell,
 				-- A linter for JSON files.
@@ -95,6 +91,6 @@ return {
 			end,
 		})
 
-		vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, {})
+		vim.keymap.set("n", "<leader>cf", vim.lsp.buf.format, { desc = "Format buffer" })
 	end,
 }
