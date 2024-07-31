@@ -43,6 +43,11 @@ return {
 			},
 		},
 		keys = {
+			{
+				"<leader>o",
+				"",
+				desc = "[O]verseer",
+			},
 			{ "<leader>ow", "<cmd>OverseerToggle<cr>", desc = "Task list" },
 			{ "<leader>oo", "<cmd>OverseerRun<cr>", desc = "Run task" },
 			{ "<leader>oq", "<cmd>OverseerQuickAction<cr>", desc = "Action recent task" },

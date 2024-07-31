@@ -26,13 +26,15 @@ return {
 			bottom_search = true,
 			command_palette = true,
 			long_message_to_split = true,
+			inc_rename = false,
+			lsp_doc_border = false,
 		},
 	},
 	keys = {
 		{
-			"<leader>sn",
+			"<leader>n",
 			"",
-			desc = "+noice",
+			desc = "[N]oice",
 		},
 		{
 			"<S-Enter>",
@@ -43,35 +45,35 @@ return {
 			desc = "Redirect Cmdline",
 		},
 		{
-			"<leader>snl",
+			"<leader>nl",
 			function()
 				require("noice").cmd("last")
 			end,
 			desc = "Noice Last Message",
 		},
 		{
-			"<leader>snh",
+			"<leader>nh",
 			function()
 				require("noice").cmd("history")
 			end,
 			desc = "Noice History",
 		},
 		{
-			"<leader>sna",
+			"<leader>na",
 			function()
 				require("noice").cmd("all")
 			end,
 			desc = "Noice All",
 		},
 		{
-			"<leader>snd",
+			"<leader>nd",
 			function()
 				require("noice").cmd("dismiss")
 			end,
 			desc = "Dismiss All",
 		},
 		{
-			"<leader>snt",
+			"<leader>nt",
 			function()
 				require("noice").cmd("pick")
 			end,

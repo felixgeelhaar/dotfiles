@@ -31,6 +31,14 @@ return {
 			require("mini.ai").setup({ n_lines = 500 })
 			require("mini.surround").setup()
 			require("mini.misc").setup()
+			require("mini.icons").setup({
+				init = function()
+					package.preload["nvim-web-devicons"] = function()
+						require("mini.icons").mock_nvim_web_devicons()
+						return package.loaded["nvim-web-devicons"]
+					end
+				end,
+			})
 			require("mini.pairs").setup({
 				modes = { insert = true, command = true, terminal = false },
 				skip_next = [=[[%w%%%'%[%"%.%`%$]]=], -- skip autopair when next character is one of these
@@ -43,12 +51,42 @@ return {
 
 			-- Simple and easy statusline.
 			local statusline = require("mini.statusline")
-			statusline.setup()
+			statusline.setup({
+				use_icons = vim.g.have_nerd_font,
+				content = {
+					active = function()
+						local check_macro_recording = function()
+							if vim.fn.reg_recording() ~= "" then
+								return "Recording @" .. vim.fn.reg_recording()
+							else
+								return ""
+							end
+						end
 
-			---@diagnostic disable-next-line: duplicate-set-field
-			statusline.section_location = function()
-				return ""
-			end
+						local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+						local git = MiniStatusline.section_git({ trunc_width = 40 })
+						local diff = MiniStatusline.section_diff({ trunc_width = 75 })
+						local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
+						-- local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
+						local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+						local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+						local location = MiniStatusline.section_location({ trunc_width = 200 })
+						local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
+						local macro = check_macro_recording()
+
+						return MiniStatusline.combine_groups({
+							{ hl = mode_hl, strings = { mode } },
+							{ hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics } },
+							"%<", -- Mark general truncate point
+							{ hl = "MiniStatuslineFilename", strings = { filename } },
+							"%=", -- End left alignment
+							{ hl = "MiniStatuslineFilename", strings = { macro } },
+							{ hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
+							{ hl = mode_hl, strings = { search, location } },
+						})
+					end,
+				},
+			})
 
 			-- You can navigate selections
 			require("mini.move").setup({
