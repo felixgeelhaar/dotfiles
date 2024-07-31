@@ -27,6 +27,7 @@ return {
 					"sql",
 					"toml",
 					"yaml",
+					"regex",
 				},
 				incremental_selection = {
 					enable = true,
