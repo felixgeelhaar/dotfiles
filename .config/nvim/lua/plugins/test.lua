@@ -76,7 +76,7 @@ return {
 		{
 			"<leader>t",
 			"",
-			desc = "+test",
+			desc = "[T]est",
 		},
 		{
 			"<leader>tt",

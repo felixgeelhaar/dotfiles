@@ -4,16 +4,22 @@ return {
 		event = "VeryLazy",
 		config = function()
 			local wk = require("which-key")
+			local MiniIcons = require("mini.icons")
+
 			wk.setup({
 				preset = "modern",
 				spec = {
-					{ "<leader>c", group = "code" },
-					{ "<leader>d", group = "debug" },
-					{ "<leader>f", group = "file" },
-					{ "<leader>g", group = "git" },
-					{ "<leader>q", group = "quit" },
-					{ "<leader>x", group = "quickfix" },
-					{ "<leader>o", group = "overseer" },
+					{ "<leader>c", group = "[C]ode", icon = { icon = MiniIcons.get("directory", "src") } },
+					{ "<leader>l", group = "[L]azy", icon = { icon = MiniIcons.get("filetype", "lazy") } },
+					{ "<leader>t", group = "[T]est", icon = { icon = MiniIcons.get("directory", "test") } },
+					{ "<leader>a", group = "[A]ction", icon = { icon = MiniIcons.get("directory", ".github") } },
+					{ "<leader>b", group = "[B]uffer", icon = { icon = MiniIcons.get("filetype", "Readme.md") } },
+					{ "<leader>d", group = "[D]ebug", icon = { icon = MiniIcons.get("lsp", "class") } },
+					{ "<leader>f", group = "[F]ile", icon = { icon = MiniIcons.get("lsp", "file") } },
+					{ "<leader>g", group = "[G]it", icon = { icon = MiniIcons.get("filetype", ".git") } },
+					{ "<leader>x", group = "quickfi[X]", icon = { icon = MiniIcons.get("filetype", "mason") } },
+					{ "<leader>o", group = "[O]verseer", icon = { icon = MiniIcons.get("directory", "build") } },
+					{ "<leader>n", group = "[N]oice", icon = { icon = MiniIcons.get("file", "Changelog") } },
 				},
 				win = {
 					title = false,
@@ -25,20 +31,3 @@ return {
 		end,
 	},
 }
-
--- {
---   'folke/which-key.nvim',
---   event = 'VimEnter', -- Sets the loading event to 'VimEnter'
---   config = function() -- This is the function that runs, AFTER loading
---     require('which-key').setup()
---
---     -- Document existing key chains
---     require('which-key').register {
---       ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
---       ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
---       ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
---       ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
---       ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
---       ['<leader>t'] = { name = '[T]rouble', _ = 'which_key_ignore' },
---     }
---   end,
