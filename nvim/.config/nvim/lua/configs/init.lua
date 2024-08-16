@@ -1,0 +1,1 @@
+Configs = require("configs.globals")
