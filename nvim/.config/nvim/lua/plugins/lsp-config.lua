@@ -22,6 +22,14 @@ return {
 	{ "folke/lazydev.nvim", opts = {} },
 	{ "b0o/schemastore.nvim" },
 	{
+		"MysticalDevil/inlay-hints.nvim",
+		event = "LspAttach",
+		dependencies = { "neovim/nvim-lspconfig" },
+		config = function()
+			require("inlay-hints").setup()
+		end,
+	},
+	{
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
@@ -34,7 +42,7 @@ return {
 			local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 			require("mason-null-ls").setup({
-				ensure_installed = nil,
+				ensure_installed = {},
 				automatic_installation = true,
 			})
 
@@ -66,6 +74,8 @@ return {
 					["mason-nvim-dap"] = true,
 				},
 			})
+
+			vim.lsp.inlay_hint.enable(true)
 
 			local handlers = {
 				-- Default handler
