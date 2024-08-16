@@ -1,5 +1,5 @@
 [core]
-    pager = delta -s 
+    pager = delta
     excludesfile = ~/.gitignore
     editor = nvim
 [alias]
