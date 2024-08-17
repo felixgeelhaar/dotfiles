@@ -14,9 +14,10 @@ Usually I use these days `wezterm + starship` and mostly work on
 I use the dotfiles in combination with `stow`.
 This enables to manage the dotfiles in a repo and enable these configurations via symlinks.
 
-Navigation to your dotfiles directory and run:
+Navigate to your dotfiles directory and run:
 
 ```bash
+    cd ~/dotfiles
     # stow <config directory>
     # for neovim config it looks like
     stow nvim
