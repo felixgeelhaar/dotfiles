@@ -17,10 +17,12 @@ This enables to manage the dotfiles in a repo and enable these configurations vi
 Navigation to your dotfiles directory and run:
 
 ```bash
-    stow <config directory>
-    # for example for the neovim configuration
+    # stow <config directory>
+    # for neovim config it looks like
     stow nvim
 ```
+
+This essentially creates a symlink in your HOME directory to `.config/nvim`.
 
 ## Inspirations & Credits
 
