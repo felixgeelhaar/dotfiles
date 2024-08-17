@@ -28,5 +28,5 @@ This essentially creates a symlink in your HOME directory to `.config/nvim`.
 
 The following amazing people inspired my configs and earn credit! Thank you!
 
-- [Dotfiles configuration from](https://github.com/carmen-gh/.dotfiles "carmen-gh")
-- [Dotfiles configuration from](https://github.com/typecraft-dev/dotfiles "typecraft")
+- Dotfiles configuration of [carmen-gh](https://github.com/carmen-gh/.dotfiles "dotfiles of carmen-gh")
+- Dotfiles configuration of [typecraft](https://github.com/typecraft-dev/dotfiles "dotfiles of typecraft")
