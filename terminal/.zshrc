@@ -1,12 +1,3 @@
-
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-# Ansible managed: zshrc.j2 modified on 2023-01-07 13:43:03 by felixgeelhaar on Felixs-Air.fritz.box
-
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
@@ -14,7 +5,11 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME=""
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export ZSH="$HOME/.oh-my-zsh"
+export BAT_THEME="Catppuccin-macchiato"
 
 # Set to this to use case-sensitive completion
 CASE_SENSITIVE="false"
@@ -60,7 +55,7 @@ ZSH_CUSTOM=$ZSH/custom
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(gh brew history minikube kubectl helm node npm yarn nvm python pip golang rust flutter docker ansible terraform vagrant vscode xcode tmux httpie zsh-history-substring-search zsh-autosuggestions)
+plugins=(gh brew history minikube kubectl helm node npm nvm python pip golang rust docker ansible terraform xcode tmux httpie zsh-history-substring-search zsh-autosuggestions colored-man-pages)
 
 # User configuration
 
@@ -71,6 +66,7 @@ source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -102,24 +98,23 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
 source ${ZSH_CUSTOM}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# [ALIAS]
 
 alias ls=colorls
 
-# GOLANG VARS
+### [LANGUAGES]
+# [GOLANG]
 export GOPATH=$HOME/Developer/go
 alias air=$GOPATH/bin/air
 
 export PATH="$(go env GOPATH)/bin:$PATH"
 
-# Add additional paths to $PATH
-export PATH=$HOME/Library/Python/3.9/bin:/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:$HOME/bin:$HOME/go/bin:/usr/local/git/bin:$HOME/.composer/vendor/bin:$PATH
-
+# [NVM]
 [[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh  # This loads NVM[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
 
 # Enable GPG Signing
 export GPG_TTY=$(tty)
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+eval "$(starship init zsh)"

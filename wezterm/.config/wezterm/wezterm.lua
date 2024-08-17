@@ -5,26 +5,23 @@ local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 local act = wezterm.action
 
-config.status_update_interval = 1000
+config = {
+	automatically_reload_config = true,
+	status_update_interval = 1000,
 
--- Terminal UX
-config.color_scheme = "Catppuccin Macchiato"
--- config.window_background_opacity = 1.0
+	color_scheme = "Catppuccin Macchiato",
+	window_background_opacity = 1.0,
+	font = wezterm.font("JetBrains Mono", { weight = "Regular" }),
 
--- Fonts
-config.font = wezterm.font("JetBrains Mono")
+	cursor_thickness = 2.0,
+	default_cursor_style = "SteadyBlock",
 
--- Cursor configs
-config.cursor_thickness = 2.0
--- on default cursor_thickness uses underline_thickness
--- config.underline_thickness = 2.0
-config.default_cursor_style = "SteadyBlock"
+	enable_tab_bar = false,
+	window_decorations = "RESIZE",
 
--- Disable Tab bar
-config.enable_tab_bar = false
-
--- Define exit behavior (Hold | Close | CloseOnCleanExit)
-config.exit_behavior = "CloseOnCleanExit"
+	window_close_confirmation = "NeverPrompt",
+	exit_behavior = "CloseOnCleanExit",
+}
 
 -- Configure keys
 config.keys = {
