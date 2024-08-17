@@ -4,46 +4,41 @@ git:
     pager: delta --dark --paging=never
   log:
     order: "topo-order"
-    # showGraph: "always"
+    showGraph: "always"
   branchLogCmd: "git log --graph --pretty=custom"
   allBranchesLogCmd: "git log --graph --pretty=custom"
   mainBranches: [master, main, develop]
   promptToReturnFromSubprocess: false
-  commitPrefixes:
-    android: # repository folder name
-      pattern: "(IMOWAPP-[0-9]{4}).*" # extraxt ticket number from branch name and place it in commit message
-      replace: "[$1]"
+  # commitPrefixes:
 gui:
   nerdFontsVersion: "3"
   sidePanelWidth: 0.2
   showBottomLine: true
   border: "rounded"
-  branchColors:
-    "release": "#838ba7" # for branches beginning with 'release/'
+  # branchColors:
+  #   "release": "#838ba7" # for branches beginning with 'release/'
   authorColors:
-    "Carmen Geelhaar": "#ca9ee6"
-    "camina": "#ca9ee6"
-    "*": "#85c1dc" # sapphire
-  # use the frappe catpucchin theme
+    "*": "#7dc4e4" # sapphire
+  # use the catpucchin macchiato theme
   theme:
     lightTheme: false
     activeBorderColor:
-      - "#ebcb8b" # yellow
+      - "#eed49f" # yellow
       - bold
     inactiveBorderColor:
-      - "#838ba7" # Overlay1
+      - "#8087a2" # Overlay1
     optionsTextColor:
-      - "#8caaee" # Blue
+      - "#8aadf4" # Blue
     selectedLineBgColor:
-      - "#51576d" # Surface0
+      - "#363a4f" # Surface0
     selectedRangeBgColor:
-      - "#51576d" # Surface0
+      - "#363a4f" # Surface0
     cherryPickedCommitBgColor:
-      - "#81c8be" # Teal
+      - "#8bd5ca" # Teal
     cherryPickedCommitFgColor:
-      - "#8caaee" # Blue
+      - "#8aadf4" # Blue
     unstagedChangesColor:
-      - "#ea999c" # Red
+      - "#ed8796" # Red
 os:
   editPreset: "nvim"
 customCommands:

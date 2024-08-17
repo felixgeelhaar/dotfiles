@@ -101,7 +101,6 @@ source ${ZSH_CUSTOM}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # [ALIAS]
-
 alias ls=colorls
 
 ### [LANGUAGES]
@@ -118,3 +117,4 @@ export PATH="$(go env GOPATH)/bin:$PATH"
 export GPG_TTY=$(tty)
 
 eval "$(starship init zsh)"
+source <(fzf --zsh)
