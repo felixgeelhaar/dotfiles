@@ -53,7 +53,7 @@ return {
 					"gopls",
 					"elixirls",
 					"html",
-					"tsserver",
+					"ts_ls",
 					"rust_analyzer",
 					"ansiblels",
 					"jsonls",
