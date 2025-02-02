@@ -6,3 +6,5 @@ lvim/lazy-lock.json
 LazyVim/lazy-lock.json
 .config/nvim/lazy-lock.json
 .config/nvim/lazy-lock.json
+
+git/.gitconfig.local
