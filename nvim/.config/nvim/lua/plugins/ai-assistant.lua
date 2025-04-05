@@ -2,13 +2,17 @@ return {
 	"github/copilot.vim",
 	{
 		"CopilotC-Nvim/CopilotChat.nvim",
-		branch = "canary",
-		cmd = "CopilotChat",
+		branch = "main",
+		dependencies = {
+			{ "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
+			{ "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+		},
+		build = "make tiktoken",
 		opts = function()
 			local user = vim.env.USER or "User"
 			user = user:sub(1, 1):upper() .. user:sub(2)
 			return {
-				model = "gpt-4",
+				model = "claude-3.7-sonnet",
 				auto_insert_mode = true,
 				show_help = true,
 				question_header = "  " .. user .. " ",
@@ -59,8 +63,7 @@ return {
 		},
 		config = function(_, opts)
 			local chat = require("CopilotChat")
-			require("CopilotChat.integrations.cmp").setup()
-
+			chat.chat_autocomplete = true
 			vim.api.nvim_create_autocmd("BufEnter", {
 				pattern = "copilot-chat",
 				callback = function()
