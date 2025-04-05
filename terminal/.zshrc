@@ -118,3 +118,5 @@ export GPG_TTY=$(tty)
 
 eval "$(starship init zsh)"
 source <(fzf --zsh)
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
