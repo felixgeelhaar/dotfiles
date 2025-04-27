@@ -78,6 +78,7 @@ return {
 				{ name = "luasnip" }, -- snippets
 				{ name = "buffer" }, -- text within current buffer
 				{ name = "path" }, -- file system paths
+				{ name = "codecompanion" }, -- AI code suggestions
 			}),
 		})
 	end,
