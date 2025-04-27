@@ -8,6 +8,7 @@ return {
 		config = function()
 			---@diagnostic disable-next-line: missing-fields
 			require("nvim-treesitter.configs").setup({
+				build = ":TSUpdate",
 				ensure_installed = {
 					"bash",
 					"go",

@@ -1,78 +1,41 @@
 return {
-	"github/copilot.vim",
-	{
-		"CopilotC-Nvim/CopilotChat.nvim",
-		branch = "main",
-		dependencies = {
-			{ "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
-			{ "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
-		},
-		build = "make tiktoken",
-		opts = function()
-			local user = vim.env.USER or "User"
-			user = user:sub(1, 1):upper() .. user:sub(2)
-			return {
-				model = "claude-3.7-sonnet",
-				auto_insert_mode = true,
-				show_help = true,
-				question_header = "  " .. user .. " ",
-				answer_header = "  Copilot ",
-				window = {
-					width = 0.4,
-				},
-				selection = function(source)
-					local select = require("CopilotChat.select")
-					return select.visual(source) or select.buffer(source)
-				end,
-			}
-		end,
-		keys = {
-			{ "<c-s>", "<CR>", ft = "copilot-chat", desc = "Submit Prompt", remap = true },
-			{ "<leader>a", "", desc = "+ai", mode = { "n", "v" } },
-			{
-				"<leader>aa",
-				function()
-					return require("CopilotChat").toggle()
-				end,
-				desc = "Toggle (CopilotChat)",
-				mode = { "n", "v" },
-			},
-			{
-				"<leader>ax",
-				function()
-					return require("CopilotChat").reset()
-				end,
-				desc = "Clear (CopilotChat)",
-				mode = { "n", "v" },
-			},
-			{
-				"<leader>aq",
-				function()
-					local input = vim.fn.input("Quick Chat: ")
-					if input ~= "" then
-						require("CopilotChat").ask(input)
-					end
-				end,
-				desc = "Quick Chat (CopilotChat)",
-				mode = { "n", "v" },
-			},
-			-- Show help actions with telescope
-			-- { "<leader>ad", M.pick("help"), desc = "Diagnostic Help (CopilotChat)", mode = { "n", "v" } },
-			-- Show prompts actions with telescope
-			-- { "<leader>ap", M.pick("prompt"), desc = "Prompt Actions (CopilotChat)", mode = { "n", "v" } },
-		},
-		config = function(_, opts)
-			local chat = require("CopilotChat")
-			chat.chat_autocomplete = true
-			vim.api.nvim_create_autocmd("BufEnter", {
-				pattern = "copilot-chat",
-				callback = function()
-					vim.opt_local.relativenumber = false
-					vim.opt_local.number = false
-				end,
-			})
-
-			chat.setup(opts)
-		end,
+	"olimorris/codecompanion.nvim",
+	opts = {},
+	dependencies = {
+		"nvim-lua/plenary.nvim",
+		"nvim-treesitter/nvim-treesitter",
+		"github/copilot.vim",
 	},
+	config = function(_, opts)
+		require("codecompanion").setup({
+			adapters = {
+				copilot = function()
+					return require("codecompanion.adapters").extend("copilot", {
+						schema = {
+							model = {
+								default = "claude-3.7-sonnet",
+							},
+						},
+					})
+				end,
+			},
+			display = {
+				action_palette = {
+					width = 95,
+					height = 10,
+					prompt = "Prompt ", -- Prompt used for interactive LLM calls
+					provider = "telescope", -- Can be "default", "telescope", or "mini_pick". If not specified, the plugin will autodetect installed providers.
+					opts = {
+						show_default_actions = true, -- Show the default actions in the action palette?
+						show_default_prompt_library = true, -- Show the default prompt library in the action palette?
+					},
+				},
+			},
+			keymaps = {
+				{ "n", "<C-a>", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true } },
+				{ "n", "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", { noremap = true, silent = true } },
+				{ "v", "ga", "<cmd>CodeCompanionChat Add<cr>", { noremap = true, silent = true } },
+			},
+		})
+	end,
 }
