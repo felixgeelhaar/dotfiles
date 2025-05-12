@@ -12,7 +12,7 @@ return {
 		"LazyGitFilterCurrentFile",
 	},
 	keys = {
-		{ "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+		{ "<leader>gg", "<cmd>LazyGit<CR>", desc = "LazyGit" },
 	},
 	-- opts = {
 	-- -- your configuration comes here

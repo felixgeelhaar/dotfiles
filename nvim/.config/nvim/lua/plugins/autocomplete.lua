@@ -56,17 +56,17 @@ return {
 				["<C-n>"] = cmp.mapping.select_next_item(),
 				-- Select the [p]revious item
 				["<C-p>"] = cmp.mapping.select_prev_item(),
-				-- Accept ([y]es) the completion.
+				-- Accept ([y]es) the completion
 				["<C-y>"] = cmp.mapping.confirm({ select = true }),
-				-- Manually trigger a completion from nvim-cmp.
+				-- Manually trigger a completion from nvim-cmp
 				["<C-Space>"] = cmp.mapping.complete({}),
-				-- jump to next location
+				-- Jump to next location
 				["<C-l>"] = cmp.mapping(function()
 					if luasnip.expand_or_locally_jumpable() then
 						luasnip.expand_or_jump()
 					end
 				end, { "i", "s" }),
-				-- jump to previous location
+				-- Jump to previous location
 				["<C-h>"] = cmp.mapping(function()
 					if luasnip.locally_jumpable(-1) then
 						luasnip.jump(-1)
@@ -74,11 +74,11 @@ return {
 				end, { "i", "s" }),
 			}),
 			sources = cmp.config.sources({
-				{ name = "nvim_lsp" }, -- lsp
-				{ name = "luasnip" }, -- snippets
-				{ name = "buffer" }, -- text within current buffer
-				{ name = "path" }, -- file system paths
-				{ name = "codecompanion" }, -- AI code suggestions
+				{ name = "nvim_lsp",      priority = 1000 }, -- LSP
+				{ name = "luasnip",       priority = 750 }, -- Snippets
+				{ name = "buffer",        priority = 500 }, -- Text within current buffer
+				{ name = "path",          priority = 250 }, -- File system paths
+				{ name = "codecompanion", priority = 800 }, -- AI code suggestions
 			}),
 		})
 	end,

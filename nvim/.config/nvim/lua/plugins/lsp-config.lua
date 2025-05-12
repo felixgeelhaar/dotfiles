@@ -18,8 +18,8 @@ return {
 			"jay-babu/mason-nvim-dap.nvim",
 		},
 	},
-	{ "folke/neoconf.nvim", cmd = "Neoconf", opts = {} },
-	{ "folke/lazydev.nvim", opts = {} },
+	{ "folke/neoconf.nvim",  cmd = "Neoconf", opts = {} },
+	{ "folke/lazydev.nvim",  opts = {} },
 	{ "b0o/schemastore.nvim" },
 	{
 		"MysticalDevil/inlay-hints.nvim",
@@ -114,6 +114,16 @@ return {
 						settings = require("plugins.lsp_lang_settings.ansible").settings,
 					})
 				end,
+				["ts_ls"] = function()
+					lspconfig.tsserver.setup({
+						settings = require("plugins.lsp_lang_settings.typescript").settings,
+					})
+				end,
+				["rust_analyzer"] = function()
+					lspconfig.rust_analyzer.setup({
+						settings = require("plugins.lsp_lang_settings.rust").settings,
+					})
+				end,
 			}
 
 			mason_lsp.setup({ handlers = handlers })
@@ -149,27 +159,12 @@ return {
 					enabled = false,
 				},
 			})
-
-			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-			vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "go to definition" })
-			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "code action" })
-			vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "go to declaration" })
-			vim.keymap.set("n", "gI", vim.lsp.buf.implementation, { desc = "go to implementation" })
-			vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "signature help" })
-			vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "rename" })
-			vim.keymap.set("n", "<leader>xd", "<cmd>Telescope diagnostics theme=ivy<cr>", { desc = "diagnostics" })
-			vim.keymap.set(
-				"n",
-				"gr",
-				"<cmd>Telescope lsp_references theme=ivy path_display={'tail'}<cr>",
-				{ desc = "go to references" }
-			)
-			vim.keymap.set(
-				"n",
-				"<leader>fr",
-				"<cmd>Telescope lsp_references theme=ivy path_display={'tail'}<cr>",
-				{ desc = "references" }
-			)
+			vim.lsp.handlers["textDocument/publishDiagnostics"] =
+			    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+				    -- Faster feedback but update less frequently
+				    update_in_insert = false,
+				    virtual_text = { spacing = 4, prefix = "●" },
+			    })
 		end,
 	},
 }
