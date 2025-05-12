@@ -1,9 +1,9 @@
--- -- Catppuccin Theme
+-- Catppuccin Theme
 return {
 	"catppuccin/nvim",
 	name = "catppuccin",
-	lazy = false,
-	priority = 1000,
+	lazy = false, -- Load immediately for consistent appearance
+	priority = 1000, -- Load before other plugins
 	opts = {
 		flavour = "mocha", -- "latte, frappe, macchiato, mocha"
 		background = {
@@ -71,24 +71,3 @@ return {
 		vim.cmd("colorscheme catppuccin")
 	end,
 }
-
--- One Nord Theme
--- ( rainbow delimiters not supported)
--- return {
---   "rmehri01/onenord.nvim",
---   lazy = false,
---   priority = 1000,
---   config = function(_, opts)
---     vim.cmd("colorscheme onenord")
---   end,
--- }
-
--- Everforest
--- return {
---   "neanias/everforest-nvim",
---   lazy = false,
---   priority = 1000,
---   config = function()
---     vim.cmd("colorscheme everforest")
---   end,
--- }
