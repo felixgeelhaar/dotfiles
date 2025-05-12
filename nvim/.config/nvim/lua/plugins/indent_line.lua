@@ -3,15 +3,15 @@ return {
 		"lukas-reineke/indent-blankline.nvim",
 		main = "ibl",
 		opts = {
-			-- indent marks the indent level in a defined highlighted color
-			-- indent = { highlight = highlight, char = '' },
-			-- whitespace marks the whitespace in a defined highlighted color
-			-- whitespace = {
-			--   highlight = highlight,
-			--   remove_blankline_trail = false,
-			-- },
-			-- scope marks the scope level in a defined highlighted color
-			-- scope = { highlight = highlight },
+			indent = { char = "│" }, -- Use a simple character for indent
+			scope = {
+				enabled = true,
+				show_start = true,
+				show_end = true,
+				injected_languages = true,
+				highlight = { "Function", "Label" },
+				priority = 500,
+			},
 			exclude = {
 				filetypes = {
 					"help",
@@ -26,6 +26,7 @@ return {
 					"toggleterm",
 					"lazyterm",
 				},
+				buftypes = { "terminal", "nofile", "quickfix", "prompt" },
 			},
 		},
 	},

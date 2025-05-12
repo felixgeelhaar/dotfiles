@@ -5,10 +5,10 @@ return {
 			"nvim-treesitter/nvim-treesitter-textobjects",
 		},
 		build = ":TSUpdate",
+		event = { "BufReadPost", "BufNewFile" }, -- Lazy load for better startup
 		config = function()
-			---@diagnostic disable-next-line: missing-fields
+			-- Use the recommended API to setup modules
 			require("nvim-treesitter.configs").setup({
-				build = ":TSUpdate",
 				ensure_installed = {
 					"bash",
 					"go",
@@ -29,7 +29,24 @@ return {
 					"toml",
 					"yaml",
 					"regex",
+					"css",
+					"dockerfile",
+					"gitignore",
+					"vim",
+					"vimdoc",
+					"query", -- Add these useful ones
 				},
+
+				-- Module configuration
+				highlight = {
+					enable = true,
+					additional_vim_regex_highlighting = false,
+				},
+
+				indent = {
+					enable = true,
+				},
+
 				incremental_selection = {
 					enable = true,
 					keymaps = {
@@ -39,13 +56,7 @@ return {
 						node_decremental = "<bs>",
 					},
 				},
-				auto_install = true,
-				rainbow = {
-					enabled = true,
-					extended_mode = true,
-				},
-				highlight = { enable = true },
-				indent = { enable = true },
+
 				textobjects = {
 					move = {
 						enable = true,
@@ -56,7 +67,7 @@ return {
 					},
 					select = {
 						enable = true,
-						lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+						lookahead = true,
 						keymaps = {
 							["aa"] = "@parameter.outer",
 							["ia"] = "@parameter.inner",
@@ -71,14 +82,46 @@ return {
 							["at"] = "@comment.outer",
 						},
 					},
+					swap = {
+						enable = true,
+						swap_next = {
+							["<leader>sa"] = "@parameter.inner", -- changed from <leader>a
+						},
+						swap_previous = {
+							["<leader>sA"] = "@parameter.inner", -- changed from <leader>A
+						},
+					},
+				},
+
+				-- Auto-install additional parsers
+				auto_install = true,
+
+				-- Improve folding using treesitter
+				fold = {
+					enable = true,
+				},
+
+				-- Enable autotag for HTML tags
+				autotag = {
+					enable = true,
 				},
 			})
+
+			-- Setup folding
+			vim.opt.foldmethod = "expr"
+			vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+			vim.opt.foldenable = false -- Start with folds open
 		end,
 	},
 	{
 		"nvim-treesitter/nvim-treesitter-context",
 		event = "VeryLazy",
 		enabled = true,
-		opts = { mode = "cursor", max_lines = 1 },
+		opts = {
+			mode = "cursor",
+			max_lines = 3, -- Show more context (up from 1)
+			min_window_height = 10,
+			trim_scope = "outer",
+		},
 	},
 }

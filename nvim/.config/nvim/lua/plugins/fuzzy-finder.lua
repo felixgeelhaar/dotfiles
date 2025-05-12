@@ -16,79 +16,177 @@ return {
 			local builtin = require("telescope.builtin")
 
 			telescope.setup({
-				extensions = {},
 				defaults = {
 					path_display = {
 						"filename_first",
 					},
-					prompt_prefix = "  ",
+					prompt_prefix = "  ",
 					selection_caret = "  ",
 					file_ignore_patterns = {
 						".DS_Store",
 						".git/",
 						"deps/",
 						"erl_crash",
+						"node_modules/",
+						"%.lock",
 					},
 					mappings = {
+						i = {
+							["<C-j>"] = actions.move_selection_next,
+							["<C-k>"] = actions.move_selection_previous,
+							["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+							["<esc>"] = actions.close,
+							["<C-u>"] = false, -- Clear the prompt instead of scrolling
+							-- ["<CR>"] = function(...)
+							-- 	-- Close all normal buffers before jumping to selection
+							-- 	local buffers = vim.api.nvim_list_bufs()
+							-- 	local current = vim.api.nvim_get_current_buf()
+							--
+							-- 	for _, buf in ipairs(buffers) do
+							-- 		if buf ~= current and vim.api.nvim_buf_is_loaded(buf) then
+							-- 			local buf_ft = vim.bo[buf].filetype
+							-- 			if
+							-- 			    not buf_ft:match("NvimTree")
+							-- 			    and not buf_ft:match("neo-tree")
+							-- 			    and not buf_ft:match("Outline")
+							-- 			    and not buf_ft:match("dap")
+							-- 			    and not buf_ft:match("Trouble")
+							-- 			    and not buf_ft:match("qf")
+							-- 			    and not buf_ft:match("TelescopePrompt")
+							-- 			    and vim.api.nvim_buf_get_option(buf, "buflisted")
+							-- 			then
+							-- 				vim.api.nvim_buf_delete(buf,
+							-- 					{ force = false })
+							-- 			end
+							-- 		end
+							-- 	end
+							--
+							-- 	-- Then perform the default action
+							-- 	return require("telescope.actions").select_default(...)
+							-- end,
+						},
 						n = {
 							["q"] = actions.close,
+							["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
 						},
 					},
+					-- Better sorting performance
+					vimgrep_arguments = {
+						"rg",
+						"--color=never",
+						"--no-heading",
+						"--with-filename",
+						"--line-number",
+						"--column",
+						"--smart-case",
+						"--hidden",
+						"--glob=!.git/",
+					},
+					-- Better previewer setup
+					preview = {
+						treesitter = true,
+						filesize_limit = 1, -- MB
+						timeout = 250, -- ms
+					},
+					-- More responsive UI
+					sorting_strategy = "ascending",
+					layout_config = {
+						horizontal = {
+							prompt_position = "top",
+							preview_width = 0.55,
+							results_width = 0.8,
+						},
+						vertical = {
+							mirror = false,
+						},
+						width = 0.87,
+						height = 0.80,
+						preview_cutoff = 120,
+					},
 				},
+
 				pickers = {
 					oldfiles = {
 						prompt_title = "History",
+						cwd_only = false, -- Show all oldfiles, not just current directory
 					},
 					buffers = {
+						sort_mru = true,
+						sort_lastused = true,
+						show_all_buffers = true,
+						ignore_current_buffer = true,
 						mappings = {
 							i = {
 								["<C-x>"] = "delete_buffer",
 							},
-						},
-						extensions = {
-							["ui-select"] = {
-								require("telescope.themes").get_dropdown({}),
-							},
-							["noice"] = {
-								require("telescope").load_extension("noice"),
+							n = {
+								["dd"] = "delete_buffer",
 							},
 						},
+					},
+					find_files = {
+						hidden = true,
+						no_ignore = false,
+						follow = true, -- Follow symlinks
+					},
+					live_grep = {
+						additional_args = function()
+							return { "--hidden" }
+						end,
+					},
+					current_buffer_fuzzy_find = {
+						skip_empty_lines = true,
+					},
+					lsp_document_symbols = {
+						symbol_width = 40, -- Wider symbol column
+					},
+				},
+
+				extensions = {
+					["ui-select"] = {
+						require("telescope.themes").get_dropdown({
+							-- More space for displaying results
+							width = 0.8,
+							previewer = false,
+							prompt_title = false,
+							borderchars = {
+								"─",
+								"│",
+								"─",
+								"│",
+								"┌",
+								"┐",
+								"┘",
+								"└",
+							},
+						}),
+					},
+					fzf = {
+						fuzzy = true,
+						override_generic_sorter = true,
+						override_file_sorter = true,
+						case_mode = "smart_case",
 					},
 				},
 			})
 
-			-- keys
-			vim.keymap.set(
-				"n",
-				"<leader>ff",
-				"<cmd>Telescope find_files theme=dropdown previewer=false<cr>",
-				{ desc = "files" }
-			)
-			vim.keymap.set("n", "<leader>fs", builtin.live_grep, { desc = "string" })
-			vim.keymap.set("n", "<leader>fg", builtin.git_files, { desc = "git files" })
-			vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "find word under cursor" })
-			vim.keymap.set("x", "<leader>fs", builtin.grep_string, { desc = "find selection" })
-			vim.keymap.set("n", "<leader>gf", builtin.git_status, { desc = "find modified file" })
-			vim.keymap.set(
-				"n",
-				"<leader>fb",
-				"<cmd>Telescope buffers sort_mru=true sort_lastused=true theme=dropdown previewer=false<cr>",
-				{ desc = "buffers" }
-			)
-			vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "help" })
-			vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "keymaps" })
-			vim.keymap.set(
-				"n",
-				"<leader>fo",
-				"<cmd>Telescope oldfiles theme=dropdown previewer=false<cr>",
-				{ desc = "oldfiles" }
-			)
-			vim.keymap.set("n", "<leader>fm", function()
-				require("telescope").extensions.notify.notify()
-			end, { desc = "messages" })
+			-- Load extensions
+			telescope.load_extension("fzf")
+			telescope.load_extension("ui-select")
 
-			-- extensions
-			require("telescope").load_extension("fzf")
+			-- Add notify extension if available
+			local has_notify, _ = pcall(require, "telescope._extensions.notify")
+			if has_notify then
+				telescope.load_extension("notify")
+			end
+
+			-- Add noice extension if available
+			local has_noice, _ = pcall(require, "telescope._extensions.noice")
+			if has_noice then
+				telescope.load_extension("noice")
+			end
+
+			-- All keymaps are now in the centralized keymaps.lua file
 		end,
 	},
 }
