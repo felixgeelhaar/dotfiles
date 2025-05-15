@@ -18,8 +18,8 @@ return {
 			"jay-babu/mason-nvim-dap.nvim",
 		},
 	},
-	{ "folke/neoconf.nvim",  cmd = "Neoconf", opts = {} },
-	{ "folke/lazydev.nvim",  opts = {} },
+	{ "folke/neoconf.nvim", cmd = "Neoconf", opts = {} },
+	{ "folke/lazydev.nvim", opts = {} },
 	{ "b0o/schemastore.nvim" },
 	{
 		"MysticalDevil/inlay-hints.nvim",
@@ -28,6 +28,10 @@ return {
 		config = function()
 			require("inlay-hints").setup()
 		end,
+	},
+	{
+		"Saghen/blink.cmp",
+		lazy = false,
 	},
 	{
 		"neovim/nvim-lspconfig",
@@ -39,7 +43,7 @@ return {
 			local mason_lsp = require("mason-lspconfig")
 			local mason_tool_install = require("mason-tool-installer")
 
-			local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+			local lsp_capabilities = require("blink.cmp").get_lsp_capabilities()
 
 			require("mason-null-ls").setup({
 				ensure_installed = {},
@@ -160,11 +164,11 @@ return {
 				},
 			})
 			vim.lsp.handlers["textDocument/publishDiagnostics"] =
-			    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-				    -- Faster feedback but update less frequently
-				    update_in_insert = false,
-				    virtual_text = { spacing = 4, prefix = "●" },
-			    })
+				vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+					-- Faster feedback but update less frequently
+					update_in_insert = false,
+					virtual_text = { spacing = 4, prefix = "●" },
+				})
 		end,
 	},
 }
