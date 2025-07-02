@@ -2,6 +2,12 @@
 -- This file extends the base LSP configuration with additional language servers
 
 return {
+  -- JSON/YAML Schema Store for enhanced completion
+  {
+    "b0o/schemastore.nvim",
+    lazy = true,
+  },
+  
   {
     "williamboman/mason.nvim",
     opts = function(_, opts)
@@ -252,7 +258,10 @@ return {
                 enable = false,
                 url = "",
               },
-              schemas = require("schemastore").yaml.schemas(),
+              schemas = (function()
+                local ok, schemastore = pcall(require, "schemastore")
+                return ok and schemastore.yaml.schemas() or {}
+              end)(),
             },
           },
         },
@@ -261,7 +270,10 @@ return {
         jsonls = {
           settings = {
             json = {
-              schemas = require("schemastore").json.schemas(),
+              schemas = (function()
+                local ok, schemastore = pcall(require, "schemastore")
+                return ok and schemastore.json.schemas() or {}
+              end)(),
               validate = { enable = true },
             },
           },
