@@ -281,11 +281,4 @@ return {
       },
     },
   },
-  
-  -- Schema store for JSON/YAML
-  {
-    "b0o/SchemaStore.nvim",
-    lazy = true,
-    version = false, -- last release is way too old
-  },
 }

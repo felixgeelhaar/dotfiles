@@ -4,7 +4,10 @@ return {
 			format = {
 				enable = true,
 			},
-			schemas = require("schemastore").json.schemas(),
+			schemas = (function()
+				local ok, schemastore = pcall(require, "schemastore")
+				return ok and schemastore.json.schemas() or {}
+			end)(),
 			validate = { enable = true },
 		},
 	},
