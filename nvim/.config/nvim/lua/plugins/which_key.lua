@@ -19,7 +19,7 @@ return {
         g = true,
       },
     },
-    key_labels = {
+    replace = {
       ["<space>"] = "SPC",
       ["<leader>"] = "SPC",
       ["<cr>"] = "RET",
@@ -30,10 +30,12 @@ return {
       separator = "➜",
       group = "+",
     },
-    window = {
+    win = {
       border = "rounded",
       padding = { 1, 2 },
-      winblend = 0,
+      wo = {
+        winblend = 0,
+      },
     },
     layout = {
       height = { min = 4, max = 25 },
@@ -72,7 +74,7 @@ return {
     wk.add({
       -- AI Assistant group
       { "<leader>a",  group = get_icon("ui", "robot") .. "[A]I Assistant" },
-      { "<leader>ac", "<cmd>CodeCompanionChat<cr>",                          desc = "Chat with AI" },
+      { "<leader>aa", "<cmd>CodeCompanionChat<cr>",                          desc = "Chat with AI" },
 
       -- AI code actions subgroup
       { "<leader>ac", group = get_icon("ui", "robot") .. "AI [C]ode Actions" },
