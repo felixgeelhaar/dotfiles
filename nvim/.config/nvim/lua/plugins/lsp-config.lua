@@ -21,14 +21,7 @@ return {
 	{ "folke/neoconf.nvim", cmd = "Neoconf", opts = {} },
 	{ "folke/lazydev.nvim", opts = {} },
 	{ "b0o/schemastore.nvim" },
-	{
-		"MysticalDevil/inlay-hints.nvim",
-		event = "LspAttach",
-		dependencies = { "neovim/nvim-lspconfig" },
-		config = function()
-			require("inlay-hints").setup()
-		end,
-	},
+	-- Native inlay hints support (Neovim 0.10+)
 	{
 		"neovim/nvim-lspconfig",
 		lazy = false,
@@ -165,6 +158,11 @@ return {
 					update_in_insert = false,
 					virtual_text = { spacing = 4, prefix = "●" },
 				})
+
+			-- Enable native inlay hints (Neovim 0.10+)
+			if vim.fn.has("nvim-0.10") == 1 then
+				vim.lsp.inlay_hint.enable(true)
+			end
 		end,
 	},
 }
