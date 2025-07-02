@@ -61,7 +61,7 @@ return {
         "shellcheck",        -- Shell scripts
         "hadolint",          -- Dockerfile
         "markdownlint",      -- Markdown
-        "vale",              -- Prose linting
+        -- "vale",           -- Prose linting (optional, requires .vale.ini config)
         
         -- Debuggers
         "debugpy",           -- Python
