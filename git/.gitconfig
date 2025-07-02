@@ -3,17 +3,53 @@
     excludesfile = ~/.gitignore
     editor = nvim
 [alias]
+    # Log and history
     l = log --pretty=custom
     lg = log --graph --pretty=custom -20
-    undo = reset --soft HEAD^
-    compare = diff --cached # view the changes you staged for the next commit relative to HEAD
+    last = log -1 HEAD
+    ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+    ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+    bl = blame -w -C # ignore whitespace changes and follow code movement commits
+    
+    # Staging and committing
     unstage = reset HEAD --
     amend = commit --amend -m
+    undo = reset --soft HEAD^
+    wip = !git add -A && git commit -m "WIP"
+    save = !git add -A && git commit -m "SAVEPOINT"
+    
+    # Branching and merging
+    co = checkout
+    cob = checkout -b
     cpick = cherry-pick
-    cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|develop\\|main' | xargs -n 1 git branch -d"
-    last = log -1 HEAD
-    bl = blame -w -C # ignore whitespace changes and follow code movement commits
+    compare = diff --cached # view the changes you staged for the next commit relative to HEAD
+    
+    # Remote operations
     fpush = push --force-with-lease # force push will fail if someone updated the remote ref (not overriding their changes by accident)
+    sync = !git fetch origin && git rebase origin/$(git branch --show-current)
+    
+    # Branch management
+    cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|develop\\|main' | xargs -n 1 git branch -d"
+    gone = !git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '$2 == \"[gone]\" {print $1}' | xargs -r git branch -D
+    recent = branch --sort=-committerdate
+    
+    # Worktree management
+    wt = worktree
+    wtls = worktree list
+    wtadd = worktree add
+    wtrm = worktree remove
+    
+    # Interactive rebase helpers
+    ri = rebase -i
+    rc = rebase --continue
+    ra = rebase --abort
+    fixup = !sh -c 'REV=$(git rev-parse $1) && git commit --fixup $@ && git rebase -i --autosquash $REV^' -
+    squash = !sh -c 'REV=$(git rev-parse $1) && git commit --squash $@ && git rebase -i --autosquash $REV^' -
+    
+    # Stash operations
+    sl = stash list
+    sa = stash apply
+    ss = stash save
 [filter "lfs"]
     process = git-lfs filter-process
     required = true
@@ -26,8 +62,12 @@
     autosquash = true
 [init]
     defaultBranch = main
+[commit]
+    gpgsign = true
+[tag]
+    gpgsign = true
 [gpg]
-    program = /usr/local/bin/gpg # linux: /usr/bin/gpg
+    program = /opt/homebrew/bin/gpg # Apple Silicon path
 [merge]
     conflictstyle = diff3
     tool = vimdiff
@@ -35,7 +75,9 @@
     path = nvim
     keepBackup = false
 [diff]
-    colorMoved = default 
+    colorMoved = default
+    algorithm = histogram
+    compactionHeuristic = true 
 [push]
     autoSetupRemote = true
     followTags = true
@@ -48,6 +90,24 @@
     sort = -committerdate
 [column]
     ui = auto
+[transfer]
+    fsckObjects = true
+[fetch]
+    fsckObjects = true
+    prune = true
+    pruneTags = true
+[receive]
+    fsckObjects = true
+[gc]
+    auto = 256
+[maintenance]
+    auto = false
+[core]
+    preloadindex = true
+    fscache = true
+[credential]
+    helper = osxkeychain
+    useHttpPath = true
 [pretty]
     custom = "%C(blue)%h %C(green) %s %C(magenta)%(decorate:prefix=,suffix=,tag= ,pointer=  ) %n%C(cyan) %an  %C(cyan)%ar%n"
     #                  │        │                   │                                                         │             └─ date relativ
@@ -61,7 +121,7 @@
     # syntax-highlighting-theme = 
 [delta]
   dark = true
-  diff-hightlight = true
+  diff-highlight = true
 	file-decoration-style = black ul
 	file-style = "#b5bfe2" 
   hunk-header-decoration-style = omit
