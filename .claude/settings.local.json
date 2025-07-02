@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(echo:*)",
+      "Bash(cat:*)",
+      "Bash(git --version)",
+      "Bash(gpg:*)",
+      "Bash(brew install:*)",
+      "Bash(chmod:*)",
+      "Bash(source:*)",
+      "Bash(nvm ls-remote:*)",
+      "Bash(nvm:*)",
+      "Bash(wezterm:*)",
+      "Bash(lua:*)",
+      "Bash(rg:*)",
+      "Bash(brew list:*)",
+      "Bash(ll)",
+      "Bash(git add:*)"
+    ],
+    "deny": []
+  }
+}
