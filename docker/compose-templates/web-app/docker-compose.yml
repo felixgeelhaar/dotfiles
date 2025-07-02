@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: web-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - web_static:/var/www/static
+    depends_on:
+      - app
+    networks:
+      - web_network
+    restart: unless-stopped
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: web-app
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://app_user:app_password@postgres:5432/app_db
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./app:/usr/src/app
+      - web_static:/usr/src/app/public
+      - /usr/src/app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - web_network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: web-postgres
+    environment:
+      - POSTGRES_DB=app_db
+      - POSTGRES_USER=app_user
+      - POSTGRES_PASSWORD=app_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      - web_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_user -d app_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    container_name: web-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - web_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  web_static:
+
+networks:
+  web_network:
+    driver: bridge

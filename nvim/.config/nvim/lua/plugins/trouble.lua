@@ -5,12 +5,12 @@ return {
 		cmd = "Trouble",
 		keys = {
 			{
-				"<leader>cs",
+				"<leader>cts",
 				"<cmd>Trouble symbols toggle focus=false<cr>",
 				desc = "Symbols (Trouble)",
 			},
 			{
-				"<leader>cS",
+				"<leader>ctS",
 				"<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
 				desc = "LSP Definitions / references / ... (Trouble)",
 			},

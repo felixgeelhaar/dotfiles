@@ -5,6 +5,8 @@ $username\
 $directory\
 $git_branch\
 $git_status\
+$git_state\
+$git_metrics\
 $fill\
 $nodejs\
 $golang\
@@ -17,6 +19,10 @@ $php\
 $java\
 $ruby\
 $terraform\
+$docker_context\
+$aws\
+$gcloud\
+$azure\
 $jobs\
 $cmd_duration\
 $time\
@@ -52,16 +58,80 @@ style_root = 'black bold'
 
 [git_metrics]
 disabled = false
+added_style = 'bold green'
+deleted_style = 'bold red'
 
 [git_commit]
 tag_symbol = " tag "
 
 [git_status]
-ahead = ">"
-behind = "<"
-diverged = "<>"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 renamed = "r"
-deleted = "x"
+deleted = "✘"
+modified = "!"
+staged = "+"
+untracked = "?"
+stashed = "$"
+
+[git_state]
+rebase = "REBASING"
+merge = "MERGING"
+revert = "REVERTING"
+cherry_pick = "CHERRY-PICKING"
+bisect = "BISECTING"
+am = "AM"
+am_or_rebase = "AM/REBASE"
+
+[cmd_duration]
+min_time = 3_000  # Only show duration for commands over 3 seconds
+format = "took [$duration]($style)"
+
+[jobs]
+format = "[$symbol$number]($style)"
+symbol = "✦"
+style = "bold blue"
+
+# Language-specific optimizations
+[nodejs]
+format = "via [$symbol($version )]($style)"
+detect_extensions = ["js", "mjs", "cjs", "ts", "mts", "cts"]
+detect_files = ["package.json", ".nvmrc"]
+detect_folders = ["node_modules"]
+
+[python]
+format = "via [$symbol$pyenv_prefix($version )(\($virtualenv\) )]($style)"
+detect_extensions = ["py"]
+detect_files = [".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]
+
+[rust]
+format = "via [$symbol($version )]($style)"
+detect_extensions = ["rs"]
+detect_files = ["Cargo.toml"]
+
+[golang]
+format = "via [$symbol($version )]($style)"
+detect_extensions = ["go"]
+detect_files = ["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]
+
+[docker_context]
+format = "via [$symbol$context]($style)"
+style = "blue bold"
+symbol = "🐳 "
+only_with_files = true
+detect_extensions = ["Dockerfile", "docker-compose.yml", "docker-compose.yaml"]
+
+[aws]
+format = "on [$symbol($profile )(\($region\) )]($style)"
+style = "bold blue"
+symbol = "☁️ "
+
+[directory]
+truncation_length = 4
+truncate_to_repo = true
+truncation_symbol = "…/"
+read_only = " 🔒"
 
 [palettes.catppuccin_macchiato]
 rosewater = "#f4dbd6"

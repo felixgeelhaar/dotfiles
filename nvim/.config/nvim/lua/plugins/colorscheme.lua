@@ -5,14 +5,14 @@ return {
 	lazy = false, -- Load immediately for consistent appearance
 	priority = 1000, -- Load before other plugins
 	opts = {
-		flavour = "mocha", -- "latte, frappe, macchiato, mocha"
+		flavour = "macchiato", -- "latte, frappe, macchiato, mocha"
 		background = {
-			dark = "mocha",
+			dark = "macchiato",
 		},
 		transparent_background = true,
 		integrations = {
 			alpha = true,
-			cmp = true,
+			blink_cmp = true,
 			dap = true,
 			dap_ui = true,
 			fidget = true,
