@@ -10,21 +10,17 @@ return {
     },
   },
 
-  -- Project management
+  -- Project management with native Telescope approach
   {
-    "ahmedkhalf/project.nvim",
-    opts = {
-      manual_mode = false,
-      detection_methods = { "lsp", "pattern" },
-      patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json", "go.mod" },
-    },
-    event = "VeryLazy",
-    config = function(_, opts)
-      require("project_nvim").setup(opts)
-      require("telescope").load_extension("projects")
-    end,
+    "nvim-telescope/telescope.nvim",
     keys = {
-      { "<leader>fp", "<Cmd>Telescope projects<CR>", desc = "Projects" },
+      { "<leader>fp", function()
+        require("telescope.builtin").find_files({
+          cwd = vim.fn.expand("~/projects"), -- Adjust to your projects directory
+          find_command = { "fd", "--type", "d", "--max-depth", "2" },
+          prompt_title = "Find Projects",
+        })
+      end, desc = "Find Projects" },
     },
   },
 
