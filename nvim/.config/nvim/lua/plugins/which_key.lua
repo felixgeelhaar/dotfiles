@@ -119,33 +119,11 @@ return {
         desc = "Fix Code",
       },
 
-      -- Buffer group
+      -- Buffer group (keymaps defined in main keymaps.lua)
       { "<leader>b",   group = get_icon("filetype", "Readme.md") .. "[B]uffer" },
-      { "<leader>bd",  "<cmd>bdelete<cr>",                                            desc = "Delete Buffer" },
-      { "<leader>bn",  "<cmd>bnext<cr>",                                              desc = "Next Buffer" },
-      { "<leader>bp",  "<cmd>bprevious<cr>",                                          desc = "Previous Buffer" },
-      { "<leader>bs",  "<cmd>w<cr>",                                                  desc = "Save Buffer" },
 
-      -- Code group
+      -- Code group (keymaps defined in main keymaps.lua)
       { "<leader>c",   group = get_icon("directory", "src") .. "[C]ode" },
-      { "<leader>ca",  "<cmd>lua vim.lsp.buf.code_action()<cr>",                      desc = "Code Action" },
-      { "<leader>cf",  "<cmd>lua vim.lsp.buf.format()<cr>",                           desc = "Format Code" },
-
-      -- Code Refactoring subgroup
-      { "<leader>cr",  group = "Refactoring" },
-      { "<leader>crr", "<cmd>lua vim.lsp.buf.rename()<cr>",                           desc = "Rename Symbol" },
-      { "<leader>cre", "<cmd>lua vim.lsp.buf.references()<cr>",                       desc = "Extract Variable" },
-
-      -- Code Symbols subgroup
-      { "<leader>cs",  group = "Symbols" },
-      { "<leader>cso", "<cmd>SymbolsOutline<cr>",                                     desc = "Outline" },
-      { "<leader>css", "<cmd>Telescope lsp_document_symbols<cr>",                     desc = "Document Symbols" },
-
-      -- Code Diagnostics subgroup
-      { "<leader>cd",  group = "Diagnostics" },
-      { "<leader>cdl", "<cmd>lua vim.diagnostic.open_float()<cr>",                    desc = "Line Diagnostics" },
-      { "<leader>cdn", "<cmd>lua vim.diagnostic.goto_next()<cr>",                     desc = "Next Diagnostic" },
-      { "<leader>cdp", "<cmd>lua vim.diagnostic.goto_prev()<cr>",                     desc = "Previous Diagnostic" },
 
       -- Debug group
       { "<leader>d",   group = get_icon("lsp", "class") .. "[D]ebug" },
@@ -158,25 +136,12 @@ return {
       { "<leader>ee",  "<cmd>Neotree toggle<cr>",                                     desc = "Toggle Explorer" },
       { "<leader>ef",  "<cmd>Neotree reveal<cr>",                                     desc = "Find File in Explorer" },
 
-      -- Find/File group
+      -- Find/File group (keymaps defined in main keymaps.lua)
       { "<leader>f",   group = get_icon("lsp", "file") .. "[F]ind/[F]ile" },
-      { "<leader>ff",  "<cmd>Telescope find_files<cr>",                               desc = "Find Files" },
-      { "<leader>fr",  "<cmd>Telescope oldfiles<cr>",                                 desc = "Recent Files" },
-      { "<leader>fg",  "<cmd>Telescope live_grep<cr>",                                desc = "Grep" },
-
-      -- Find Usages subgroup
       { "<leader>fu",  group = "[U]sages" },
-      { "<leader>fur", "<cmd>Telescope lsp_references<cr>",                           desc = "Find References" },
-      { "<leader>fui", "<cmd>Telescope lsp_implementations<cr>",                      desc = "Find Implementations" },
 
-      -- Git group
+      -- Git group (keymaps defined in main keymaps.lua)
       { "<leader>g",   group = get_icon("filetype", ".git") .. "[G]it" },
-      { "<leader>gs",  "<cmd>Telescope git_status<cr>",                               desc = "Status" },
-      { "<leader>gc",  "<cmd>Telescope git_commits<cr>",                              desc = "Commits" },
-      { "<leader>gb",  "<cmd>Telescope git_branches<cr>",                             desc = "Branches" },
-      { "<leader>gg",  "<cmd>LazyGit<cr>",                                            desc = "LazyGit" },
-      { "<leader>gd",  "<cmd>DiffviewOpen<cr>",                                       desc = "Diff View" },
-      { "<leader>gD",  "<cmd>DiffviewOpen origin/develop...HEAD<cr>",                 desc = "Diff with develop" },
 
       -- Lazy group
       { "<leader>l",   group = get_icon("filetype", "lazy") .. "[L]azy" },
@@ -195,25 +160,16 @@ return {
       { "<leader>oo",  "<cmd>OverseerToggle<cr>",                                     desc = "Toggle Overseer" },
       { "<leader>or",  "<cmd>OverseerRun<cr>",                                        desc = "Run Task" },
 
-      -- Search group
+      -- Search group (keymaps defined in main keymaps.lua)
       { "<leader>s",   group = get_icon("lsp", "symbol-array") .. "[S]earch" },
-      { "<leader>ss",  "<cmd>Telescope current_buffer_fuzzy_find<cr>",                desc = "Search in Buffer" },
-      { "<leader>sp",  "<cmd>Telescope live_grep<cr>",                                desc = "Search in Project" },
 
       -- Test group
       { "<leader>t",   group = get_icon("directory", "test") .. "[T]est" },
       { "<leader>tt",  "<cmd>lua require('neotest').run.run()<cr>",                   desc = "Run Test" },
       { "<leader>tf",  "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<cr>", desc = "Run File" },
 
-      -- Workspace group
+      -- Workspace group (keymaps defined in main keymaps.lua)
       { "<leader>w",   group = get_icon("directory", "workspace") .. "[W]orkspace" },
-      { "<leader>wa",  "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>",             desc = "Add Folder" },
-      { "<leader>wr",  "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>",          desc = "Remove Folder" },
-      {
-        "<leader>wl",
-        "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>",
-        desc = "List Folders",
-      },
 
       -- Quickfix group
       { "<leader>x",  group = get_icon("filetype", "mason") .. "quickfi[X]" },

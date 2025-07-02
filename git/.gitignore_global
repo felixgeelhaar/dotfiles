@@ -1,0 +1,161 @@
+# Global gitignore file for common patterns across all projects
+# Configure with: git config --global core.excludesfile ~/.gitignore_global
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Editors & IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.vim/
+.netrwhist
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+.metadata
+.recommenders/
+nbproject/
+.nb-gradle/
+
+# Development
+node_modules/
+.npm
+.yarn/
+.pnp.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pid
+*.seed
+*.pid.lock
+.nyc_output
+coverage/
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+.tox/
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+target/
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.class
+.gradle/
+build/
+out/
+.cargo/
+Cargo.lock
+
+# Language specific
+*.log
+*.out
+*.tmp
+*.cache
+.rustup/
+.rustc/
+
+# Cloud & CI
+.terraform/
+*.tfstate
+*.tfstate.*
+.vagrant/
+Vagrantfile.local
+
+# Archives
+*.7z
+*.dmg
+*.gz
+*.iso
+*.tar
+*.zip
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Compiled
+*.o
+*.so
+*.dylib
+*.exe
+*.dll
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*~
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp

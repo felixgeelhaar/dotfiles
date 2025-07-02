@@ -30,10 +30,6 @@ return {
 		end,
 	},
 	{
-		"Saghen/blink.cmp",
-		lazy = false,
-	},
-	{
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
@@ -119,7 +115,7 @@ return {
 					})
 				end,
 				["ts_ls"] = function()
-					lspconfig.tsserver.setup({
+					lspconfig.ts_ls.setup({
 						settings = require("plugins.lsp_lang_settings.typescript").settings,
 					})
 				end,
