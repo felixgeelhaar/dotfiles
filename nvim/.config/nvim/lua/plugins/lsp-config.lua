@@ -20,7 +20,6 @@ return {
 	},
 	{ "folke/neoconf.nvim", cmd = "Neoconf", opts = {} },
 	{ "folke/lazydev.nvim", opts = {} },
-	{ "b0o/schemastore.nvim" },
 	-- Native inlay hints support (Neovim 0.10+)
 	{
 		"neovim/nvim-lspconfig",

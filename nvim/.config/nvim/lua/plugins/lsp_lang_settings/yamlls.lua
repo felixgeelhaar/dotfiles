@@ -12,7 +12,10 @@ return {
 					enable = true,
 				},
 				validate = true,
-				schemas = require("schemastore").yaml.schemas(),
+				schemas = (function()
+					local ok, schemastore = pcall(require, "schemastore")
+					return ok and schemastore.yaml.schemas() or {}
+				end)(),
 			},
 			capabilities = {
 				textDocument = {
