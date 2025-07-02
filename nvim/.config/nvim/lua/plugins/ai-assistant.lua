@@ -316,13 +316,8 @@ return {
 				},
 			},
 		})
-	end,
-}, {
-	-- Configure the modern Copilot.lua plugin
-	"zbirenbaum/copilot.lua",
-	cmd = "Copilot",
-	event = "InsertEnter",
-	config = function()
+
+		-- Configure the modern Copilot.lua plugin
 		require("copilot").setup({
 			panel = {
 				enabled = true,
