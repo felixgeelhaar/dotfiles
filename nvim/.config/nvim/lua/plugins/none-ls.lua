@@ -49,7 +49,21 @@ return {
 			add_if_available("pylint", none_ls.builtins.diagnostics.pylint)
 			add_if_available("tidy", none_ls.builtins.diagnostics.tidy)
 			add_if_available("markdownlint", none_ls.builtins.diagnostics.markdownlint)
-			add_if_available("vale", none_ls.builtins.diagnostics.vale)
+			-- Vale with config file check
+			if vim.fn.executable("vale") == 1 then
+				-- Check if Vale has a config file in current directory or home directory
+				local config_paths = { ".vale.ini", ".vale.yaml", ".vale.json", vim.fn.expand("~/.vale.ini") }
+				local has_config = false
+				for _, path in ipairs(config_paths) do
+					if vim.fn.filereadable(path) == 1 then
+						has_config = true
+						break
+					end
+				end
+				if has_config then
+					table.insert(sources, none_ls.builtins.diagnostics.vale)
+				end
+			end
 			add_if_available("golangci-lint", none_ls.builtins.diagnostics.golangci_lint)
 			add_if_available("codespell", none_ls.builtins.diagnostics.codespell)
 			add_if_available("jsonlint", require("none-ls-jsonlint.diagnostics.jsonlint"))
