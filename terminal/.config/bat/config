@@ -1,0 +1,24 @@
+# bat configuration file
+
+# Use Catppuccin theme (matching our overall theme)
+--theme="Catppuccin-macchiato"
+
+# Show line numbers
+--style="numbers,changes,header"
+
+# Enable git integration
+--diff
+
+# Map common file extensions
+--map-syntax "*.conf:INI"
+--map-syntax ".ignore:Git Ignore"
+--map-syntax "*.{yaml,yml}:YAML"
+--map-syntax "Dockerfile*:Dockerfile"
+--map-syntax "docker-compose*.yml:YAML"
+--map-syntax "*.env*:Bash"
+
+# Paging behavior
+--paging=auto
+
+# Tab width
+--tabs=4

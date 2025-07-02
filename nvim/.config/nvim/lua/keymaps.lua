@@ -1,8 +1,33 @@
+-- ============================================================================
+-- NEOVIM KEYMAP CONFIGURATION
+-- ============================================================================
+-- This file contains all global keymaps for Neovim. Plugin-specific keymaps
+-- that don't conflict are defined in their respective plugin files.
+--
+-- Organization:
+-- - Core vim improvements (search, navigation, editing)
+-- - Window/buffer management  
+-- - LSP operations (code actions, diagnostics, navigation)
+-- - AI assistant integration
+-- - Git operations
+-- - File operations (telescope, neo-tree)
+-- - Application commands
+--
+-- Note: Window navigation uses tmux-navigator plugin for seamless tmux integration
+-- ============================================================================
+
 -- Clear search highlights
 vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
 
--- Exit terminal mode with a more reliable shortcut
+-- Exit terminal mode with multiple reliable shortcuts
 vim.keymap.set("t", "<C-\\>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode (double escape)" })
+
+-- Terminal window navigation (works when in terminal mode)
+vim.keymap.set("t", "<A-h>", "<C-\\><C-n><C-w>h", { desc = "Terminal: Go to Left Window" })
+vim.keymap.set("t", "<A-j>", "<C-\\><C-n><C-w>j", { desc = "Terminal: Go to Lower Window" })
+vim.keymap.set("t", "<A-k>", "<C-\\><C-n><C-w>k", { desc = "Terminal: Go to Upper Window" })
+vim.keymap.set("t", "<A-l>", "<C-\\><C-n><C-w>l", { desc = "Terminal: Go to Right Window" })
 
 -- Enforce vim navigation habits
 vim.keymap.set("n", "<left>", '<cmd>echo "Use the vim keys"<CR>')
@@ -11,10 +36,18 @@ vim.keymap.set("n", "<up>", '<cmd>echo "Use the vim keys"<CR>')
 vim.keymap.set("n", "<down>", '<cmd>echo "Use the vim keys"<CR>')
 
 -- Window navigation and management
+-- Use Alt+hjkl for window navigation (consistent with terminal multiplexer)
 vim.keymap.set("n", "<A-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
 vim.keymap.set("n", "<A-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
 vim.keymap.set("n", "<A-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
 vim.keymap.set("n", "<A-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
+
+-- Alternative Ctrl+hjkl for window navigation (disabled for tmux-navigator integration)
+-- tmux-navigator plugin handles <C-h>, <C-j>, <C-l> and uses <A-k> for up navigation
+-- vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
+-- vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
+-- vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
+vim.keymap.set("n", "<C-w>k", "<C-w>k", { desc = "Go to Upper Window (use C-w+k, C-k reserved for signature help)", remap = true })
 
 -- Window resizing
 vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
@@ -100,7 +133,7 @@ vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to Implementa
 vim.keymap.set(
 	"n",
 	"gr",
-	"<cmd>Telescope lsp_references theme=ivy path_display={'tail'}<cr>",
+	"<cmd>Telescope lsp_references theme=dropdown path_display={'tail'}<cr>",
 	{ desc = "Go to References" }
 )
 vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, { desc = "Go to Type Definition" })
@@ -165,7 +198,7 @@ end, { desc = "Toggle Inlay Hints" })
 -- Code folding
 vim.keymap.set("n", "<leader>cz", "za", { desc = "Toggle Fold", remap = true })
 vim.keymap.set("n", "<leader>cZ", "zA", { desc = "Toggle All Folds", remap = true })
-vim.keymap.set("n", "<leader>cf", "zf", { desc = "Create Fold", remap = true })
+vim.keymap.set("n", "<leader>cF", "zf", { desc = "Create Fold", remap = true })
 
 -- [S]earch operations
 vim.keymap.set("n", "<leader>ss", function()
@@ -186,6 +219,15 @@ vim.api.nvim_create_user_command("Cheatsheet", function()
 	require("telescope.builtin").keymaps({})
 end, { desc = "Show keymaps cheatsheet" })
 vim.keymap.set("n", "<leader>?", "<cmd>Cheatsheet<cr>", { desc = "Keymaps Cheatsheet" })
+
+-- ============================================================================
+-- GIT KEYMAPS
+-- ============================================================================
+vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "LazyGit" })
+vim.keymap.set("n", "<leader>gb", "<cmd>Telescope git_branches theme=dropdown previewer=false<cr>", { desc = "Git Branches" })
+vim.keymap.set("n", "<leader>gc", "<cmd>Telescope git_commits<cr>", { desc = "Git Commits" })
+vim.keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen<cr>", { desc = "Git Diff View" })
+vim.keymap.set("n", "<leader>gD", "<cmd>DiffviewClose<cr>", { desc = "Close Git Diff" })
 
 -- ============================================================================
 -- FILE TREE KEYMAPS (Neo-tree)
@@ -293,10 +335,12 @@ end, { silent = true, expr = true, desc = "Scroll Backward" })
 -- vim.keymap.set("n", "<leader>cf", vim.lsp.buf.format, { desc = "Format buffer" })
 
 -- ============================================================================
--- TREESITTER TEXTOBJECTS KEYMAPS
+-- TREESITTER TEXTOBJECTS KEYMAPS  
 -- ============================================================================
--- These are configured in the treesitter setup, so we don't need to
--- duplicate them here, but documenting them for reference
+-- Text objects and parameter swapping configured in treesitter.lua:
+-- - <leader>cpa: Swap parameter forward  
+-- - <leader>cpA: Swap parameter backward
+-- - af/if: function inner/outer, ac/ic: class inner/outer, etc.
 
 -- ============================================================================
 -- CODE MOVEMENT KEYMAPS
