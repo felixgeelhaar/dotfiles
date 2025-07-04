@@ -397,7 +397,9 @@ export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 
 # Initialize tools
 eval "$(starship init zsh)"
-eval "$(zoxide init zsh --cmd cd)"
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh --cmd cd)"
+fi
 source <(fzf --zsh)
 
 # zoxide creates cd and cdi functions automatically with --cmd cd flag
