@@ -399,6 +399,11 @@ export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 eval "$(starship init zsh)"
 if command -v zoxide >/dev/null 2>&1; then
     eval "$(zoxide init zsh --cmd cd)"
+else
+    # Fallback cd function if zoxide is not available
+    cd() {
+        builtin cd "$@"
+    }
 fi
 source <(fzf --zsh)
 
