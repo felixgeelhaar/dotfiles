@@ -399,11 +399,6 @@ export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 eval "$(starship init zsh)"
 if command -v zoxide >/dev/null 2>&1; then
     eval "$(zoxide init zsh --cmd cd)"
-else
-    # Fallback cd function if zoxide is not available
-    cd() {
-        builtin cd "$@"
-    }
 fi
 source <(fzf --zsh)
 
@@ -439,3 +434,8 @@ export PATH
 
 # Aliases
 alias claude="/Users/felixgeelhaar/.claude/local/claude"
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/felixgeelhaar/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
