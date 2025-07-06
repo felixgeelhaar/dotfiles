@@ -63,7 +63,7 @@
 [init]
     defaultBranch = main
 [commit]
-    gpgsign = true
+	gpgsign = false
 [tag]
     gpgsign = true
 [gpg]
@@ -155,3 +155,9 @@
     #     order to allow any of the above configs to be overwritten
     #     by the local ones
     path = ~/.gitconfig.local
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
