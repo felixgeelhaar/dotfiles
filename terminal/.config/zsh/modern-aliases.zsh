@@ -72,7 +72,7 @@ fi
 # GIT ENHANCEMENTS
 # =============================================================================
 
-# Git aliases for common operations
+# Git aliases for common operations (comprehensive set)
 alias g="git"
 alias ga="git add"
 alias gaa="git add --all"
@@ -90,7 +90,8 @@ alias gcb="git checkout -b"
 alias gd="git diff"
 alias gds="git diff --staged"
 alias gf="git fetch"
-alias gl="git pull"
+alias gl="git log --oneline --graph --decorate --all"
+alias gpl="git pull"
 alias gp="git push"
 alias gpo="git push origin"
 alias glog="git log --oneline --decorate --graph"
@@ -103,6 +104,9 @@ alias gstd="git stash drop"
 alias gstl="git stash list"
 alias gstp="git stash pop"
 alias gsts="git stash show --text"
+alias gm="git merge"
+alias gss="git stash save"
+alias gsp="git stash pop"
 
 # Git flow aliases
 alias gfl="git flow"
@@ -137,6 +141,8 @@ alias dprune="docker system prune -af"
 alias dstop="docker stop \$(docker ps -aq)"
 alias drm="docker rm \$(docker ps -aq)"
 alias drmi="docker rmi \$(docker images -q)"
+alias dlogs="docker logs -f"
+alias dexec="docker exec -it"
 
 # Docker functions
 docker-ip() {
@@ -186,12 +192,6 @@ alias subl="subl ."
 # Language-specific shortcuts
 alias py="python3"
 alias pip="pip3"
-alias node="node"
-alias npm="npm"
-alias yarn="yarn"
-alias go="go"
-alias rust="rustc"
-alias cargo="cargo"
 
 # Package managers
 alias pnpm="pnpm"
@@ -203,15 +203,12 @@ alias yum="sudo yum"
 # SYSTEM UTILITIES
 # =============================================================================
 
-# System information
-alias sysinfo="system_profiler SPSoftwareDataType SPHardwareDataType"
+# System and network utilities
 alias ports="lsof -i"
 alias listening="lsof -i -P | grep LISTEN"
 alias myip="curl -s http://ipinfo.io/ip"
 alias localip="ipconfig getifaddr en0"
 alias speedtest="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
-
-# Network utilities
 alias ping="ping -c 5"
 alias wget="wget -c"
 alias curl="curl -L"
@@ -251,18 +248,17 @@ alias psg="ps aux | grep"
 alias killall="killall"
 alias jobs="jobs -l"
 
-# File searching
-alias ff="find . -type f -name"
-alias fd="find . -type d -name"
+# File searching (use modern tools if available)
+if ! command -v fd >/dev/null 2>&1; then
+    alias ff="find . -type f -name"
+    alias fd="find . -type d -name"
+fi
 
 # =============================================================================
 # SAFETY ALIASES
 # =============================================================================
 
-# Prevent accidental overwrites
-alias cp="cp -i"
-alias mv="mv -i"
-alias rm="rm -i"
+# Safety aliases are already defined in file operations section above
 
 # Safer rm
 alias trash="rmtrash" # if available
