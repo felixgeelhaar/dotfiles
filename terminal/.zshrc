@@ -93,74 +93,9 @@ bindkey '^[[B' history-substring-search-down
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # [ALIASES]
-# File and directory operations
-# Modern ls aliases are now defined in .config/zsh/modern-aliases.zsh
+# Basic navigation - keep only essential ones here
 alias tree="tree -C"
-alias mkdir="mkdir -pv"
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
-
-# Smart directory navigation with zoxide (aliases set after zoxide init)
-
-# Git aliases (in addition to gitconfig)
-alias gs="git status"
-alias ga="git add"
-alias gc="git commit"
-alias gcm="git commit -m"
-alias gp="git push"
-alias gpl="git pull"
-alias gd="git diff"
-alias gco="git checkout"
-alias gb="git branch"
-alias gm="git merge"
-alias gl="git log --oneline --graph --decorate --all"
-alias gss="git stash save"
-alias gsp="git stash pop"
-alias gsl="git stash list"
-
-# Docker aliases
-alias d="docker"
-alias dc="docker-compose"
-alias dps="docker ps"
-alias dpsa="docker ps -a"
-alias di="docker images"
-alias drm="docker rm"
-alias drmi="docker rmi"
-alias dprune="docker system prune -f"
-alias dlogs="docker logs -f"
-alias dexec="docker exec -it"
-
-# Development aliases
-alias v="nvim"
-alias vim="nvim"
-alias code="code ."
-alias py="python3"
-alias pip="pip3"
-
-# System aliases
 alias reload="source ~/.zshrc"
-alias h="history"
-alias hg="history | grep"
-alias ps="ps aux"
-alias df="df -h"
-alias du="du -h"
-alias free="vm_stat"
-alias top="htop"
-
-# Network aliases
-alias ping="ping -c 5"
-alias wget="wget -c"
-alias ports="lsof -i"
-alias ip="curl -s http://ipinfo.io/ip"
-
-# Find and search aliases
-alias f="fd"
-alias find="fd"
-alias grep="rg"
-alias cat="bat"
-alias less="bat"
 
 # Quick edit aliases
 alias zshrc="nvim ~/.zshrc"
@@ -168,32 +103,7 @@ alias vimrc="nvim ~/.config/nvim/init.lua"
 alias gitconfig="nvim ~/.gitconfig"
 
 # [FUNCTIONS]
-# Create directory and cd into it
-mkcd() {
-    mkdir -p "$1" && cd "$1"
-}
-
-# Extract various archive formats
-extract() {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xjf $1     ;;
-            *.tar.gz)    tar xzf $1     ;;
-            *.bz2)       bunzip2 $1     ;;
-            *.rar)       unrar e $1     ;;
-            *.gz)        gunzip $1      ;;
-            *.tar)       tar xf $1      ;;
-            *.tbz2)      tar xjf $1     ;;
-            *.tgz)       tar xzf $1     ;;
-            *.zip)       unzip $1       ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1        ;;
-            *)     echo "'$1' cannot be extracted via extract()" ;;
-        esac
-    else
-        echo "'$1' is not a valid file"
-    fi
-}
+# Functions specific to .zshrc - others moved to modern-aliases.zsh
 
 # Find process by name
 psgrep() {
@@ -399,23 +309,25 @@ export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 eval "$(starship init zsh)"
 if command -v zoxide >/dev/null 2>&1; then
     eval "$(zoxide init zsh --cmd cd)"
+else
+    # Fallback cd function when zoxide is unavailable
+    cd() {
+        builtin cd "$@"
+    }
 fi
 source <(fzf --zsh)
 
 # zoxide creates cd and cdi functions automatically with --cmd cd flag
+# Ensure cd function is available even if zoxide fails to initialize
+if ! command -v __zoxide_z >/dev/null 2>&1; then
+    cd() {
+        builtin cd "$@"
+    }
+fi
 
 # Load performance optimizations and modern aliases
 [[ -f "$HOME/.config/zsh/lazy-loading.zsh" ]] && source "$HOME/.config/zsh/lazy-loading.zsh"
 [[ -f "$HOME/.config/zsh/modern-aliases.zsh" ]] && source "$HOME/.config/zsh/modern-aliases.zsh"
-
-# Override any conflicting aliases with eza (must be after all other alias definitions)
-if command -v eza >/dev/null 2>&1; then
-    alias ls="eza --color=always --group-directories-first"
-    alias ll="eza -alF --color=always --group-directories-first" 
-    alias la="eza -a --color=always --group-directories-first"
-    alias l="eza -F --color=always --group-directories-first"
-    alias lt="eza -aT --color=always --group-directories-first"
-fi
 
 # PATH consolidation and deduplication
 path_prepend() {
