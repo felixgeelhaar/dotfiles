@@ -262,6 +262,10 @@ serve() {
 # [NVM] - Auto-use .nvmrc when entering directories
 export NVM_DIR="$HOME/.nvm"
 
+# Load NVM from Homebrew
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && source "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+
 # Check if we have a working NVM installation
 if command -v nvm &> /dev/null; then
   # Auto-use .nvmrc if present when changing directories
