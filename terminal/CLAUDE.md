@@ -200,7 +200,38 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 ```
 
+### Zoxide Configuration (Smart Directory Navigation)
+```bash
+# Zoxide environment variables
+export _ZO_FZF_OPTS="--height=40% --layout=reverse --border --info=inline"
+export _ZO_RESOLVE_SYMLINKS=1
+export _ZO_EXCLUDE_DIRS="$HOME/.Trash:$HOME/.npm:$HOME/.cache:*/node_modules:*/.git:*/.svn:*/.hg"
+
+# Available commands:
+# cd <query>    - Smart directory jumping based on frequency and recency
+# cdi           - Interactive directory selection with FZF
+# zi            - Alias for interactive directory selection
+```
+
 ## Development Workflows
+
+### Smart Directory Navigation with Zoxide
+```bash
+# Smart directory jumping - learns from your usage patterns
+cd ~/projects/myapp          # First visit - traditional navigation
+cd myapp                     # Future visits - jump directly with just the name
+cd my                        # Partial matching - jumps to most frequent match
+
+# Interactive directory selection with FZF
+zi                           # Opens FZF with directory history
+cdi                          # Alternative interactive selection
+
+# Common usage patterns:
+cd docs                      # Jump to any "docs" directory you've visited
+cd ~/work/project1           # Full path first time
+cd proj1                     # Short name afterwards
+cd test                      # Jump to test directories across projects
+```
 
 ### Project Navigation
 ```bash
@@ -213,6 +244,10 @@ proj() {
         cd "$project_dir/$1"
     fi
 }
+
+# Enhanced with zoxide integration
+# After using proj a few times, you can use:
+# cd projname instead of proj projname
 ```
 
 ### Git Workflows
