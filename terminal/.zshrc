@@ -305,10 +305,17 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 
+# Zoxide configuration
+export _ZO_FZF_OPTS="--height=40% --layout=reverse --border --info=inline"
+export _ZO_RESOLVE_SYMLINKS=1
+export _ZO_EXCLUDE_DIRS="$HOME/.Trash:$HOME/.npm:$HOME/.cache:*/node_modules:*/.git:*/.svn:*/.hg"
+
 # Initialize tools
 eval "$(starship init zsh)"
 if command -v zoxide >/dev/null 2>&1; then
     eval "$(zoxide init zsh --cmd cd)"
+    # Enhanced zoxide aliases - define after zoxide initialization
+    alias zi='__zoxide_zi'  # Interactive directory selection with FZF
 else
     # Fallback cd function when zoxide is unavailable
     cd() {
