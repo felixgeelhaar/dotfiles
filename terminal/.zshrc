@@ -1,7 +1,8 @@
 # Path to your oh-my-zsh configuration.
 export ZSH="$HOME/.oh-my-zsh"
 export XDG_CONFIG_HOME="$HOME/.config"
-export BAT_THEME="Catppuccin-macchiato"
+export BAT_THEME="gruvbox-dark"
+export GNUPGHOME="$HOME/.gnupg"
 
 # Set to this to use case-sensitive completion
 CASE_SENSITIVE="false"
