@@ -8,3 +8,7 @@ LazyVim/lazy-lock.json
 .config/nvim/lazy-lock.json
 
 *.local
+
+# GPG generated files
+gpg/.config/gpg/pubring.kbx
+gpg/.config/gpg/trustdb.gpg
