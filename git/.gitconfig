@@ -63,11 +63,11 @@
 [init]
     defaultBranch = main
 [commit]
-	gpgsign = false
+	gpgsign = true
 [tag]
-    gpgsign = true
+	gpgsign = true
 [gpg]
-    program = /opt/homebrew/bin/gpg # Apple Silicon path
+	program = /opt/homebrew/bin/gpg
 [merge]
     conflictstyle = diff3
     tool = vimdiff
@@ -146,6 +146,7 @@
 	zero-style = "#838ba7"
 
 [user]
+	signingkey = E6755166985CA7BB
     #configered in `~/.gitconfig.local`
 [include]
     # Load local configs.
