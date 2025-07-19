@@ -1,0 +1,10 @@
+# GPG generated files
+gpg/.config/gpg/pubring.kbx
+gpg/.config/gpg/pubring.kbx~
+gpg/.config/gpg/trustdb.gpg
+gpg/.config/gpg/tofu.db
+gpg/.config/gpg/openpgp-revocs.d/
+gpg/.config/gpg/private-keys-v1.d/
+
+# Claude Code local settings
+.claude/
