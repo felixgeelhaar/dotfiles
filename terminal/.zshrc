@@ -318,9 +318,10 @@ export _ZO_EXCLUDE_DIRS="$HOME/.Trash:$HOME/.npm:$HOME/.cache:*/node_modules:*/.
 # Initialize tools
 eval "$(starship init zsh)"
 if command -v zoxide >/dev/null 2>&1; then
-    eval "$(zoxide init zsh --cmd cd)"
-    # Enhanced zoxide aliases - define after zoxide initialization
-    alias zi='__zoxide_zi'  # Interactive directory selection with FZF
+    eval "$(zoxide init zsh)"
+    # Override cd to use zoxide while maintaining compatibility
+    alias cd='z'
+    alias cdi='zi'  # Interactive directory selection with FZF
 else
     # Fallback cd function when zoxide is unavailable
     cd() {
@@ -329,11 +330,14 @@ else
 fi
 source <(fzf --zsh)
 
-# zoxide creates cd and cdi functions automatically with --cmd cd flag
-# Ensure cd function is available even if zoxide fails to initialize
+# Ensure zoxide functions are available even if initialization fails
 if ! command -v __zoxide_z >/dev/null 2>&1; then
     cd() {
         builtin cd "$@"
+    }
+    zi() {
+        echo "zoxide not properly initialized"
+        return 1
     }
 fi
 
