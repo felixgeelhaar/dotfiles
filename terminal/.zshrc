@@ -341,6 +341,9 @@ fi
 [[ -f "$HOME/.config/zsh/lazy-loading.zsh" ]] && source "$HOME/.config/zsh/lazy-loading.zsh"
 [[ -f "$HOME/.config/zsh/modern-aliases.zsh" ]] && source "$HOME/.config/zsh/modern-aliases.zsh"
 
+# Load custom completions
+fpath=(~/.config/zsh/completions $fpath)
+
 # PATH consolidation and deduplication
 path_prepend() {
   case ":$PATH:" in
