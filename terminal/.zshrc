@@ -323,23 +323,14 @@ if command -v zoxide >/dev/null 2>&1; then
     alias cd='z'
     alias cdi='zi'  # Interactive directory selection with FZF
 else
-    # Fallback cd function when zoxide is unavailable
+    # Fallback: ensure no cd alias exists, then define function
+    unalias cd 2>/dev/null || true
     cd() {
         builtin cd "$@"
     }
 fi
 source <(fzf --zsh)
 
-# Ensure zoxide functions are available even if initialization fails
-if ! command -v __zoxide_z >/dev/null 2>&1; then
-    cd() {
-        builtin cd "$@"
-    }
-    zi() {
-        echo "zoxide not properly initialized"
-        return 1
-    }
-fi
 
 # Load performance optimizations and modern aliases
 [[ -f "$HOME/.config/zsh/lazy-loading.zsh" ]] && source "$HOME/.config/zsh/lazy-loading.zsh"
@@ -364,7 +355,6 @@ path_prepend "/opt/homebrew/opt/rustup/bin"
 export PATH
 
 # Aliases
-alias claude="/Users/felixgeelhaar/.claude/local/claude"
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
 fpath=(/Users/felixgeelhaar/.docker/completions $fpath)
 autoload -Uz compinit
