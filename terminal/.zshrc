@@ -322,12 +322,6 @@ if command -v zoxide >/dev/null 2>&1; then
     # Override cd to use zoxide while maintaining compatibility
     alias cd='z'
     alias cdi='zi'  # Interactive directory selection with FZF
-else
-    # Fallback: ensure no cd alias exists, then define function
-    unalias cd 2>/dev/null || true
-    cd() {
-        builtin cd "$@"
-    }
 fi
 source <(fzf --zsh)
 
