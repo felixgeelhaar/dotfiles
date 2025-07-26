@@ -317,12 +317,6 @@ export _ZO_EXCLUDE_DIRS="$HOME/.Trash:$HOME/.npm:$HOME/.cache:*/node_modules:*/.
 
 # Initialize tools
 eval "$(starship init zsh)"
-if command -v zoxide >/dev/null 2>&1; then
-    eval "$(zoxide init zsh)"
-    # Override cd to use zoxide while maintaining compatibility
-    alias cd='z'
-    alias cdi='zi'  # Interactive directory selection with FZF
-fi
 source <(fzf --zsh)
 
 
@@ -355,3 +349,8 @@ autoload -Uz compinit
 compinit
 # End of Docker CLI completions
 export GPG_TTY=$(tty)
+
+# Initialize zoxide - MUST be at the end of the file
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+fi
