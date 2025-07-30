@@ -354,3 +354,5 @@ export GPG_TTY=$(tty)
 if command -v zoxide >/dev/null 2>&1; then
     eval "$(zoxide init zsh)"
 fi
+
+alias claude="/Users/felixgeelhaar/.claude/local/claude"

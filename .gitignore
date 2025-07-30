@@ -8,3 +8,6 @@ gpg/.config/gpg/private-keys-v1.d/
 
 # Claude Code local settings
 .claude/
+
+# Claude backups
+.claude-backup-*/
