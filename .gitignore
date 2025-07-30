@@ -6,8 +6,12 @@ gpg/.config/gpg/tofu.db
 gpg/.config/gpg/openpgp-revocs.d/
 gpg/.config/gpg/private-keys-v1.d/
 
-# Claude Code local settings
-.claude/
+# Claude Code runtime data (exclude from git)
+.claude/.claude/local/
+.claude/.claude/projects/
+.claude/.claude/shell-snapshots/
+.claude/.claude/statsig/
+.claude/.claude/todos/
 
 # Claude backups
 .claude-backup-*/
