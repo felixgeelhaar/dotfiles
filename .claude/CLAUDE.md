@@ -8,16 +8,17 @@ This directory contains stowable configuration files for Claude Code (claude.ai/
 .claude/
 ├── CLAUDE.md                        # This file - Claude Code configuration documentation
 ├── .claude/                         # Stowable Claude Code configuration
-│   └── agents/                      # Custom agent configurations (STOWABLE)
-│       ├── backend-development-specialist.md
-│       ├── code-review-quality-assurance-specialist.md
-│       ├── devops-infrastructure-specialist.md
-│       ├── frontend-ui-ux-development-specialist.md
-│       ├── go-backend-specialist.md
-│       ├── product-design-strategist.md
-│       ├── project-management-specialist.md
-│       ├── strategic-product-management-specialist.md
-│       └── typescript-javascript-specialist.md
+│   ├── agents/                      # Custom agent configurations (STOWABLE)
+│   │   ├── backend-development-specialist.md
+│   │   ├── code-review-quality-assurance-specialist.md
+│   │   ├── devops-infrastructure-specialist.md
+│   │   ├── frontend-ui-ux-development-specialist.md
+│   │   ├── go-backend-specialist.md
+│   │   ├── product-design-strategist.md
+│   │   ├── project-management-specialist.md
+│   │   ├── strategic-product-management-specialist.md
+│   │   └── typescript-javascript-specialist.md
+│   └── settings.json                # Claude Code global settings (STOWABLE)
 └── .config/claude/                  # Stowable system-wide reference
     └── CLAUDE.md                    # Comprehensive best practices guide (STOWABLE)
 
@@ -29,7 +30,7 @@ This directory contains stowable configuration files for Claude Code (claude.ai/
 # ~/.claude/todos/                   # Task management and todo tracking
 # ~/.claude/ClAUDE.md                # Legacy Claude configuration file
 # ~/.claude/mcp.json                 # MCP (Model Context Protocol) configuration
-# ~/.claude/settings.local.json      # Claude Code permissions and settings
+# ~/.claude/settings.local.json      # Local overrides for settings (if needed)
 ```
 
 ## Stow Installation
@@ -37,11 +38,12 @@ This directory contains stowable configuration files for Claude Code (claude.ai/
 To apply the Claude Code configuration:
 
 ```bash
-# Apply Claude Code configuration (agents and global CLAUDE.md only)
+# Apply Claude Code configuration (agents, settings.json, and global CLAUDE.md)
 stow .claude
 
 # This creates:
 # ~/.claude/agents/                   # Custom agent configurations
+# ~/.claude/settings.json             # Global Claude Code settings
 # ~/.config/claude/CLAUDE.md          # System-wide best practices reference
 ```
 
@@ -71,6 +73,19 @@ Custom agent definitions for specialized development tasks:
 - **project-management-specialist.md**: Project planning and delivery management
 - **strategic-product-management-specialist.md**: Product strategy and roadmap planning
 - **typescript-javascript-specialist.md**: TypeScript/JavaScript development expertise
+
+#### `~/.claude/settings.json` (Stowable)
+Global Claude Code settings with security-focused configuration:
+- **Tool Permissions**: Allows all standard tools by default, with specific denials for:
+  - File deletion commands (`rm`, `rm -rf`)
+  - Privilege escalation (`sudo`)
+  - Dangerous permission changes (`chmod 777`)
+  - Unsafe script execution (`curl/wget | bash`)
+- **Privacy Settings**: 
+  - Telemetry disabled (`CLAUDE_NO_TELEMETRY`)
+  - Co-authored-by disabled (`includeCoAuthoredBy: false`)
+- **Environment**: Sets nvim as default editor
+- **MCP Security**: Requires manual approval for project MCP servers
 
 ### Runtime Configuration Files (Not Stowable)
 
