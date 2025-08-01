@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **modular dotfiles repository** organized by application, using **GNU Stow** for symlink management. Each directory contains configuration for a specific tool with its own CLAUDE.md documentation:
 
-- `.claude/` - Claude Code configuration and integration settings
+- `.claude/` - Claude Code shared configuration (agents and global best practices)
 - `docker/` - Docker container management and development workflows
 - `git/` - Git configuration with delta pager, GPG signing, and advanced workflows
 - `gpg/` - GPG configuration for commit signing and key management

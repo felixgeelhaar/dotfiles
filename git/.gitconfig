@@ -50,6 +50,13 @@
     sl = stash list
     sa = stash apply
     ss = stash save
+    stash-all = stash save --include-untracked
+    stash-unapply = !git stash show -p | git apply -R
+    
+    # Advanced operations
+    graph = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit
+    find = !git log --pretty=format:'%C(yellow)%h %Creset%s' --grep
+    optimize = !git maintenance run --task=gc --task=commit-graph --task=loose-objects --task=incremental-repack
 [filter "lfs"]
     process = git-lfs filter-process
     required = true
@@ -105,6 +112,18 @@
 [core]
     preloadindex = true
     fscache = true
+[feature]
+    manyFiles = true # Optimize for repos with many files
+    experimental = true # Enable experimental performance features
+[pack]
+    threads = 0 # Use all CPU cores for packing objects
+[protocol]
+    version = 2 # Use newer, more efficient Git protocol
+[blame]
+    coloring = highlightRecent # Color blame by age
+    date = relative # Show relative dates in blame
+[status]
+    submoduleSummary = true # Show submodule changes in status
 [credential]
     helper = osxkeychain
     useHttpPath = true

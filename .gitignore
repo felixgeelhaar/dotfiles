@@ -6,12 +6,61 @@ gpg/.config/gpg/tofu.db
 gpg/.config/gpg/openpgp-revocs.d/
 gpg/.config/gpg/private-keys-v1.d/
 
-# Claude Code runtime data (exclude from git)
-.claude/.claude/local/
-.claude/.claude/projects/
-.claude/.claude/shell-snapshots/
-.claude/.claude/statsig/
-.claude/.claude/todos/
+# Claude runtime directories (should not be in dotfiles)
+.claude/local/
+.claude/projects/
+.claude/shell-snapshots/
+.claude/statsig/
+.claude/todos/
+.claude/mcp.json
+.claude/settings.local.json
+.claude/ClAUDE.md
 
 # Claude backups
 .claude-backup-*/
+
+# Local configuration files (personal data)
+*.local
+!*.local.template
+git/.gitconfig.local
+ssh/.ssh/id_*
+ssh/.ssh/known_hosts
+ssh/.ssh/authorized_keys
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.backup
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-*
+
+# Build and dependency directories
+node_modules/
+target/
+dist/
+build/
+*.pyc
+__pycache__/
+.pytest_cache/
+.coverage
+
+# Documentation drafts
+IMPROVEMENTS.md
+BACKUP.md
+TODO.md
+NOTES.md
+*_SUMMARY.md
+*_DRAFT.md

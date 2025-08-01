@@ -1,6 +1,8 @@
 # GPG Configuration
 
-This directory contains GPG (GNU Privacy Guard) configuration for commit signing, key management, and cryptographic operations.
+This directory contains GPG (GNU Privacy Guard) configuration templates for commit signing, key management, and cryptographic operations.
+
+**⚠️ SECURITY NOTICE**: This GPG configuration should NOT be stowed due to security concerns. Private keys must remain local and never be version controlled.
 
 ## Directory Structure
 

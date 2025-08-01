@@ -1,3 +1,11 @@
+# Performance optimization: Skip security check for faster startup
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR}/.zcompdump(#qNmh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+
 # Path to your oh-my-zsh configuration.
 export ZSH="$HOME/.oh-my-zsh"
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -57,6 +65,29 @@ plugins=(gh brew history minikube kubectl helm node npm python pip golang rust d
 export PATH="$HOME/bin:/usr/local/bin:$PATH"
 
 source $ZSH/oh-my-zsh.sh
+
+# Performance optimizations
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history
+setopt HIST_FIND_NO_DUPS         # Don't display duplicates when searching history
+setopt HIST_SAVE_NO_DUPS         # Don't save duplicates to history file
+setopt SHARE_HISTORY             # Share history between all sessions
+setopt HIST_VERIFY               # Show command with history expansion before running
+
+# Better glob patterns
+setopt EXTENDED_GLOB             # Use extended globbing syntax
+setopt GLOB_DOTS                 # Include dotfiles in globbing
+setopt NO_CASE_GLOB              # Case insensitive globbing
+
+# Improved directory navigation
+setopt AUTO_PUSHD                # Push directories onto stack
+setopt PUSHD_IGNORE_DUPS         # Don't push duplicate directories
+setopt PUSHD_MINUS               # Exchange meanings of + and -
+
+# Enhanced completion
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' cache-path ~/.zsh/cache
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -294,7 +325,6 @@ fi
 
 # GPG configuration
 export GPG_TTY=$(tty)
-export GNUPGHOME="$HOME/.config/gpg"
 
 # Refresh GPG agent tty in case user switches into an X session
 gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
@@ -355,4 +385,5 @@ if command -v zoxide >/dev/null 2>&1; then
     eval "$(zoxide init zsh)"
 fi
 
-alias claude="/Users/felixgeelhaar/.claude/local/claude"
+# Claude CLI - local symlink points to global installation
+# ~/.claude/local/claude -> ~/.nvm/versions/node/v22.17.0/bin/claude

@@ -1,6 +1,6 @@
 # Claude Code Configuration
 
-This directory contains configuration files and resources for Claude Code (claude.ai/code) integration with the dotfiles repository.
+This directory contains stowable configuration files for Claude Code (claude.ai/code) integration.
 
 ## Directory Structure
 
@@ -8,52 +8,73 @@ This directory contains configuration files and resources for Claude Code (claud
 .claude/
 ├── CLAUDE.md                        # This file - Claude Code configuration documentation
 ├── .claude/                         # Stowable Claude Code configuration
-│   ├── agents/                      # Custom agent configurations
-│   │   ├── backend-development-specialist.md
-│   │   ├── code-review-quality-assurance-specialist.md
-│   │   ├── devops-infrastructure-specialist.md
-│   │   ├── frontend-ui-ux-development-specialist.md
-│   │   ├── go-backend-specialist.md
-│   │   ├── product-design-strategist.md
-│   │   ├── project-management-specialist.md
-│   │   ├── strategic-product-management-specialist.md
-│   │   └── typescript-javascript-specialist.md
-│   ├── local/                       # Local Claude Code installation and dependencies
-│   ├── projects/                    # Project-specific conversation history
-│   ├── shell-snapshots/             # Shell environment snapshots
-│   ├── statsig/                     # Usage analytics and feature flags
-│   ├── todos/                       # Task management and todo tracking
-│   ├── ClAUDE.md                    # Legacy Claude configuration file
-│   ├── mcp.json                     # MCP (Model Context Protocol) configuration
-│   └── settings.local.json          # Claude Code permissions and settings
+│   └── agents/                      # Custom agent configurations (STOWABLE)
+│       ├── backend-development-specialist.md
+│       ├── code-review-quality-assurance-specialist.md
+│       ├── devops-infrastructure-specialist.md
+│       ├── frontend-ui-ux-development-specialist.md
+│       ├── go-backend-specialist.md
+│       ├── product-design-strategist.md
+│       ├── project-management-specialist.md
+│       ├── strategic-product-management-specialist.md
+│       └── typescript-javascript-specialist.md
 └── .config/claude/                  # Stowable system-wide reference
-    └── CLAUDE.md                     # Comprehensive best practices guide
+    └── CLAUDE.md                    # Comprehensive best practices guide (STOWABLE)
+
+# Runtime directories (NOT in dotfiles, live in ~/.claude):
+# ~/.claude/local/                   # Local Claude Code installation and dependencies
+# ~/.claude/projects/                # Project-specific conversation history
+# ~/.claude/shell-snapshots/         # Shell environment snapshots
+# ~/.claude/statsig/                 # Usage analytics and feature flags
+# ~/.claude/todos/                   # Task management and todo tracking
+# ~/.claude/ClAUDE.md                # Legacy Claude configuration file
+# ~/.claude/mcp.json                 # MCP (Model Context Protocol) configuration
+# ~/.claude/settings.local.json      # Claude Code permissions and settings
 ```
 
 ## Stow Installation
 
-To apply the Claude Code configuration system-wide:
+To apply the Claude Code configuration:
 
 ```bash
-# Apply Claude Code configuration
+# Apply Claude Code configuration (agents and global CLAUDE.md only)
 stow .claude
 
 # This creates:
 # ~/.claude/agents/                   # Custom agent configurations
-# ~/.claude/local/                    # Local Claude Code installation  
-# ~/.claude/projects/                 # Project conversation history
-# ~/.claude/shell-snapshots/          # Shell environment snapshots
-# ~/.claude/statsig/                  # Usage analytics and feature flags
-# ~/.claude/todos/                    # Task management and todo tracking
-# ~/.claude/ClAUDE.md                 # Legacy Claude configuration
-# ~/.claude/mcp.json                  # MCP configuration
-# ~/.claude/settings.local.json       # Claude Code permissions and settings
 # ~/.config/claude/CLAUDE.md          # System-wide best practices reference
 ```
 
+**Important:** Runtime files (local/, projects/, shell-snapshots/, statsig/, todos/, mcp.json, settings.local.json) remain in ~/.claude and are NOT managed by stow.
+
 ## Configuration Files
 
-### Core Configuration Files
+### Stowable Configuration Files
+
+#### `~/.config/claude/CLAUDE.md`
+Comprehensive system-wide best practices guide covering:
+- **Enterprise Architecture**: SOLID principles, DDD, microservices patterns
+- **Security Framework**: Input validation, authentication, encryption standards
+- **Development Workflow**: TDD, code review, deployment strategies
+- **Performance Engineering**: Database optimization, caching, monitoring
+- **Technology Guidelines**: Language-specific best practices
+- **Agent Utilization**: Specialized agent usage strategies
+
+#### `~/.claude/agents/` (Stowable)
+Custom agent definitions for specialized development tasks:
+- **backend-development-specialist.md**: Server-side architecture and database design
+- **code-review-quality-assurance-specialist.md**: Code quality and security reviews  
+- **devops-infrastructure-specialist.md**: Deployment and infrastructure management
+- **frontend-ui-ux-development-specialist.md**: UI/UX development and design systems
+- **go-backend-specialist.md**: Go-specific backend development patterns
+- **product-design-strategist.md**: Product design and user experience strategy
+- **project-management-specialist.md**: Project planning and delivery management
+- **strategic-product-management-specialist.md**: Product strategy and roadmap planning
+- **typescript-javascript-specialist.md**: TypeScript/JavaScript development expertise
+
+### Runtime Configuration Files (Not Stowable)
+
+These files contain user-specific data and runtime state, managed directly in ~/.claude:
 
 #### `~/.claude/settings.local.json`
 Claude Code permissions and tool access configuration:
@@ -67,25 +88,7 @@ Model Context Protocol configuration:
 - **Resource access**: Repository management, browser automation, documentation search
 - **Integration settings**: Tool-specific configurations and permissions
 
-#### `~/.claude/ClAUDE.md`
-Legacy Claude configuration file (migrated from existing setup):
-- **Historical configurations**: Previous Claude setup instructions
-- **Migration reference**: Documentation of configuration evolution
-
-### Agent Configurations (`~/.claude/agents/`)
-
-Custom agent definitions for specialized development tasks:
-- **backend-development-specialist.md**: Server-side architecture and database design
-- **code-review-quality-assurance-specialist.md**: Code quality and security reviews  
-- **devops-infrastructure-specialist.md**: Deployment and infrastructure management
-- **frontend-ui-ux-development-specialist.md**: UI/UX development and design systems
-- **go-backend-specialist.md**: Go-specific backend development patterns
-- **product-design-strategist.md**: Product design and user experience strategy
-- **project-management-specialist.md**: Project planning and delivery management
-- **strategic-product-management-specialist.md**: Product strategy and roadmap planning
-- **typescript-javascript-specialist.md**: TypeScript/JavaScript development expertise
-
-### Data and History
+### Data and History (Runtime Only)
 
 #### `~/.claude/projects/`
 Project-specific conversation history and context:
@@ -117,34 +120,22 @@ Local Claude Code installation and dependencies:
 - **Node modules**: Required JavaScript packages and libraries
 - **Installation assets**: Supporting files for Claude Code operation
 
-### System-Wide Reference
-
-#### `~/.config/claude/CLAUDE.md`
-Comprehensive system-wide best practices guide covering:
-- **Enterprise Architecture**: SOLID principles, DDD, microservices patterns
-- **Security Framework**: Input validation, authentication, encryption standards
-- **Development Workflow**: TDD, code review, deployment strategies
-- **Performance Engineering**: Database optimization, caching, monitoring
-- **Technology Guidelines**: Language-specific best practices
-- **Agent Utilization**: Specialized agent usage strategies
-
 ## Purpose
 
 The `.claude` directory serves as the centralized location for:
 
-- **Claude Code Settings**: Configuration files for Claude Code behavior
-- **Project Context**: Additional context files for better code understanding
-- **Custom Instructions**: Specific instructions for Claude Code operations
-- **Workflow Automation**: Scripts and configurations for Claude-assisted development
+- **Shared Configuration**: Agents and best practices that can be version controlled
+- **Runtime Data**: Project history, todos, and user-specific settings that are machine-local
+- **Development Assistance**: Context and configurations for Claude-assisted development
 
 ## Integration with Dotfiles
 
 This Claude Code configuration is designed to work seamlessly with the modular dotfiles architecture:
 
-- **Stow Compatibility**: Managed with GNU Stow like other configurations
+- **Stow Compatibility**: Only agents and global CLAUDE.md are managed with GNU Stow
 - **Documentation Consistency**: Follows the same documentation patterns as other modules
 - **Security Awareness**: Respects the repository's security practices and GPG signing
-- **Development Workflow**: Enhances the existing development environment setup
+- **Runtime Separation**: Keeps user data and runtime files separate from version control
 
 ## Features
 
@@ -182,22 +173,26 @@ Works with all configured tools:
 
 ### Configuration Changes
 
-- **Use Stow**: Apply configuration changes through the stow system
-- **Preserve Local Settings**: Respect `.local` files and environment-specific configurations
+- **Use Stow for Shared Config**: Apply agent and global CLAUDE.md changes through stow
+- **Direct Edit for Runtime**: Modify runtime files directly in ~/.claude
+- **Preserve Local Settings**: Respect machine-specific configurations
 - **Follow Theme System**: Maintain Catppuccin theming consistency across tools
-- **Version Control**: Commit configuration changes with descriptive messages
+- **Version Control**: Commit shareable configuration changes with descriptive messages
 
 ## Usage Examples
 
 ### Common Tasks
 ```bash
-# Apply Claude Code configuration
+# Apply Claude Code shared configuration (agents + global CLAUDE.md)
 stow .claude
 
-# Update all configurations with Claude assistance
-./update.sh
+# View current agents
+ls ~/.claude/agents/
 
-# Remove Claude Code configuration
+# Edit runtime settings directly
+nvim ~/.claude/settings.local.json
+
+# Remove shared configuration
 stow -D .claude
 ```
 
@@ -207,55 +202,26 @@ stow -D .claude
 - **Security Operations**: GPG and SSH key management scripts
 - **Development Workflows**: Container and editor setup assistance
 
-## Backup and Recovery
-
-### Backup Location
-Complete backup of existing ~/.claude configuration is stored at:
-`/Users/felixgeelhaar/dotfiles/.claude-backup-20250730_125458/`
-
-This backup includes:
-- **agents/**: All 9 specialized agent configuration files
-- **todos/**: Complete todo history with archive
-- **local/**: Full Claude Code installation
-- **projects/**: Project conversation history
-- **shell-snapshots/**: Shell environment snapshots
-- **statsig/**: Usage analytics and feature flags
-- **mcp.json**: MCP server configurations (puppeteer, filesystem, sequential-thinking, memory)
-- **ClAUDE.md**: Legacy configuration file (empty)
-- **settings.local.json**: Missing from original location
-
-### Recovery Procedure
-If the stow migration causes issues, restore from backup:
-```bash
-# Remove stowed configuration
-stow -D .claude
-
-# Restore from backup
-cp -r /Users/felixgeelhaar/dotfiles/.claude-backup-20250730_125458/* ~/.claude/
-
-# Verify restoration
-ls -la ~/.claude/
-cat ~/.claude/mcp.json
-```
-
 ## Maintenance
 
 ### Regular Updates
-- Keep Claude Code context files updated with repository changes
+- Keep Claude Code shared configuration updated with repository changes
 - Update documentation when adding new tools or configurations
 - Ensure security practices remain current with evolving standards
+- Sync agent configurations across development machines
 
 ### Quality Assurance
 - Verify Claude Code suggestions align with repository patterns
 - Test configuration changes before committing
 - Maintain consistency with the overall dotfiles architecture
+- Review agent configurations for relevance and accuracy
 
 ## Future Enhancements
 
 Potential additions to this directory:
-- **Custom Prompts**: Specialized prompts for different development tasks
-- **Workflow Templates**: Common development workflow automations
-- **Integration Scripts**: Enhanced integration with existing tools
-- **Context Files**: Additional context for specialized development scenarios
+- **Custom Prompts**: Specialized prompts for different development tasks (stowable)
+- **Workflow Templates**: Common development workflow automations (stowable)
+- **Integration Scripts**: Enhanced integration with existing tools (stowable)
+- **Context Files**: Additional context for specialized development scenarios (stowable)
 
-This configuration enhances the already comprehensive dotfiles setup with intelligent assistance while maintaining the security, modularity, and consistency that defines this repository.
+This configuration enhances the comprehensive dotfiles setup with intelligent assistance while maintaining the security, modularity, and consistency that defines this repository. The separation between stowable shared configuration and runtime user data ensures both version control benefits and proper data isolation.
