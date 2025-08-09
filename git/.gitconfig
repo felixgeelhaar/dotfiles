@@ -165,8 +165,7 @@
 	zero-style = "#838ba7"
 
 [user]
-	signingkey = E6755166985CA7BB
-    #configered in `~/.gitconfig.local`
+    #configured in `~/.gitconfig.local`
 [include]
     # Load local configs.
     # https://git-scm.com/docs/git-config#_includes
