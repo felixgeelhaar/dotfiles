@@ -43,10 +43,6 @@ return {
 		},
 		config = function(_, opts)
 			require("noice").setup(opts)
-			-- Debug message to confirm noice is loading
-			vim.defer_fn(function()
-				vim.notify("Noice is now active!", vim.log.levels.INFO, { title = "Noice" })
-			end, 100)
 		end,
 	},
 }

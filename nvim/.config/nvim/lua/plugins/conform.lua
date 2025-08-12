@@ -198,8 +198,7 @@ return {
         desc = "Re-enable autoformat-on-save",
       })
       
-      -- Show conform status in statusline
-      vim.o.statusline = vim.o.statusline .. "%{&modified?'':ConformInfo()}"
+      -- Note: ConformInfo is available as a command, not a function for statusline
     end,
   },
 }
