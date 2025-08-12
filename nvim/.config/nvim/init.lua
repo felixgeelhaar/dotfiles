@@ -7,6 +7,9 @@ end
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Fix deprecated LSP functions before any plugins load
+require("config.lsp-deprecation-fix").setup()
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
