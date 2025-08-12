@@ -1,6 +1,8 @@
 return {
 	{
 		"folke/noice.nvim",
+		event = "VimEnter", -- Ensure it loads early
+		priority = 1000, -- Load with high priority
 		dependencies = {
 			"MunifTanjim/nui.nvim",
 			"rcarriga/nvim-notify",
@@ -137,8 +139,11 @@ return {
 			end
 			require("noice").setup(opts)
 
-			-- Set up the telescope extension
-			require("telescope").load_extension("noice")
+			-- Set up the telescope extension with error handling
+			local ok, telescope = pcall(require, "telescope")
+			if ok then
+				telescope.load_extension("noice")
+			end
 		end,
 	},
 }
