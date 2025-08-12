@@ -33,11 +33,23 @@ return {
 				view_history = "messages", -- view for :messages
 				view_search = "virtualtext", -- view for search count messages
 			},
-			-- Route specific message patterns
+			-- Route specific message patterns and filter out noisy messages
 			routes = {
 				{
 					view = "notify",
 					filter = { event = "msg_showmode" },
+				},
+				-- Filter out formatter timeout warnings
+				{
+					filter = {
+						event = "notify",
+						any = {
+							{ find = "timeout" },
+							{ find = "Formatter.*timeout" },
+							{ find = "LSP.*timeout" },
+						},
+					},
+					opts = { skip = true },
 				},
 			},
 		},

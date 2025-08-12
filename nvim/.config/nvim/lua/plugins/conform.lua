@@ -12,6 +12,7 @@ return {
             async = true, 
             lsp_fallback = true,
             quiet = true, -- Don't show errors for missing formatters
+            timeout_ms = 5000, -- Increased timeout
           })
         end,
         mode = "",
@@ -42,8 +43,8 @@ return {
         yaml = { "prettier", stop_after_first = true },
         markdown = { "prettier", stop_after_first = true },
         
-        -- Languages with built-in formatters
-        go = { "gofmt", stop_after_first = true },
+        -- Languages with built-in formatters (disabled go due to timeout issues)
+        -- go = { "gofmt", stop_after_first = true }, -- Disabled due to timeout
         rust = { "rustfmt", stop_after_first = true },
         lua = { "stylua", stop_after_first = true },
         python = { "black", stop_after_first = true },
@@ -93,7 +94,7 @@ return {
         end
         
         return {
-          timeout_ms = 3000,
+          timeout_ms = 5000, -- Increased timeout for slow formatters
           lsp_fallback = true,
           async = true,
         }
