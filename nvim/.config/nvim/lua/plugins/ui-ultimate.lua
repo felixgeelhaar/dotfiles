@@ -341,18 +341,19 @@ return {
         diagnostic = true,
         gitsigns = true,
         handle = true,
-        search = true,
+        search = false, -- Disabled since hlslens is not installed
         ale = false,
       },
     },
     config = function(_, opts)
       require("scrollbar").setup(opts)
       require("scrollbar.handlers.gitsigns").setup()
-      require("scrollbar.handlers.search").setup({
-        calm_down = true,
-        nearest_only = true,
-        nearest_float_border = true,
-      })
+      -- Disable search handler since hlslens is not installed
+      -- require("scrollbar.handlers.search").setup({
+      --   calm_down = true,
+      --   nearest_only = true,
+      --   nearest_float_border = true,
+      -- })
     end,
   },
 
