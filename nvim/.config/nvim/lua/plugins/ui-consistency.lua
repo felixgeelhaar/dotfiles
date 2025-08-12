@@ -36,7 +36,10 @@ return {
     config = function(_, opts)
       local notify = require("notify")
       notify.setup(opts)
-      vim.notify = notify
+      -- Only set vim.notify if noice is not available
+      if not pcall(require, "noice") then
+        vim.notify = notify
+      end
       
       -- Set highlight groups for Catppuccin
       vim.api.nvim_set_hl(0, "NotifyERRORBorder", { link = "DiagnosticError" })
