@@ -33,23 +33,27 @@ return {
 				view_history = "messages", -- view for :messages
 				view_search = "virtualtext", -- view for search count messages
 			},
-			-- Route specific message patterns and filter out noisy messages
+			-- Route specific message patterns and filter out only specific noisy messages
 			routes = {
 				{
 					view = "notify",
 					filter = { event = "msg_showmode" },
 				},
-				-- Filter out formatter timeout warnings
+				-- Filter out only specific timeout warnings, not all messages
 				{
 					filter = {
 						event = "notify",
 						any = {
-							{ find = "timeout" },
 							{ find = "Formatter.*timeout" },
-							{ find = "LSP.*timeout" },
+							{ find = "%[LSP%].*timeout" },
 						},
 					},
 					opts = { skip = true },
+				},
+				-- Ensure save messages go through noice
+				{
+					filter = { event = "msg_show", kind = "bufwrite" },
+					view = "notify",
 				},
 			},
 		},

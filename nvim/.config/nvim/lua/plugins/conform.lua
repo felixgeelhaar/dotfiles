@@ -43,8 +43,8 @@ return {
         yaml = { "prettier", stop_after_first = true },
         markdown = { "prettier", stop_after_first = true },
         
-        -- Languages with built-in formatters (disabled go due to timeout issues)
-        -- go = { "gofmt", stop_after_first = true }, -- Disabled due to timeout
+        -- Languages with built-in formatters
+        go = { "gofmt", stop_after_first = true },
         rust = { "rustfmt", stop_after_first = true },
         lua = { "stylua", stop_after_first = true },
         python = { "black", stop_after_first = true },

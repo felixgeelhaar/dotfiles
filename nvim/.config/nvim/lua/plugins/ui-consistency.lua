@@ -2,10 +2,42 @@
 -- This ensures all floating windows, borders, and UI elements match the theme
 
 return {
-  -- Improved notifications (disabled - using noice instead)
+  -- Improved notifications (required by noice)
   {
     "rcarriga/nvim-notify",
-    enabled = false, -- Disabled to let noice handle all notifications
+    lazy = false,
+    priority = 50, -- Lower priority than noice
+    opts = {
+      background_colour = "#000000",
+      fps = 60,
+      icons = {
+        DEBUG = "",
+        ERROR = "",
+        INFO = "",
+        TRACE = "✎",
+        WARN = "",
+      },
+      level = vim.log.levels.INFO,
+      minimum_width = 50,
+      render = "compact",
+      stages = "fade_in_slide_out",
+      timeout = 3000,
+      top_down = false,
+      max_height = function()
+        return math.floor(vim.o.lines * 0.75)
+      end,
+      max_width = function()
+        return math.floor(vim.o.columns * 0.75)
+      end,
+      on_open = function(win)
+        vim.api.nvim_win_set_config(win, { border = "rounded" })
+      end,
+    },
+    config = function(_, opts)
+      local notify = require("notify")
+      notify.setup(opts)
+      -- DON'T override vim.notify - let noice handle that
+    end,
   },
 
   -- Consistent UI components
