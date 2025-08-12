@@ -117,7 +117,10 @@ return {
         color_icons = true,
         show_buffer_icons = true,
         show_buffer_close_icons = true,
-        show_buffer_default_icon = true,
+        get_element_icon = function(element)
+          local icon, hl = require('nvim-web-devicons').get_icon_by_filetype(element.filetype, { default = false })
+          return icon, hl
+        end,
         show_close_icon = true,
         show_tab_indicators = true,
         show_duplicate_prefix = true,
