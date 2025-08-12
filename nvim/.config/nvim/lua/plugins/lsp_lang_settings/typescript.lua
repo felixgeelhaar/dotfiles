@@ -1,6 +1,9 @@
 return {
 	settings = {
 		complete_function_calls = true,
+		signatureHelp = {
+			enabled = true,
+		},
 		vtsls = {
 			enableMoveToFileCodeAction = true,
 			autoUseWorkspaceTsdk = true,
@@ -14,6 +17,9 @@ return {
 			updateImportsOnFileMove = { enabled = "always" },
 			suggest = {
 				completeFunctionCalls = true,
+			},
+			signatureHelp = {
+				enabled = true,
 			},
 			inlayHints = {
 				enumMemberValues = { enabled = true },

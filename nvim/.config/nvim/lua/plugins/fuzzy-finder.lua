@@ -22,6 +22,13 @@ return {
 					},
 					prompt_prefix = "  ",
 					selection_caret = "  ",
+					borderchars = {
+						{ "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+						prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
+						results = { "─", "│", "─", "│", "├", "┤", "╯", "╰" },
+						preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+					},
+					winblend = 0,
 					file_ignore_patterns = {
 						".DS_Store",
 						".git/",

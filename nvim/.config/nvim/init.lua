@@ -1,3 +1,8 @@
+-- Enable faster lua module loading (Neovim 0.9+)
+if vim.loader then
+	vim.loader.enable()
+end
+
 -- Set <space> as the leader key
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "

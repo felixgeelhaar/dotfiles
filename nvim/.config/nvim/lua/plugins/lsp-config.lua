@@ -79,40 +79,47 @@ return {
 
 				["lua_ls"] = function()
 					lspconfig.lua_ls.setup({
+						capabilities = lsp_capabilities,
 						settings = require("plugins.lsp_lang_settings.lua_ls").settings,
 					})
 				end,
 
 				["jsonls"] = function()
 					lspconfig.jsonls.setup({
+						capabilities = lsp_capabilities,
 						settings = require("plugins.lsp_lang_settings.jsonls").settings,
 					})
 				end,
 
 				["yamlls"] = function()
 					lspconfig.yamlls.setup({
+						capabilities = lsp_capabilities,
 						settings = require("plugins.lsp_lang_settings.yamlls").settings,
 					})
 				end,
 
 				["gopls"] = function()
 					lspconfig.gopls.setup({
+						capabilities = lsp_capabilities,
 						settings = require("plugins.lsp_lang_settings.gopls").settings,
 					})
 				end,
 
 				["ansiblels"] = function()
 					lspconfig.ansiblels.setup({
+						capabilities = lsp_capabilities,
 						settings = require("plugins.lsp_lang_settings.ansible").settings,
 					})
 				end,
 				["ts_ls"] = function()
 					lspconfig.ts_ls.setup({
+						capabilities = lsp_capabilities,
 						settings = require("plugins.lsp_lang_settings.typescript").settings,
 					})
 				end,
 				["rust_analyzer"] = function()
 					lspconfig.rust_analyzer.setup({
+						capabilities = lsp_capabilities,
 						settings = require("plugins.lsp_lang_settings.rust").settings,
 					})
 				end,

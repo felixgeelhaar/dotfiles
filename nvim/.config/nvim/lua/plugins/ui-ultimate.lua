@@ -1,0 +1,598 @@
+-- Ultimate UI enhancements for the perfect Neovim experience
+return {
+  -- Animated cursor and smooth cursor movement
+  {
+    "gen740/SmoothCursor.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("smoothcursor").setup({
+        type = "default",
+        cursor = "",
+        texthl = "SmoothCursor",
+        linehl = nil,
+        fancy = {
+          enable = true,
+          head = { cursor = "▷", texthl = "SmoothCursor", linehl = nil },
+          body = {
+            { cursor = "󰝥", texthl = "SmoothCursorRed" },
+            { cursor = "󰝥", texthl = "SmoothCursorOrange" },
+            { cursor = "●", texthl = "SmoothCursorYellow" },
+            { cursor = "●", texthl = "SmoothCursorGreen" },
+            { cursor = "•", texthl = "SmoothCursorAqua" },
+            { cursor = ".", texthl = "SmoothCursorBlue" },
+            { cursor = ".", texthl = "SmoothCursorPurple" },
+          },
+          tail = { cursor = nil, texthl = "SmoothCursor" },
+        },
+        flyin_effect = nil,
+        speed = 25,
+        intervals = 35,
+        priority = 10,
+        timeout = 3000,
+        threshold = 3,
+        max_threshold = nil,
+        disable_float_win = false,
+        enabled_filetypes = nil,
+        disabled_filetypes = nil,
+        show_last_positions = nil,
+      })
+    end,
+  },
+
+  -- Beautiful command palette
+  {
+    "gelguy/wilder.nvim",
+    event = "CmdlineEnter",
+    dependencies = {
+      "romgrk/fzy-lua-native",
+    },
+    build = ":UpdateRemotePlugins",
+    config = function()
+      local wilder = require("wilder")
+      
+      wilder.setup({
+        modes = { ":", "/", "?" },
+        next_key = "<Tab>",
+        previous_key = "<S-Tab>",
+        accept_key = "<Down>",
+        reject_key = "<Up>",
+      })
+
+      wilder.set_option("pipeline", {
+        wilder.branch(
+          wilder.cmdline_pipeline({
+            fuzzy = 1,
+            set_pcre2_pattern = 1,
+          }),
+          wilder.python_search_pipeline({
+            pattern = "fuzzy",
+          })
+        ),
+      })
+
+      local highlighters = {
+        wilder.pcre2_highlighter(),
+        wilder.basic_highlighter(),
+      }
+
+      wilder.set_option("renderer", wilder.popupmenu_renderer(
+        wilder.popupmenu_border_theme({
+          highlighter = highlighters,
+          min_width = "20%",
+          max_width = "50%",
+          min_height = 0,
+          max_height = "50%",
+          reverse = 0,
+          border = "rounded",
+          left = { " ", wilder.popupmenu_devicons() },
+          right = { " ", wilder.popupmenu_scrollbar() },
+          highlights = {
+            border = "Normal",
+            accent = wilder.make_hl("WilderAccent", "Pmenu", { { a = 1 }, { a = 1 }, { foreground = "#f4468f" } }),
+          },
+        })
+      ))
+    end,
+  },
+
+  -- Contextual winbar with code context
+  {
+    "utilyre/barbecue.nvim",
+    name = "barbecue",
+    version = "*",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = {
+      "SmiteshP/nvim-navic",
+      "nvim-tree/nvim-web-devicons",
+    },
+    opts = {
+      theme = "catppuccin",
+      create_autocmd = false,
+      attach_navic = true,
+      show_dirname = false,
+      show_basename = true,
+      show_modified = true,
+      modified = function(bufnr)
+        return vim.bo[bufnr].modified
+      end,
+      show_navic = true,
+      lead_custom_section = function()
+        return " " .. "󱃾 "
+      end,
+      custom_section = function()
+        local time = os.date("%H:%M")
+        return "  " .. time
+      end,
+      exclude_filetypes = { "netrw", "toggleterm", "alpha" },
+      modifiers = {
+        dirname = ":~:.",
+        basename = "",
+      },
+      context_follow_icon_color = true,
+      symbols = {
+        modified = "●",
+        ellipsis = "…",
+        separator = "",
+      },
+      kinds = require("configs.globals").icons and require("configs.globals").icons.kinds or {},
+    },
+    config = function(_, opts)
+      require("barbecue").setup(opts)
+      
+      vim.api.nvim_create_autocmd({
+        "WinScrolled",
+        "WinResized",
+        "BufWinEnter",
+        "CursorHold",
+        "InsertLeave",
+        "BufModifiedSet",
+      }, {
+        group = vim.api.nvim_create_augroup("barbecue.updater", {}),
+        callback = function()
+          require("barbecue.ui").update()
+        end,
+      })
+    end,
+  },
+
+  -- Beautiful tabs
+  {
+    "akinsho/bufferline.nvim",
+    version = "*",
+    event = "VeryLazy",
+    dependencies = "nvim-tree/nvim-web-devicons",
+    opts = {
+      options = {
+        mode = "buffers",
+        theme_name = "catppuccin",
+        numbers = "none",
+        close_command = "bdelete! %d",
+        right_mouse_command = "bdelete! %d",
+        left_mouse_command = "buffer %d",
+        middle_mouse_command = nil,
+        indicator = {
+          icon = "▎",
+          style = "icon",
+        },
+        buffer_close_icon = "󰅖",
+        modified_icon = "●",
+        close_icon = "",
+        left_trunc_marker = "",
+        right_trunc_marker = "",
+        max_name_length = 30,
+        max_prefix_length = 30,
+        tab_size = 21,
+        diagnostics = "nvim_lsp",
+        diagnostics_update_in_insert = false,
+        diagnostics_indicator = function(count, level, diagnostics_dict, context)
+          local icon = level:match("error") and " " or " "
+          return " " .. icon .. count
+        end,
+        custom_filter = function(buf_number, buf_numbers)
+          if vim.bo[buf_number].filetype ~= "qf" then
+            return true
+          end
+        end,
+        offsets = {
+          {
+            filetype = "neo-tree",
+            text = "Explorer",
+            highlight = "Directory",
+            text_align = "center",
+            separator = true,
+          },
+        },
+        color_icons = true,
+        show_buffer_icons = true,
+        show_buffer_close_icons = true,
+        show_buffer_default_icon = true,
+        show_close_icon = true,
+        show_tab_indicators = true,
+        show_duplicate_prefix = true,
+        persist_buffer_sort = true,
+        separator_style = "thin",
+        enforce_regular_tabs = false,
+        always_show_bufferline = true,
+        hover = {
+          enabled = true,
+          delay = 200,
+          reveal = { "close" },
+        },
+        sort_by = "insert_after_current",
+      },
+      highlights = require("catppuccin.groups.integrations.bufferline").get(),
+    },
+    config = function(_, opts)
+      require("bufferline").setup(opts)
+      
+      -- Fix bufferline when restoring a session
+      vim.api.nvim_create_autocmd("BufAdd", {
+        callback = function()
+          vim.schedule(function()
+            pcall(nvim_bufferline)
+          end)
+        end,
+      })
+    end,
+  },
+
+  -- Reactive cursor line and mode indicator
+  {
+    "rasulomaroff/reactive.nvim",
+    event = "VeryLazy",
+    opts = {
+      builtin = {
+        cursorline = true,
+        cursor = true,
+        modemsg = true,
+      },
+      load = { "catppuccin-macchiato-cursor", "catppuccin-macchiato-cursorline" },
+    },
+  },
+
+  -- Minimap for code navigation
+  {
+    "echasnovski/mini.map",
+    version = false,
+    event = "BufReadPost",
+    keys = {
+      { "<leader>um", function() require("mini.map").toggle() end, desc = "Toggle Minimap" },
+    },
+    opts = function()
+      local map = require("mini.map")
+      return {
+        integrations = {
+          map.gen_integration.builtin_search(),
+          map.gen_integration.diagnostic({
+            error = "DiagnosticFloatingError",
+            warn = "DiagnosticFloatingWarn",
+            info = "DiagnosticFloatingInfo",
+            hint = "DiagnosticFloatingHint",
+          }),
+          map.gen_integration.gitsigns(),
+        },
+        symbols = {
+          encode = map.gen_encode_symbols.dot("4x2"),
+          scroll_line = "█",
+          scroll_view = "┃",
+        },
+        window = {
+          focusable = false,
+          side = "right",
+          show_integration_count = true,
+          width = 10,
+          winblend = 0,
+        },
+      }
+    end,
+    config = function(_, opts)
+      local map = require("mini.map")
+      map.setup(opts)
+      map.open()
+    end,
+  },
+
+  -- Distraction-free coding with animations
+  {
+    "folke/drop.nvim",
+    event = "VimEnter",
+    config = function()
+      require("drop").setup({
+        theme = "snow",
+        max = 40,
+        interval = 150,
+        screensaver = 1000 * 60 * 5, -- 5 minutes
+        filetypes = { "dashboard", "alpha", "starter" },
+      })
+    end,
+  },
+
+  -- Scrollbar with diagnostics and search results
+  {
+    "petertriho/nvim-scrollbar",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      show = true,
+      show_in_active_only = false,
+      set_highlights = true,
+      folds = 1000,
+      max_lines = false,
+      hide_if_all_visible = false,
+      throttle_ms = 100,
+      handle = {
+        text = " ",
+        blend = 30,
+        color = nil,
+        color_nr = nil,
+        highlight = "CursorColumn",
+        hide_if_all_visible = true,
+      },
+      marks = {
+        Cursor = {
+          text = "•",
+          priority = 0,
+          gui = nil,
+          color = nil,
+          cterm = nil,
+          color_nr = nil,
+          highlight = "Normal",
+        },
+        Search = {
+          text = { "-", "=" },
+          priority = 1,
+          gui = nil,
+          color = nil,
+          cterm = nil,
+          color_nr = nil,
+          highlight = "Search",
+        },
+        Error = {
+          text = { "-", "=" },
+          priority = 2,
+          gui = nil,
+          color = nil,
+          cterm = nil,
+          color_nr = nil,
+          highlight = "DiagnosticVirtualTextError",
+        },
+        Warn = {
+          text = { "-", "=" },
+          priority = 3,
+          gui = nil,
+          color = nil,
+          cterm = nil,
+          color_nr = nil,
+          highlight = "DiagnosticVirtualTextWarn",
+        },
+        Info = {
+          text = { "-", "=" },
+          priority = 4,
+          gui = nil,
+          color = nil,
+          cterm = nil,
+          color_nr = nil,
+          highlight = "DiagnosticVirtualTextInfo",
+        },
+        Hint = {
+          text = { "-", "=" },
+          priority = 5,
+          gui = nil,
+          color = nil,
+          cterm = nil,
+          color_nr = nil,
+          highlight = "DiagnosticVirtualTextHint",
+        },
+        Misc = {
+          text = { "-", "=" },
+          priority = 6,
+          gui = nil,
+          color = nil,
+          cterm = nil,
+          color_nr = nil,
+          highlight = "Normal",
+        },
+        GitAdd = {
+          text = "┆",
+          priority = 7,
+          gui = nil,
+          color = nil,
+          cterm = nil,
+          color_nr = nil,
+          highlight = "GitSignsAdd",
+        },
+        GitChange = {
+          text = "┆",
+          priority = 7,
+          gui = nil,
+          color = nil,
+          cterm = nil,
+          color_nr = nil,
+          highlight = "GitSignsChange",
+        },
+        GitDelete = {
+          text = "▁",
+          priority = 7,
+          gui = nil,
+          color = nil,
+          cterm = nil,
+          color_nr = nil,
+          highlight = "GitSignsDelete",
+        },
+      },
+      excluded_buftypes = {
+        "terminal",
+      },
+      excluded_filetypes = {
+        "cmp_docs",
+        "cmp_menu",
+        "noice",
+        "prompt",
+        "TelescopePrompt",
+        "alpha",
+      },
+      autocmd = {
+        render = {
+          "BufWinEnter",
+          "TabEnter",
+          "TermEnter",
+          "WinEnter",
+          "CmdwinLeave",
+          "TextChanged",
+          "VimResized",
+          "WinScrolled",
+        },
+        clear = {
+          "BufWinLeave",
+          "TabLeave",
+          "TermLeave",
+          "WinLeave",
+        },
+      },
+      handlers = {
+        cursor = true,
+        diagnostic = true,
+        gitsigns = true,
+        handle = true,
+        search = true,
+        ale = false,
+      },
+    },
+    config = function(_, opts)
+      require("scrollbar").setup(opts)
+      require("scrollbar.handlers.gitsigns").setup()
+      require("scrollbar.handlers.search").setup({
+        calm_down = true,
+        nearest_only = true,
+        nearest_float_border = true,
+      })
+    end,
+  },
+
+  -- Highlight TODO comments
+  {
+    "folke/todo-comments.nvim",
+    cmd = { "TodoTrouble", "TodoTelescope" },
+    event = { "BufReadPost", "BufNewFile" },
+    config = true,
+    keys = {
+      { "]t", function() require("todo-comments").jump_next() end, desc = "Next todo comment" },
+      { "[t", function() require("todo-comments").jump_prev() end, desc = "Previous todo comment" },
+      { "<leader>xt", "<cmd>TodoTrouble<cr>", desc = "Todo (Trouble)" },
+      { "<leader>xT", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme (Trouble)" },
+      { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "Todo" },
+      { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme" },
+    },
+  },
+
+  -- Better quickfix window
+  {
+    "kevinhwang91/nvim-bqf",
+    ft = "qf",
+    opts = {
+      auto_enable = true,
+      auto_resize_height = true,
+      preview = {
+        win_height = 12,
+        win_vheight = 12,
+        delay_syntax = 80,
+        border = "rounded",
+        show_title = true,
+        should_preview_cb = function(bufnr, qwinid)
+          local ret = true
+          local bufname = vim.api.nvim_buf_get_name(bufnr)
+          local fsize = vim.fn.getfsize(bufname)
+          if fsize > 100 * 1024 then
+            -- skip file size greater than 100k
+            ret = false
+          elseif bufname:match("^fugitive://") then
+            -- skip fugitive buffer
+            ret = false
+          end
+          return ret
+        end,
+      },
+      func_map = {
+        drop = "o",
+        openc = "O",
+        split = "<C-s>",
+        vsplit = "<C-v>",
+        tab = "t",
+        tabb = "T",
+        tabc = "<C-t>",
+        tabdrop = "",
+        ptogglemode = "z,",
+        ptoggleitem = "p",
+        ptoggleauto = "P",
+        pscrollup = "<C-b>",
+        pscrolldown = "<C-f>",
+        pscrollorig = "zo",
+        prevfile = "<C-p>",
+        nextfile = "<C-n>",
+        prevhist = "<",
+        nexthist = ">",
+        lastleave = "\"",
+        stoggleup = "<S-Tab>",
+        stoggledown = "<Tab>",
+        stogglevm = "<Tab>",
+        stogglebuf = "\"",
+        sclear = "z<Tab>",
+        filter = "zn",
+        filterr = "zN",
+        fzffilter = "zf",
+      },
+      filter = {
+        fzf = {
+          action_for = { ["ctrl-s"] = "split", ["ctrl-t"] = "tab drop" },
+          extra_opts = { "--bind", "ctrl-o:toggle-all", "--prompt", "> " },
+        },
+      },
+    },
+  },
+
+  -- Animation and visual effects control
+  {
+    "echasnovski/mini.animate",
+    version = false,
+    event = "VeryLazy",
+    opts = function()
+      local mouse_scrolled = false
+      for _, scroll in ipairs({ "Up", "Down" }) do
+        local key = "<ScrollWheel" .. scroll .. ">"
+        vim.keymap.set({ "", "i" }, key, function()
+          mouse_scrolled = true
+          return key
+        end, { expr = true })
+      end
+
+      local animate = require("mini.animate")
+      return {
+        resize = {
+          enable = false,
+        },
+        scroll = {
+          enable = true,
+          timing = animate.gen_timing.linear({ duration = 150, unit = "total" }),
+          subscroll = animate.gen_subscroll.equal({
+            predicate = function(total_scroll)
+              if mouse_scrolled then
+                mouse_scrolled = false
+                return false
+              end
+              return total_scroll > 1
+            end,
+          }),
+        },
+        cursor = {
+          enable = true,
+          timing = animate.gen_timing.linear({ duration = 80, unit = "total" }),
+        },
+        open = {
+          enable = false,
+        },
+        close = {
+          enable = false,
+        },
+      }
+    end,
+  },
+}
