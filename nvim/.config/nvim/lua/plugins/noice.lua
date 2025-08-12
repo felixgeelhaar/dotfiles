@@ -24,18 +24,29 @@ return {
 				inc_rename = false,
 				lsp_doc_border = false,
 			},
-			-- Enable messages to show in noice
+			-- Ensure all messages go through noice
 			messages = {
-				enabled = true,
-				view = "notify",
-				view_error = "notify",
-				view_warn = "notify",
-				view_history = "messages",
-				view_search = "virtualtext",
+				enabled = true, -- enables the Noice messages UI
+				view = "notify", -- default view for messages
+				view_error = "notify", -- view for errors
+				view_warn = "notify", -- view for warnings
+				view_history = "messages", -- view for :messages
+				view_search = "virtualtext", -- view for search count messages
+			},
+			-- Route specific message patterns
+			routes = {
+				{
+					view = "notify",
+					filter = { event = "msg_showmode" },
+				},
 			},
 		},
 		config = function(_, opts)
 			require("noice").setup(opts)
+			-- Debug message to confirm noice is loading
+			vim.defer_fn(function()
+				vim.notify("Noice is now active!", vim.log.levels.INFO, { title = "Noice" })
+			end, 100)
 		end,
 	},
 }

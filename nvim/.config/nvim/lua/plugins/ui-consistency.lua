@@ -2,52 +2,10 @@
 -- This ensures all floating windows, borders, and UI elements match the theme
 
 return {
-  -- Improved notifications with consistent styling
+  -- Improved notifications (disabled - using noice instead)
   {
     "rcarriga/nvim-notify",
-    lazy = false,
-    priority = 100,
-    opts = {
-      background_colour = "#000000",
-      fps = 60,
-      icons = {
-        DEBUG = "",
-        ERROR = "",
-        INFO = "",
-        TRACE = "✎",
-        WARN = "",
-      },
-      level = vim.log.levels.INFO,
-      minimum_width = 50,
-      render = "compact", -- Use compact render for cleaner look
-      stages = "fade_in_slide_out",
-      timeout = 3000,
-      top_down = false, -- Bottom-up notifications
-      max_height = function()
-        return math.floor(vim.o.lines * 0.75)
-      end,
-      max_width = function()
-        return math.floor(vim.o.columns * 0.75)
-      end,
-      on_open = function(win)
-        vim.api.nvim_win_set_config(win, { border = "rounded" })
-      end,
-    },
-    config = function(_, opts)
-      local notify = require("notify")
-      notify.setup(opts)
-      -- Only set vim.notify if noice is not available
-      if not pcall(require, "noice") then
-        vim.notify = notify
-      end
-      
-      -- Set highlight groups for Catppuccin
-      vim.api.nvim_set_hl(0, "NotifyERRORBorder", { link = "DiagnosticError" })
-      vim.api.nvim_set_hl(0, "NotifyWARNBorder", { link = "DiagnosticWarn" })
-      vim.api.nvim_set_hl(0, "NotifyINFOBorder", { link = "DiagnosticInfo" })
-      vim.api.nvim_set_hl(0, "NotifyDEBUGBorder", { link = "DiagnosticHint" })
-      vim.api.nvim_set_hl(0, "NotifyTRACEBorder", { link = "DiagnosticHint" })
-    end,
+    enabled = false, -- Disabled to let noice handle all notifications
   },
 
   -- Consistent UI components
