@@ -8,7 +8,11 @@ return {
       {
         "<leader>cf",
         function()
-          require("conform").format({ async = true, lsp_fallback = true })
+          require("conform").format({ 
+            async = true, 
+            lsp_fallback = true,
+            quiet = true, -- Don't show errors for missing formatters
+          })
         end,
         mode = "",
         desc = "Format Buffer",
@@ -23,111 +27,35 @@ return {
       },
     },
     opts = {
-      -- Define formatters by filetype
+      -- Define formatters by filetype (only commonly available ones)
       formatters_by_ft = {
-        -- JavaScript/TypeScript
-        javascript = { "prettier", "eslint_d" },
-        javascriptreact = { "prettier", "eslint_d" },
-        typescript = { "prettier", "eslint_d" },
-        typescriptreact = { "prettier", "eslint_d" },
-        vue = { "prettier" },
-        svelte = { "prettier" },
+        -- JavaScript/TypeScript (fallback to LSP if prettier not available)
+        javascript = { "prettier", stop_after_first = true },
+        javascriptreact = { "prettier", stop_after_first = true },
+        typescript = { "prettier", stop_after_first = true },
+        typescriptreact = { "prettier", stop_after_first = true },
         
-        -- Web
-        css = { "prettier" },
-        scss = { "prettier" },
-        less = { "prettier" },
-        html = { "prettier" },
-        json = { "prettier" },
-        jsonc = { "prettier" },
-        yaml = { "prettier" },
-        markdown = { "prettier", "markdownlint" },
-        ["markdown.mdx"] = { "prettier" },
-        graphql = { "prettier" },
-        handlebars = { "prettier" },
+        -- Web formats
+        css = { "prettier", stop_after_first = true },
+        html = { "prettier", stop_after_first = true },
+        json = { "prettier", stop_after_first = true },
+        yaml = { "prettier", stop_after_first = true },
+        markdown = { "prettier", stop_after_first = true },
         
-        -- Python
-        python = { "ruff_format", "black", stop_after_first = true },
+        -- Languages with built-in formatters
+        go = { "gofmt", stop_after_first = true },
+        rust = { "rustfmt", stop_after_first = true },
+        lua = { "stylua", stop_after_first = true },
+        python = { "black", stop_after_first = true },
         
-        -- Rust
-        rust = { "rustfmt" },
-        
-        -- Go
-        go = { "goimports", "gofumpt" },
-        
-        -- Lua
-        lua = { "stylua" },
-        
-        -- Shell
-        sh = { "shfmt", "shellcheck" },
-        bash = { "shfmt", "shellcheck" },
-        zsh = { "shfmt" },
-        fish = { "fish_indent" },
-        
-        -- C/C++
-        c = { "clang_format" },
-        cpp = { "clang_format" },
-        
-        -- Java
-        java = { "google-java-format" },
-        
-        -- SQL
-        sql = { "sql_formatter" },
-        mysql = { "sql_formatter" },
-        postgresql = { "sql_formatter" },
-        
-        -- Configuration files
-        toml = { "taplo" },
-        terraform = { "terraform_fmt" },
-        tf = { "terraform_fmt" },
-        ["terraform-vars"] = { "terraform_fmt" },
-        
-        -- Docker
-        dockerfile = { "hadolint" },
-        
-        -- Use the "*" filetype to run formatters on all filetypes
-        ["*"] = { "codespell", "trim_whitespace" },
         -- Use the "_" filetype to run formatters on filetypes that don't
-        -- have other formatters configured
+        -- have other formatters configured (basic cleanup)
         ["_"] = { "trim_whitespace" },
       },
       
-      -- Customize formatters
+      -- Customize formatters (basic configurations)
       formatters = {
-        prettier = {
-          prepend_args = { "--single-quote", "--jsx-single-quote" },
-        },
-        black = {
-          prepend_args = { "--line-length", "100" },
-        },
-        stylua = {
-          prepend_args = { "--indent-type", "Tabs", "--indent-width", "2" },
-        },
-        shfmt = {
-          prepend_args = { "-i", "2", "-ci" },
-        },
-        sql_formatter = {
-          prepend_args = { "--language", "postgresql" },
-        },
-        eslint_d = {
-          condition = function(self, ctx)
-            return vim.fs.find({ ".eslintrc", ".eslintrc.js", ".eslintrc.json" }, { path = ctx.filename, upward = true })[1]
-          end,
-        },
-        markdownlint = {
-          prepend_args = { "--fix" },
-        },
-        ruff_format = {
-          prepend_args = { "--line-length", "100" },
-        },
-        gofumpt = {
-          prepend_args = { "-extra" },
-        },
-        injected = {
-          options = {
-            ignore_errors = true,
-          },
-        },
+        -- Custom formatter for removing trailing whitespace
         -- Define custom formatter for removing trailing whitespace
         trim_whitespace = {
           command = "sed",
@@ -172,7 +100,7 @@ return {
       end,
       
       -- Set to true to automatically format on save
-      notify_on_error = true,
+      notify_on_error = false, -- Don't notify on formatter errors
       
       -- Use LSP formatting as fallback
       lsp_fallback = true,
