@@ -1,98 +1,10 @@
 -- Ultimate UI enhancements for the perfect Neovim experience
 return {
-  -- Animated cursor and smooth cursor movement
-  {
-    "gen740/SmoothCursor.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("smoothcursor").setup({
-        type = "default",
-        cursor = "",
-        texthl = "SmoothCursor",
-        linehl = nil,
-        fancy = {
-          enable = true,
-          head = { cursor = "▷", texthl = "SmoothCursor", linehl = nil },
-          body = {
-            { cursor = "󰝥", texthl = "SmoothCursorRed" },
-            { cursor = "󰝥", texthl = "SmoothCursorOrange" },
-            { cursor = "●", texthl = "SmoothCursorYellow" },
-            { cursor = "●", texthl = "SmoothCursorGreen" },
-            { cursor = "•", texthl = "SmoothCursorAqua" },
-            { cursor = ".", texthl = "SmoothCursorBlue" },
-            { cursor = ".", texthl = "SmoothCursorPurple" },
-          },
-          tail = { cursor = nil, texthl = "SmoothCursor" },
-        },
-        flyin_effect = nil,
-        speed = 25,
-        intervals = 35,
-        priority = 10,
-        timeout = 3000,
-        threshold = 3,
-        max_threshold = nil,
-        disable_float_win = false,
-        enabled_filetypes = nil,
-        disabled_filetypes = nil,
-        show_last_positions = nil,
-      })
-    end,
-  },
 
-  -- Beautiful command palette
+  -- Beautiful command palette (disabled - potentially causing issues)
   {
     "gelguy/wilder.nvim",
-    event = "CmdlineEnter",
-    dependencies = {
-      "romgrk/fzy-lua-native",
-    },
-    build = ":UpdateRemotePlugins",
-    config = function()
-      local wilder = require("wilder")
-      
-      wilder.setup({
-        modes = { ":", "/", "?" },
-        next_key = "<Tab>",
-        previous_key = "<S-Tab>",
-        accept_key = "<Down>",
-        reject_key = "<Up>",
-      })
-
-      wilder.set_option("pipeline", {
-        wilder.branch(
-          wilder.cmdline_pipeline({
-            fuzzy = 1,
-            set_pcre2_pattern = 1,
-          }),
-          wilder.python_search_pipeline({
-            pattern = "fuzzy",
-          })
-        ),
-      })
-
-      local highlighters = {
-        wilder.pcre2_highlighter(),
-        wilder.basic_highlighter(),
-      }
-
-      wilder.set_option("renderer", wilder.popupmenu_renderer(
-        wilder.popupmenu_border_theme({
-          highlighter = highlighters,
-          min_width = "20%",
-          max_width = "50%",
-          min_height = 0,
-          max_height = "50%",
-          reverse = 0,
-          border = "rounded",
-          left = { " ", wilder.popupmenu_devicons() },
-          right = { " ", wilder.popupmenu_scrollbar() },
-          highlights = {
-            border = "Normal",
-            accent = wilder.make_hl("WilderAccent", "Pmenu", { { a = 1 }, { a = 1 }, { foreground = "#f4468f" } }),
-          },
-        })
-      ))
-    end,
+    enabled = false, -- Temporarily disabled
   },
 
   -- Contextual winbar with code context
@@ -134,7 +46,7 @@ return {
         ellipsis = "…",
         separator = "",
       },
-      kinds = require("configs.globals").icons and require("configs.globals").icons.kinds or {},
+      kinds = {},
     },
     config = function(_, opts)
       require("barbecue").setup(opts)
@@ -236,19 +148,6 @@ return {
     end,
   },
 
-  -- Reactive cursor line and mode indicator
-  {
-    "rasulomaroff/reactive.nvim",
-    event = "VeryLazy",
-    opts = {
-      builtin = {
-        cursorline = true,
-        cursor = true,
-        modemsg = true,
-      },
-      load = { "catppuccin-macchiato-cursor", "catppuccin-macchiato-cursorline" },
-    },
-  },
 
   -- Minimap for code navigation
   {
@@ -292,20 +191,6 @@ return {
     end,
   },
 
-  -- Distraction-free coding with animations
-  {
-    "folke/drop.nvim",
-    event = "VimEnter",
-    config = function()
-      require("drop").setup({
-        theme = "snow",
-        max = 40,
-        interval = 150,
-        screensaver = 1000 * 60 * 5, -- 5 minutes
-        filetypes = { "dashboard", "alpha", "starter" },
-      })
-    end,
-  },
 
   -- Scrollbar with diagnostics and search results
   {
@@ -549,50 +434,10 @@ return {
     },
   },
 
-  -- Animation and visual effects control
+  -- Animation and visual effects control (disabled)
   {
     "echasnovski/mini.animate",
     version = false,
-    event = "VeryLazy",
-    opts = function()
-      local mouse_scrolled = false
-      for _, scroll in ipairs({ "Up", "Down" }) do
-        local key = "<ScrollWheel" .. scroll .. ">"
-        vim.keymap.set({ "", "i" }, key, function()
-          mouse_scrolled = true
-          return key
-        end, { expr = true })
-      end
-
-      local animate = require("mini.animate")
-      return {
-        resize = {
-          enable = false,
-        },
-        scroll = {
-          enable = true,
-          timing = animate.gen_timing.linear({ duration = 150, unit = "total" }),
-          subscroll = animate.gen_subscroll.equal({
-            predicate = function(total_scroll)
-              if mouse_scrolled then
-                mouse_scrolled = false
-                return false
-              end
-              return total_scroll > 1
-            end,
-          }),
-        },
-        cursor = {
-          enable = true,
-          timing = animate.gen_timing.linear({ duration = 80, unit = "total" }),
-        },
-        open = {
-          enable = false,
-        },
-        close = {
-          enable = false,
-        },
-      }
-    end,
+    enabled = false, -- Disable all animations
   },
 }
