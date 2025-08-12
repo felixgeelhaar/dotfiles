@@ -67,9 +67,10 @@ return {
     end,
   },
 
-  -- Beautiful tabs
+  -- Beautiful tabs (disabled)
   {
     "akinsho/bufferline.nvim",
+    enabled = false, -- Disabled per user request
     version = "*",
     event = "VeryLazy",
     dependencies = "nvim-tree/nvim-web-devicons",
