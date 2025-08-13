@@ -2,7 +2,7 @@ return {
 	settings = {
 		complete_function_calls = true,
 		signatureHelp = {
-			enabled = true,
+			enabled = false, -- Disable automatic signature help, use manual Ctrl+k
 		},
 		vtsls = {
 			enableMoveToFileCodeAction = true,
@@ -19,7 +19,7 @@ return {
 				completeFunctionCalls = true,
 			},
 			signatureHelp = {
-				enabled = true,
+				enabled = false, -- Disable automatic signature help, use manual Ctrl+k
 			},
 			inlayHints = {
 				enumMemberValues = { enabled = true },

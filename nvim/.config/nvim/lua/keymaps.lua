@@ -140,8 +140,11 @@ vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, { desc = "Go to Type Defi
 
 -- Core documentation/information
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Symbol Documentation" })
+
+-- Manual signature help trigger - simplified version
 vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
 vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
+
 
 -- [C]ode operations with leader prefixes
 vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename Symbol" })
@@ -187,7 +190,7 @@ vim.keymap.set("n", "[i", diagnostic_goto(false, "INFO"), { desc = "Prev Info" }
 vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, { desc = "Add Workspace Folder" })
 vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, { desc = "Remove Workspace Folder" })
 vim.keymap.set("n", "<leader>wl", function()
-	print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+	vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()), "info", { title = "Workspace Folders" })
 end, { desc = "List Workspace Folders" })
 
 -- Inlay hints toggle

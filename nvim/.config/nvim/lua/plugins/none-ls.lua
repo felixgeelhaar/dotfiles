@@ -26,23 +26,7 @@ return {
 			table.insert(sources, none_ls.builtins.code_actions.gomodifytags)
 			table.insert(sources, none_ls.builtins.code_actions.impl)
 
-			-- Formatting
-			add_if_available("stylua", none_ls.builtins.formatting.stylua)
-			add_if_available("prettier", none_ls.builtins.formatting.prettier)
-			add_if_available("biome", none_ls.builtins.formatting.biome)
-			add_if_available("htmlbeautifier", none_ls.builtins.formatting.htmlbeautifier)
-			add_if_available("rustywind", none_ls.builtins.formatting.rustywind)
-			add_if_available("black", none_ls.builtins.formatting.black)
-			add_if_available("isort", none_ls.builtins.formatting.isort)
-			add_if_available("gofmt", none_ls.builtins.formatting.gofmt)
-			add_if_available("gofumpt", none_ls.builtins.formatting.gofumpt)
-			add_if_available("goimports", none_ls.builtins.formatting.goimports)
-			add_if_available("golines", none_ls.builtins.formatting.golines)
-			add_if_available("rustfmt", require("none-ls.formatting.rustfmt"))
-			add_if_available("protolint", none_ls.builtins.formatting.protolint)
-			add_if_available("shfmt", none_ls.builtins.formatting.shfmt)
-			add_if_available("yamlfmt", none_ls.builtins.formatting.yamlfmt)
-			add_if_available("markdownlint", none_ls.builtins.formatting.markdownlint)
+			-- Note: All formatting is handled by conform.nvim to avoid conflicts
 
 			-- Diagnostics
 			add_if_available("stylelint", none_ls.builtins.diagnostics.stylelint)
@@ -77,42 +61,11 @@ return {
 		none_ls.setup({
 			sources = get_available_sources(),
 			on_attach = function(client, bufnr)
-				if client.supports_method("textDocument/formatting") then
-					vim.api.nvim_clear_autocmds({
-						group = augroup,
-						buffer = bufnr,
-					})
-					-- Add a user command to toggle format on save
-					vim.api.nvim_create_user_command("ToggleFormatOnSave", function()
-						if vim.b.format_on_save then
-							vim.b.format_on_save = false
-							vim.notify("Format on save disabled", "info",
-								{ title = "Formatting" })
-						else
-							vim.b.format_on_save = true
-							vim.notify("Format on save enabled", "info",
-								{ title = "Formatting" })
-						end
-					end, {})
-
-					-- Only format on save if enabled (default to true)
-					if vim.b.format_on_save ~= false then
-						vim.api.nvim_create_autocmd("BufWritePre", {
-							group = augroup,
-							buffer = bufnr,
-							callback = function()
-								if vim.b.format_on_save ~= false then
-									vim.lsp.buf.format({ bufnr = bufnr })
-								end
-							end,
-						})
-					end
-				end
+				-- Note: Format on save is handled by conform.nvim to avoid conflicts
+				-- none-ls provides diagnostics and code actions, not formatting on save
 			end,
 		})
 
-		-- Remove this keymap as it's already defined in your centralized keymaps
-		-- vim.keymap.set("n", "<leader>cf", vim.lsp.buf.format, { desc = "Format buffer" })
-		vim.keymap.set("n", "<leader>cF", "<cmd>ToggleFormatOnSave<CR>", { desc = "Toggle Format on Save" })
+		-- Format keymaps are handled by conform.nvim in its configuration
 	end,
 }

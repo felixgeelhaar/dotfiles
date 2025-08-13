@@ -32,6 +32,14 @@ return {
 			local mason_tool_install = require("mason-tool-installer")
 
 			local lsp_capabilities = require("blink.cmp").get_lsp_capabilities()
+			vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+				vim.lsp.handlers.signature_help, {
+					-- Disable automatic triggers
+					border = "rounded",
+					focusable = false,
+					silent = true,
+				}
+			)
 
 			require("mason-null-ls").setup({
 				ensure_installed = {},
@@ -115,6 +123,11 @@ return {
 					lspconfig.ts_ls.setup({
 						capabilities = lsp_capabilities,
 						settings = require("plugins.lsp_lang_settings.typescript").settings,
+						on_attach = function(client, bufnr)
+							if client.server_capabilities and client.server_capabilities.signatureHelpProvider then
+								client.server_capabilities.signatureHelpProvider.triggerCharacters = {}
+							end
+						end,
 					})
 				end,
 				["rust_analyzer"] = function()
@@ -141,8 +154,14 @@ return {
 					spacing = 4,
 					source = "if_many",
 					prefix = "●",
+					-- Limit virtual text to reduce visual noise
+					severity = { min = vim.diagnostic.severity.WARN },
 				},
 				severity_sort = true,
+				-- Reduce diagnostic update frequency
+				underline = {
+					severity = { min = vim.diagnostic.severity.WARN },
+				},
 				float = {
 					focusable = true,
 					style = "minimal",
@@ -150,6 +169,9 @@ return {
 					source = true,
 					header = "",
 					prefix = " ● ",
+					-- Add max width/height to prevent huge popups
+					max_width = 80,
+					max_height = 20,
 				},
 				document_highlight = {
 					enabled = true,
@@ -158,12 +180,16 @@ return {
 					enabled = false,
 				},
 			})
+			-- Optimize diagnostic handling (using modern API)
 			vim.lsp.handlers["textDocument/publishDiagnostics"] =
-				vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-					-- Faster feedback but update less frequently
+				vim.lsp.with(vim.lsp.handlers["textDocument/publishDiagnostics"], {
+					-- Reduce diagnostic frequency for better performance
 					update_in_insert = false,
 					virtual_text = { spacing = 4, prefix = "●" },
+					-- Debounce diagnostics to reduce excessive updates
+					debounce_text_changes = 200,
 				})
+			
 
 			-- Enable native inlay hints (Neovim 0.10+)
 			if vim.fn.has("nvim-0.10") == 1 then

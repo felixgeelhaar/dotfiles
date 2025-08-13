@@ -29,11 +29,8 @@ M.setup = function()
     max_height = 30,
   })
   
-  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-    border = "rounded",
-    max_width = 80,
-    max_height = 30,
-  })
+  -- Signature help is disabled globally and handled manually via Ctrl+k
+  -- See keymaps.lua for custom signature help implementation
   
   -- Ensure consistent window separators
   vim.opt.fillchars = {
