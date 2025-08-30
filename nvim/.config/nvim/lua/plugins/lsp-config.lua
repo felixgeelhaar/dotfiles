@@ -34,10 +34,11 @@ return {
 			local lsp_capabilities = require("blink.cmp").get_lsp_capabilities()
 			vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
 				vim.lsp.handlers.signature_help, {
-					-- Disable automatic triggers
 					border = "rounded",
 					focusable = false,
 					silent = true,
+					max_width = 80,
+					max_height = 20,
 				}
 			)
 
@@ -65,6 +66,8 @@ return {
 					"astro",
 					"tailwindcss",
 					"jsonlint",
+					"pyright", -- Python LSP
+					"clangd",  -- C/C++ LSP
 				},
 				auto_update = true,
 				run_on_start = true,
@@ -82,6 +85,17 @@ return {
 				function(server_name)
 					require("lspconfig")[server_name].setup({
 						capabilities = lsp_capabilities,
+						on_attach = function(client, bufnr)
+							-- Enable semantic tokens if available
+							if client.server_capabilities.semanticTokensProvider then
+								vim.lsp.semantic_tokens.start(bufnr, client.id)
+							end
+							
+							-- Enable inlay hints if available (Neovim 0.10+)
+							if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+								vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+							end
+						end,
 					})
 				end,
 
@@ -123,17 +137,46 @@ return {
 					lspconfig.ts_ls.setup({
 						capabilities = lsp_capabilities,
 						settings = require("plugins.lsp_lang_settings.typescript").settings,
-						on_attach = function(client, bufnr)
-							if client.server_capabilities and client.server_capabilities.signatureHelpProvider then
-								client.server_capabilities.signatureHelpProvider.triggerCharacters = {}
-							end
-						end,
 					})
 				end,
 				["rust_analyzer"] = function()
 					lspconfig.rust_analyzer.setup({
 						capabilities = lsp_capabilities,
 						settings = require("plugins.lsp_lang_settings.rust").settings,
+					})
+				end,
+				["pyright"] = function()
+					lspconfig.pyright.setup({
+						capabilities = lsp_capabilities,
+						settings = {
+							python = {
+								analysis = {
+									autoSearchPaths = true,
+									diagnosticMode = "workspace",
+									useLibraryCodeForTypes = true,
+									typeCheckingMode = "basic",
+								},
+							},
+						},
+					})
+				end,
+				["clangd"] = function()
+					lspconfig.clangd.setup({
+						capabilities = lsp_capabilities,
+						cmd = {
+							"clangd",
+							"--background-index",
+							"--clang-tidy",
+							"--header-insertion=iwyu",
+							"--completion-style=detailed",
+							"--function-arg-placeholders",
+							"--fallback-style=llvm",
+						},
+						init_options = {
+							usePlaceholders = true,
+							completeUnimported = true,
+							clangdFileStatus = true,
+						},
 					})
 				end,
 			}
@@ -180,21 +223,32 @@ return {
 					enabled = false,
 				},
 			})
-			-- Optimize diagnostic handling (using modern API)
-			vim.lsp.handlers["textDocument/publishDiagnostics"] =
-				vim.lsp.with(vim.lsp.handlers["textDocument/publishDiagnostics"], {
-					-- Reduce diagnostic frequency for better performance
-					update_in_insert = false,
-					virtual_text = { spacing = 4, prefix = "●" },
-					-- Debounce diagnostics to reduce excessive updates
-					debounce_text_changes = 200,
-				})
-			
+			-- Modern LSP progress indicator (if available)
+			if vim.lsp.progress then
+				vim.lsp.progress.enable(true)
+			end
+
+			-- Set up LSP hover and signature help borders
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+				vim.lsp.handlers.hover, {
+					border = "rounded",
+					max_width = math.floor(vim.o.columns * 0.7),
+					max_height = math.floor(vim.o.lines * 0.3),
+				}
+			)
 
 			-- Enable native inlay hints (Neovim 0.10+)
 			if vim.fn.has("nvim-0.10") == 1 then
 				vim.lsp.inlay_hint.enable(true)
 			end
+
+			-- Auto-format on save for specific filetypes
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				pattern = { "*.lua", "*.py", "*.go", "*.rs", "*.ts", "*.js" },
+				callback = function()
+					vim.lsp.buf.format({ async = false })
+				end,
+			})
 		end,
 	},
 }

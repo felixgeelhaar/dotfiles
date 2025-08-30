@@ -18,33 +18,59 @@ return {
 					"gowork",
 					"html",
 					"json",
+					"jsonc",
+					"json5",
 					"lua",
+					"luadoc",
+					"luap",
 					"markdown",
 					"markdown_inline",
 					"python",
-					"rust",
-					"typescript",
-					"javascript",
-					"sql",
+					"rust", 
 					"toml",
+					"typescript",
+					"tsx",
+					"javascript",
+					"jsdoc",
+					"sql",
 					"yaml",
 					"regex",
 					"css",
+					"scss",
 					"dockerfile",
 					"gitignore",
+					"gitcommit",
+					"gitattributes",
 					"vim",
 					"vimdoc",
-					"query", -- Add these useful ones
+					"query",
+					"c",
+					"cpp",
+					"cmake",
+					"make",
+					"diff",
+					"http",
+					"xml",
 				},
 
 				-- Module configuration
 				highlight = {
 					enable = true,
 					additional_vim_regex_highlighting = false,
+					-- Disable slow treesitter highlight for large files
+					disable = function(lang, buf)
+						local max_filesize = 100 * 1024 -- 100 KB
+						local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+						if ok and stats and stats.size > max_filesize then
+							return true
+						end
+					end,
 				},
 
 				indent = {
 					enable = true,
+					-- Disable indent for problematic languages
+					disable = { "yaml", "python" },
 				},
 
 				incremental_selection = {
@@ -107,10 +133,8 @@ return {
 				},
 			})
 
-			-- Setup folding
-			vim.opt.foldmethod = "expr"
-			vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-			vim.opt.foldenable = false -- Start with folds open
+			-- Modern treesitter folding is now handled in opts.lua
+			-- This provides better integration with other fold settings
 		end,
 	},
 	{
@@ -119,9 +143,30 @@ return {
 		enabled = true,
 		opts = {
 			mode = "cursor",
-			max_lines = 3, -- Show more context (up from 1)
+			max_lines = 3,
 			min_window_height = 10,
+			line_numbers = true,
+			multiline_threshold = 1,
 			trim_scope = "outer",
+			zindex = 20,
+			on_attach = function(buf)
+				-- Disable in very large files for performance
+				local max_filesize = 100 * 1024 -- 100 KB
+				local filename = vim.api.nvim_buf_get_name(buf)
+				local ok, stats = pcall(vim.loop.fs_stat, filename)
+				if ok and stats and stats.size > max_filesize then
+					return false
+				end
+				return true
+			end,
 		},
+		config = function(_, opts)
+			require("treesitter-context").setup(opts)
+			
+			-- Add keymap to toggle context
+			vim.keymap.set("n", "<leader>tc", function()
+				require("treesitter-context").toggle()
+			end, { desc = "Toggle Treesitter Context" })
+		end,
 	},
 }

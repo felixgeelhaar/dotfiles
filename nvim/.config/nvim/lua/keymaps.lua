@@ -166,12 +166,16 @@ vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diag
 vim.keymap.set("n", "<leader>cl", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Buffer Diagnostics List" })
 vim.keymap.set("n", "<leader>cL", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace Diagnostics List" })
 
--- Diagnostic navigation
+-- Diagnostic navigation with modern API
 local diagnostic_goto = function(next, severity)
 	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
 	severity = severity and vim.diagnostic.severity[severity] or nil
 	return function()
-		go({ severity = severity })
+		go({ 
+			severity = severity,
+			wrap = true,
+			float = true,
+		})
 	end
 end
 
@@ -193,10 +197,16 @@ vim.keymap.set("n", "<leader>wl", function()
 	vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()), "info", { title = "Workspace Folders" })
 end, { desc = "List Workspace Folders" })
 
--- Inlay hints toggle
+-- Inlay hints toggle (buffer-specific)
 vim.keymap.set("n", "<leader>cI", function()
-	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+	local bufnr = vim.api.nvim_get_current_buf()
+	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
 end, { desc = "Toggle Inlay Hints" })
+
+-- Global inlay hints toggle
+vim.keymap.set("n", "<leader>cIG", function()
+	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+end, { desc = "Toggle Global Inlay Hints" })
 
 -- Code folding
 vim.keymap.set("n", "<leader>cz", "za", { desc = "Toggle Fold", remap = true })
@@ -217,11 +227,27 @@ vim.keymap.set("n", "<leader>sf", function()
 	require("telescope.builtin").find_files()
 end, { desc = "Search Files" })
 
--- Add cheatsheet command
+-- Add cheatsheet command with improved formatting
 vim.api.nvim_create_user_command("Cheatsheet", function()
-	require("telescope.builtin").keymaps({})
+	require("telescope.builtin").keymaps({
+		show_plug = false,
+		modes = { "n", "v", "i", "t" },
+		layout_config = {
+			width = 0.8,
+			height = 0.8,
+		},
+	})
 end, { desc = "Show keymaps cheatsheet" })
 vim.keymap.set("n", "<leader>?", "<cmd>Cheatsheet<cr>", { desc = "Keymaps Cheatsheet" })
+
+-- Quick access to common settings
+vim.keymap.set("n", "<leader>co", function()
+	vim.cmd("edit " .. vim.fn.stdpath("config") .. "/lua/opts.lua")
+end, { desc = "Open Options File" })
+
+vim.keymap.set("n", "<leader>ck", function()
+	vim.cmd("edit " .. vim.fn.stdpath("config") .. "/lua/keymaps.lua")
+end, { desc = "Open Keymaps File" })
 
 -- ============================================================================
 -- GIT KEYMAPS
