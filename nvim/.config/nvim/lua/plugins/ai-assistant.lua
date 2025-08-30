@@ -40,15 +40,17 @@ return {
 
 		require("codecompanion").setup({
 			adapters = {
-				copilot = function()
-					return require("codecompanion.adapters").extend("copilot", {
-						schema = {
-							model = {
-								default = "claude-3.7-sonnet",
+				http = {
+					copilot = function()
+						return require("codecompanion.adapters").extend("copilot", {
+							schema = {
+								model = {
+									default = "claude-3.7-sonnet",
+								},
 							},
-						},
-					})
-				end,
+						})
+					end,
+				},
 			},
 			display = {
 				-- Show model name instead of "Bot" in the UI

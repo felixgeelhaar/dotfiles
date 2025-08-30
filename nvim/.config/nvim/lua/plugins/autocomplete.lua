@@ -20,8 +20,6 @@ return {
       trigger = {
         blocked_trigger_characters = {},
         blocked_retrigger_characters = {},
-        -- Show signature help on function calls
-        show_trigger_characters = { "(", "," },
       },
       window = {
         min_width = 1,
@@ -29,9 +27,7 @@ return {
         max_height = 10,
         border = "rounded",
         winblend = 0,
-        scrolloff = 2,
-        -- Close signature help automatically when appropriate
-        close_on_cursor_move = { 'i' },
+        scrollbar = false,
       },
     },
     
@@ -74,9 +70,7 @@ return {
     -- Enhanced completion menu appearance
     completion = {
       menu = {
-        max_items = 200,
         min_width = 15,
-        max_width = 60,
         border = "rounded",
         winblend = 0,
         scrolloff = 2,
@@ -102,40 +96,23 @@ return {
           max_height = 20,
           border = "rounded",
           winblend = 0,
-          scrolloff = 2,
         },
       },
       ghost_text = {
         enabled = true,
+      },
+      -- Accept behavior configuration
+      accept = {
+        create_undo_point = true,
+        auto_brackets = {
+          enabled = true,
+        },
       },
     },
     
     -- Performance optimizations
     fuzzy = { 
       implementation = "prefer_rust",
-      -- Prebuilt binaries for better performance
-      use_typos_check = false,
-      max_items = 200,
-    },
-    
-    -- Enhanced accept behavior
-    accept = {
-      create_undo_point = true,
-      auto_brackets = {
-        enabled = true,
-        default_brackets = { "(", ")" },
-        override_brackets_for_filetypes = {},
-        force_allow_filetypes = {},
-        blocked_filetypes = {},
-        kind_resolution = {
-          enabled = true,
-          blocked_filetypes = { "typescriptreact", "javascriptreact", "vue" },
-        },
-        semantic_token_resolution = {
-          enabled = true,
-          blocked_filetypes = {},
-        },
-      },
     },
   },
   opts_extend = { "sources.default" },
