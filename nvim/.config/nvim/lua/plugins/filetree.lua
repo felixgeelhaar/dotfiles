@@ -7,6 +7,15 @@ return {
       "MunifTanjim/nui.nvim",
     },
     config = function()
+      -- Disable folding for neo-tree buffers with autocmd
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "neo-tree",
+        callback = function()
+          vim.wo.foldenable = false
+          vim.wo.foldcolumn = "0"
+        end,
+      })
+
       require("neo-tree").setup({
         close_if_last_window = true,
         popup_border_style = "rounded",
@@ -29,6 +38,14 @@ return {
             event = "file_renamed",
             handler = function(_)
               require("neo-tree.sources.filesystem").refresh()
+            end,
+          },
+          -- Disable folding in neo-tree buffer
+          {
+            event = "neo_tree_buffer_enter",
+            handler = function()
+              vim.wo.foldenable = false
+              vim.wo.foldcolumn = "0"
             end,
           },
         },
