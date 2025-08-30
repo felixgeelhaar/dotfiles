@@ -25,10 +25,10 @@
     ],
     "deny": [
       "Bash(sudo:*)",
-      "Bash(* sudo *)",
+      "Bash(sudo)",
       "Bash(chmod 777:*)",
-      "Bash(curl * | bash)",
-      "Bash(wget * | bash)"
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)"
     ]
   },
   "enableAllProjectMcpServers": false,
