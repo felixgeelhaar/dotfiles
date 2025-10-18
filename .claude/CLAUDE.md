@@ -23,6 +23,20 @@ This directory contains stowable configuration files for Claude Code (claude.ai/
     └── CLAUDE.md                    # Comprehensive best practices guide (STOWABLE)
 
 # Runtime directories (NOT in dotfiles, live in ~/.claude):
+# ~/.claude/skills/                  # Personal skills (global, available across all projects)
+# │   ├── tdd-workflow/              # Test-Driven Development workflow
+# │   ├── git-workflow-commit-standards/ # Git workflow and commit standards
+# │   ├── code-review-checklist/     # Code review checklist
+# │   ├── refactoring-patterns/      # Refactoring techniques and patterns
+# │   ├── enterprise-architecture-review/ # Architecture review skill
+# │   ├── api-design-documentation/  # API design and documentation
+# │   ├── database-design-migration/ # Database design and migrations
+# │   ├── security-audit/            # Security auditing skill
+# │   ├── performance-optimization-profiling/ # Performance optimization
+# │   ├── production-readiness/      # Production readiness checklist
+# │   ├── observability-logging-setup/ # Logging and observability
+# │   ├── docker-demo-environment/   # Docker demo environment setup
+# │   └── dependency-management-security/ # Dependency management and security
 # ~/.claude/local/                   # Local Claude Code installation and dependencies
 # ~/.claude/projects/                # Project-specific conversation history
 # ~/.claude/shell-snapshots/         # Shell environment snapshots
@@ -81,11 +95,58 @@ Global Claude Code settings with security-focused configuration:
   - Privilege escalation (`sudo`)
   - Dangerous permission changes (`chmod 777`)
   - Unsafe script execution (`curl/wget | bash`)
-- **Privacy Settings**: 
+- **Privacy Settings**:
   - Telemetry disabled (`CLAUDE_NO_TELEMETRY`)
   - Co-authored-by disabled (`includeCoAuthoredBy: false`)
 - **Environment**: Sets nvim as default editor
 - **MCP Security**: Requires manual approval for project MCP servers
+
+#### `~/.claude/skills/` (Personal Skills)
+Global skills that extend Claude's capabilities across all projects:
+
+**Development Workflow:**
+- **tdd-workflow**: Test-Driven Development workflow with Red-Green-Refactor cycle, atomic commits, and Vitest/Playwright integration
+- **git-workflow-commit-standards**: Git workflow, conventional commits, atomic commits, branch strategies, and interactive rebase
+
+**Code Quality:**
+- **code-review-checklist**: Comprehensive code review covering functionality, quality, testing, security, performance, and documentation
+- **refactoring-patterns**: Code smell detection, refactoring techniques, Boy Scout Rule, and technical debt management
+
+**Architecture & Design:**
+- **enterprise-architecture-review**: SOLID principles, DDD, Clean Architecture, microservices patterns, and architecture decision records
+- **api-design-documentation**: RESTful and GraphQL API design, OpenAPI/Swagger documentation, versioning, and best practices
+- **database-design-migration**: Schema design, normalization, indexing, migrations, query optimization, and data modeling
+
+**Security & Performance:**
+- **security-audit**: OWASP Top 10, input validation, authentication, authorization, encryption, and security headers
+- **performance-optimization-profiling**: Profiling, memory leak detection, bundle optimization, query optimization, and load testing
+
+**Operations:**
+- **production-readiness**: 12-Factor App, health checks, graceful shutdown, resilience patterns, and monitoring
+- **observability-logging-setup**: Structured logging, correlation IDs, metrics, distributed tracing, and alerting
+- **docker-demo-environment**: Production-grade Docker demo environments with database seeding and data separation
+- **dependency-management-security**: Vulnerability scanning, automated updates, breaking change detection, and supply chain security
+
+Skills are model-invoked (Claude decides when to use them based on context) and package expertise into discoverable capabilities.
+
+### Understanding Skills vs Agents
+
+**Agents** are specialized AI personas invoked explicitly by the user or Claude Code for complex multi-step tasks:
+- User or system explicitly launches agents with the Task tool
+- Examples: `devops-infrastructure-specialist`, `frontend-ui-ux-specialist`
+- Long-running autonomous operations
+- Can use all available tools
+
+**Skills** are model-invoked capabilities that Claude automatically uses when relevant:
+- Claude autonomously decides to use skills based on the task context
+- Examples: TDD workflow triggers when writing tests, security audit triggers when reviewing security
+- Focused on specific workflows or checklists
+- Can restrict tool usage with `allowed-tools` field
+- Lighter-weight than agents, perfect for patterns and workflows
+
+**When to Use Each:**
+- Use **agents** for complex, multi-step projects requiring planning and execution (e.g., "design and implement a microservices architecture")
+- Use **skills** for recurring workflows, checklists, and best practices (e.g., TDD cycle, security audits, production readiness checks)
 
 ### Runtime Configuration Files (Not Stowable)
 
@@ -204,11 +265,53 @@ stow .claude
 # View current agents
 ls ~/.claude/agents/
 
+# View installed skills
+ls ~/.claude/skills/
+
+# Edit a skill
+nvim ~/.claude/skills/tdd-workflow/SKILL.md
+
+# Create a new skill
+mkdir -p ~/.claude/skills/my-new-skill
+nvim ~/.claude/skills/my-new-skill/SKILL.md
+
 # Edit runtime settings directly
 nvim ~/.claude/settings.local.json
 
 # Remove shared configuration
 stow -D .claude
+```
+
+### Using Skills
+
+Skills activate automatically when Claude detects relevant context:
+
+```bash
+# Development Workflow Skills activate when you:
+# - Ask to write tests, mention TDD → TDD Workflow skill
+# - Write commit messages, create branches → Git Workflow skill
+
+# Code Quality Skills activate when you:
+# - Request code review, PR review → Code Review Checklist skill
+# - Refactor code, mention code smells → Refactoring Patterns skill
+
+# Architecture Skills activate when you:
+# - Design systems, review architecture → Enterprise Architecture Review skill
+# - Design APIs, create endpoints → API Design & Documentation skill
+# - Design database schema, create migrations → Database Design & Migration skill
+
+# Security & Performance Skills activate when you:
+# - Security review, mention OWASP → Security Audit skill
+# - Optimize performance, profile code → Performance Optimization skill
+
+# Operations Skills activate when you:
+# - Prepare for production deployment → Production Readiness skill
+# - Set up logging, implement monitoring → Observability & Logging skill
+# - Create demo environments → Docker Demo Environment skill
+# - Update dependencies, fix vulnerabilities → Dependency Management skill
+
+# Check which skills are available
+# Just ask Claude: "What skills are available?"
 ```
 
 ### Integration Points
@@ -234,6 +337,16 @@ stow -D .claude
 ## Future Enhancements
 
 Potential additions to this directory:
+- **Additional Skills**: More specialized skills for specific frameworks and workflows
+  - Accessibility (a11y) audit skill
+  - CI/CD pipeline configuration skill (GitHub Actions, GitLab CI, Jenkins)
+  - Container orchestration skill (Kubernetes, Docker Swarm)
+  - Incident response and postmortem skill
+  - API integration testing skill
+  - Mobile-first responsive design skill
+  - Internationalization (i18n) and localization skill
+  - Data privacy and GDPR compliance skill
+- **Project-Specific Skills**: Skills in `.claude/skills/` within projects for team-shared workflows
 - **Custom Prompts**: Specialized prompts for different development tasks (stowable)
 - **Workflow Templates**: Common development workflow automations (stowable)
 - **Integration Scripts**: Enhanced integration with existing tools (stowable)
