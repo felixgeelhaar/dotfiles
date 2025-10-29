@@ -44,33 +44,6 @@ return {
 							["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
 							["<esc>"] = actions.close,
 							["<C-u>"] = false, -- Clear the prompt instead of scrolling
-							-- ["<CR>"] = function(...)
-							-- 	-- Close all normal buffers before jumping to selection
-							-- 	local buffers = vim.api.nvim_list_bufs()
-							-- 	local current = vim.api.nvim_get_current_buf()
-							--
-							-- 	for _, buf in ipairs(buffers) do
-							-- 		if buf ~= current and vim.api.nvim_buf_is_loaded(buf) then
-							-- 			local buf_ft = vim.bo[buf].filetype
-							-- 			if
-							-- 			    not buf_ft:match("NvimTree")
-							-- 			    and not buf_ft:match("neo-tree")
-							-- 			    and not buf_ft:match("Outline")
-							-- 			    and not buf_ft:match("dap")
-							-- 			    and not buf_ft:match("Trouble")
-							-- 			    and not buf_ft:match("qf")
-							-- 			    and not buf_ft:match("TelescopePrompt")
-							-- 			    and vim.api.nvim_buf_get_option(buf, "buflisted")
-							-- 			then
-							-- 				vim.api.nvim_buf_delete(buf,
-							-- 					{ force = false })
-							-- 			end
-							-- 		end
-							-- 	end
-							--
-							-- 	-- Then perform the default action
-							-- 	return require("telescope.actions").select_default(...)
-							-- end,
 						},
 						n = {
 							["q"] = actions.close,
