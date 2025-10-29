@@ -67,7 +67,4 @@ NOTES.md
 
 # Oh-My-Zsh upstream managed files (updated by framework)
 terminal/.oh-my-zsh/.github/
-terminal/.oh-my-zsh/plugins/kompose/
-terminal/.oh-my-zsh/plugins/spackenv/
-terminal/.oh-my-zsh/plugins/task/
-terminal/.oh-my-zsh/plugins/tt/
+terminal/.oh-my-zsh/plugins/
