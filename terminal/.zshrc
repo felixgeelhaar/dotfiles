@@ -1,3 +1,12 @@
+# Skip execution for non-interactive shells
+[[ $- != *i* ]] && return
+
+# Performance profiling (uncomment to profile startup time with: zsh -i -c exit)
+# zmodload zsh/zprof
+
+# Docker CLI completions (must be before compinit)
+fpath=(/Users/felixgeelhaar/.docker/completions $fpath)
+
 # Performance optimization: Skip security check for faster startup
 autoload -Uz compinit
 if [[ -n ${ZDOTDIR}/.zcompdump(#qNmh+24) ]]; then
@@ -66,12 +75,22 @@ export PATH="$HOME/bin:/usr/local/bin:$PATH"
 
 source $ZSH/oh-my-zsh.sh
 
-# Performance optimizations
-setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history
-setopt HIST_FIND_NO_DUPS         # Don't display duplicates when searching history
+# Enhanced History Configuration
+HISTSIZE=50000                   # Number of commands in memory
+SAVEHIST=50000                   # Number of commands saved to file
+HISTFILE=~/.zsh_history          # History file location
+
+# History behavior options
+setopt EXTENDED_HISTORY          # Record timestamp of command
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming
+setopt HIST_FIND_NO_DUPS         # Don't display duplicates when searching
+setopt HIST_IGNORE_DUPS          # Don't record consecutive duplicates
+setopt HIST_IGNORE_SPACE         # Don't record commands starting with space (privacy)
+setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks from history
 setopt HIST_SAVE_NO_DUPS         # Don't save duplicates to history file
-setopt SHARE_HISTORY             # Share history between all sessions
 setopt HIST_VERIFY               # Show command with history expansion before running
+setopt SHARE_HISTORY             # Share history between all sessions
+setopt INC_APPEND_HISTORY        # Write to history file immediately, not on shell exit
 
 # Better glob patterns
 setopt EXTENDED_GLOB             # Use extended globbing syntax
@@ -83,11 +102,31 @@ setopt AUTO_PUSHD                # Push directories onto stack
 setopt PUSHD_IGNORE_DUPS         # Don't push duplicate directories
 setopt PUSHD_MINUS               # Exchange meanings of + and -
 
-# Enhanced completion
+# Enhanced Completion Configuration
 zstyle ':completion:*' use-cache yes
 zstyle ':completion:*' cache-path ~/.zsh/cache
 zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
+# Advanced completion settings
+zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*:match:*' original only
+zstyle ':completion:*:approximate:*' max-errors 1 numeric
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format '%B%F{blue}%d%f%b'
+zstyle ':completion:*:messages' format '%F{yellow}%d%f'
+zstyle ':completion:*:warnings' format '%F{red}No matches for: %d%f'
+zstyle ':completion:*:corrections' format '%B%F{green}%d (errors: %e)%f%b'
+
+# Enhanced listing with colors
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+
+# Partial word completion
+zstyle ':completion:*' matcher-list '' \
+    'm:{a-z\-}={A-Z\_}' \
+    'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+    'r:|?=** m:{a-z\-}={A-Z\_}'
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -291,37 +330,68 @@ serve() {
     fi
 }
 
-# [NVM] - Auto-use .nvmrc when entering directories
-export NVM_DIR="$HOME/.nvm"
+# [NVM] - Lazy loaded via lazy-loading.zsh for better performance
+# NVM will be loaded on first use of node/npm/nvm commands
+# Project-based auto-loading handled by auto_load_project_tools function below
 
-# Load NVM from Homebrew
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && source "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+# =============================================================================
+# PROJECT-BASED TOOL AUTO-LOADING
+# =============================================================================
+# Automatically load language tools when entering project directories
 
-# Check if we have a working NVM installation
-if command -v nvm &> /dev/null; then
-  # Auto-use .nvmrc if present when changing directories
-  autoload -U add-zsh-hook
-  load-nvmrc() {
-    if [[ -f .nvmrc && -r .nvmrc ]]; then
-      local nvmrc_node_version=$(cat .nvmrc)
-      local current_node_version=$(nvm version 2>/dev/null || echo "none")
-      
-      if [[ "$nvmrc_node_version" != "$current_node_version" ]]; then
-        echo "Found .nvmrc with Node.js $nvmrc_node_version"
-        if nvm list | grep -q "$nvmrc_node_version"; then
-          nvm use "$nvmrc_node_version"
-        else
-          echo "Node.js $nvmrc_node_version not installed. Run 'nvm install' to install it."
-        fi
-      fi
+auto_load_project_tools() {
+  # Node.js projects - load NVM if package.json exists
+  if [[ -f package.json || -f .nvmrc ]] && ! command -v node >/dev/null 2>&1; then
+    # Trigger lazy loading if nvm function exists
+    if typeset -f load_nvm >/dev/null 2>&1; then
+      load_nvm
     fi
-  }
-  add-zsh-hook chpwd load-nvmrc
-  
-  # Run on current directory when shell starts
-  load-nvmrc
-fi
+  fi
+
+  # Python projects - load pyenv if Python project files exist
+  if [[ -f requirements.txt || -f pyproject.toml || -f setup.py || -f Pipfile ]]; then
+    # Trigger lazy loading if pyenv function exists
+    if typeset -f load_pyenv >/dev/null 2>&1 && ! command -v pyenv >/dev/null 2>&1; then
+      load_pyenv
+    fi
+  fi
+
+  # Go projects - ensure GOPATH is set
+  if [[ -f go.mod || -f go.sum ]]; then
+    export GOPATH="${GOPATH:-$HOME/Developer/go}"
+    path_prepend "$GOPATH/bin"
+  fi
+
+  # Rust projects - ensure cargo is in PATH
+  if [[ -f Cargo.toml ]]; then
+    export CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
+    path_prepend "$CARGO_HOME/bin"
+  fi
+
+  # Kubernetes projects - load kubectl/helm if k8s files exist
+  if [[ -f kubernetes.yaml || -f k8s.yaml || -d k8s/ || -d kubernetes/ ]]; then
+    # Trigger lazy loading if kubectl function exists
+    if typeset -f load_kubectl >/dev/null 2>&1 && ! command -v kubectl >/dev/null 2>&1; then
+      load_kubectl
+    fi
+    if typeset -f load_helm >/dev/null 2>&1 && ! command -v helm >/dev/null 2>&1; then
+      load_helm
+    fi
+  fi
+
+  # Docker projects - helpful to have docker compose available
+  if [[ -f docker-compose.yml || -f docker-compose.yaml || -f Dockerfile ]]; then
+    # Docker should already be available, just a marker for future enhancements
+    :
+  fi
+}
+
+# Hook auto-loading into directory changes
+autoload -U add-zsh-hook
+add-zsh-hook chpwd auto_load_project_tools
+
+# Run on current directory when shell starts
+auto_load_project_tools
 
 # GPG configuration
 export GPG_TTY=$(tty)
@@ -345,9 +415,18 @@ export _ZO_FZF_OPTS="--height=40% --layout=reverse --border --info=inline"
 export _ZO_RESOLVE_SYMLINKS=1
 export _ZO_EXCLUDE_DIRS="$HOME/.Trash:$HOME/.npm:$HOME/.cache:*/node_modules:*/.git:*/.svn:*/.hg"
 
-# Initialize tools
-eval "$(starship init zsh)"
-source <(fzf --zsh)
+# Initialize tools with error handling
+if command -v starship >/dev/null 2>&1; then
+    eval "$(starship init zsh)"
+else
+    echo "Warning: starship not found, using default prompt"
+fi
+
+if command -v fzf >/dev/null 2>&1; then
+    source <(fzf --zsh)
+else
+    echo "Warning: fzf not found, fuzzy finding disabled"
+fi
 
 
 # Load performance optimizations and modern aliases
@@ -370,20 +449,25 @@ path_prepend "$(go env GOPATH)/bin"
 path_prepend "/opt/homebrew/opt/ruby/bin"
 path_prepend "/opt/homebrew/opt/rustup/bin"
 
-export PATH
+# PATH Sanitization - remove duplicates and non-existent directories
+typeset -U path                  # Remove duplicate entries from path array
+path=($^path(N-/))               # Keep only existing directories
 
-# Aliases
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/felixgeelhaar/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
-# End of Docker CLI completions
-export GPG_TTY=$(tty)
+export PATH
 
 # Initialize zoxide - MUST be at the end of the file
 if command -v zoxide >/dev/null 2>&1; then
     eval "$(zoxide init zsh)"
+else
+    echo "Warning: zoxide not found, smart directory navigation disabled"
 fi
+
+# Local machine-specific configuration override
+# Create ~/.zshrc.local for machine-specific customizations
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# Performance profiling output (uncomment the zmodload at top to enable)
+# zprof
 
 # Claude CLI - local symlink points to global installation
 # ~/.claude/local/claude -> ~/.nvm/versions/node/v22.17.0/bin/claude

@@ -20,6 +20,9 @@ wezterm/
   - GPU-accelerated rendering for smooth performance
   - Catppuccin Macchiato theme for visual consistency
   - Tmux-style leader key bindings for window/pane management
+  - **Contextual window titles** with project type, git branch, and process indicators
+  - **Neovim-optimized** with true color, large scrollback, and cursor shape support
+  - **Developer shortcuts** for search, font adjustment, and scrollback management
   - Integrated clipboard and file operations
   - Development-optimized font and display settings
 
@@ -35,7 +38,33 @@ wezterm/
 - **Theme**: Catppuccin Macchiato for consistency with other tools
 - **Font**: JetBrains Mono Nerd Font with full icon support
 - **Transparency**: Configurable window opacity for desktop integration
-- **Minimal UI**: Clean interface without unnecessary chrome
+- **Minimal UI**: Clean interface without unnecessary chrome (tabs disabled by default)
+
+### Contextual Window Titles
+The window title provides rich context about your current development environment:
+
+**Project Information:**
+- **Folder name**: Current directory/project name
+- **Project type detection**: Automatically identifies Node.js, Python, Go, Rust, Ruby, PHP, Java, Kotlin projects
+- **Git branch**: Shows current git branch in parentheses (if in a git repository)
+
+**Process Indicators** (with emojis):
+- `✎ nvim` - Neovim editor active
+- `⬢ node` - Node.js runtime
+- `🐍 python` - Python interpreter
+- `🦀 rust` - Rust toolchain (cargo/rustc)
+- `🐹 go` - Go compiler/tools
+- `🐳 docker` - Docker commands
+- `☸ k8s` - Kubernetes tools (kubectl/k9s)
+- `▶ [process]` - Other active processes
+
+**Example Titles:**
+```
+dotfiles [Node.js] (main) ✎ nvim
+my-api [Go] (feature/auth) 🐹 go
+frontend [Node.js] (develop) ⬢ node
+scripts [Python] 🐍 python
+```
 
 ### Key Binding System
 ```bash
@@ -45,9 +74,41 @@ wezterm/
 <leader> h/j/k/l    # Navigate panes (vim-style)
 <leader> arrow      # Resize panes
 <leader> x          # Close current pane
-<leader> c          # Create new tab
-<leader> n/p        # Switch between tabs
+<leader> z          # Toggle pane zoom
+<leader> r          # Reload configuration
+<leader> [          # Enter copy mode
+
+# Developer shortcuts (CMD key on macOS)
+CMD+k               # Clear scrollback
+CMD+f               # Search in scrollback
+CMD++               # Increase font size
+CMD+-               # Decrease font size
+CMD+0               # Reset font size
+CMD+c               # Copy to clipboard
+CMD+v               # Paste from clipboard
+CMD+n               # New window
 ```
+
+### Neovim Integration
+WezTerm is optimized for Neovim with the following features:
+
+**Visual Features:**
+- **True color support**: 24-bit color for accurate theme rendering
+- **Cursor shape changes**: Supports Neovim's cursor shape changes (block, bar, underline) for different modes
+- **Non-blinking cursor**: Steady cursor for better focus during coding
+- **60 FPS rendering**: Smooth cursor movements and animations
+
+**Performance Features:**
+- **Large scrollback**: 10,000 lines for debugging and log review
+- **Kitty graphics protocol**: Image rendering support for plugins
+- **Fast rendering**: GPU-accelerated text display
+- **Proper TERM value**: Set to `wezterm` for optimal feature detection
+
+**Workflow Benefits:**
+- Window title shows when Neovim is active (`✎ nvim`)
+- Clean UI without tabs (consistent with single-window workflow preference)
+- Vim-style pane navigation matching Neovim keybindings
+- Copy-paste integration with system clipboard
 
 ## Development Integration
 
