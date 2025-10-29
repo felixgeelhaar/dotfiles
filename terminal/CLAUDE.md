@@ -69,13 +69,10 @@ terminal/
 - **Cross-shell**: Works with Zsh, Bash, Fish, and PowerShell
 
 ### Modern CLI Tools Integration
-- **File operations**: Enhanced ls (eza), cat (bat), find (fd), grep (ripgrep/rg)
-- **JSON/YAML processing**: jq for JSON manipulation, jless for interactive viewing, yq for YAML
-- **Developer tools**: tldr (simplified man pages), hyperfine (benchmarking), tokei (code statistics)
-- **System monitoring**: bottom/btm (better top), bandwhich (network monitoring), procs (better ps)
-- **Git workflows**: Advanced Git aliases, delta diff pager, diffview integration
-- **Fuzzy finding**: fzf for files and directories, zoxide for smart directory navigation
-- **Development shortcuts**: Language-specific helpers and project detection
+- **File operations**: Enhanced ls, cat, find, grep alternatives
+- **Git workflows**: Advanced Git aliases and integrations
+- **Development tools**: Language-specific shortcuts and helpers
+- **System utilities**: Improved system monitoring and management
 
 ## Enabled Oh My Zsh Plugins
 
@@ -175,88 +172,16 @@ alias activate="source venv/bin/activate"
 - **Plugin management**: Only load necessary plugins
 - **Process monitoring**: Tools to monitor shell performance
 
-## Project-Based Auto-Loading
-
-The terminal configuration includes intelligent project detection that automatically loads the appropriate language tools when entering project directories:
-
-### Auto-Detection Features
-
-**Node.js Projects** - Detects `package.json` or `.nvmrc` files:
-- Automatically loads NVM if Node.js is not available
-- Ensures correct Node.js version for the project
-- No manual `nvm use` required
-
-**Python Projects** - Detects `requirements.txt`, `pyproject.toml`, `setup.py`, or `Pipfile`:
-- Triggers pyenv lazy loading when needed
-- Activates virtual environments automatically
-- Ensures proper Python version management
-
-**Go Projects** - Detects `go.mod` or `go.sum`:
-- Sets GOPATH environment variable
-- Adds Go binaries to PATH
-- Ensures Go tooling availability
-
-**Rust Projects** - Detects `Cargo.toml`:
-- Sets CARGO_HOME environment variable
-- Adds Cargo binaries to PATH
-- Ensures Rust toolchain availability
-
-**Kubernetes Projects** - Detects `kubernetes.yaml`, `k8s.yaml`, or `k8s/`, `kubernetes/` directories:
-- Loads kubectl if not already available
-- Loads helm if not already available
-- Triggers lazy loading for Kubernetes tools
-
-**Docker Projects** - Detects `docker-compose.yml`, `docker-compose.yaml`, or `Dockerfile`:
-- Marker for future enhancements
-- Docker is always available by default
-
-### Usage
-
-The auto-loading function runs automatically:
-1. When starting a new shell session
-2. When changing directories (`cd` command)
-3. Only loads tools that aren't already available
-4. Leverages lazy-loading functions for performance
-
-### Benefits
-
-- **Zero configuration**: Works automatically based on project files
-- **Performance**: Only loads tools when actually needed
-- **Consistency**: Same behavior across all projects
-- **Developer experience**: Seamless transition between projects
-
 ## Tool Configuration
 
 ### Ripgrep (`.ripgreprc`)
 ```bash
-# Performance settings
---max-filesize=10M
---encoding=auto
-
-# Search behavior
---smart-case
---follow
---hidden
---context=2
-
-# Display optimization
+# Performance and behavior settings
 --max-columns=150
 --max-columns-preview
-
-# Catppuccin-inspired colors
---colors=line:fg:yellow
---colors=path:fg:cyan
---colors=match:fg:red
-
-# Comprehensive exclusions (node_modules, build outputs, caches, locks)
+--smart-case
+--hidden
 --glob=!.git/*
---glob=!node_modules/*
---glob=!target/*
---glob=!dist/*
-
-# Custom file types (web, config, docs, shell, iac, k8s)
---type-add=web:*.{html,htm,css,scss,sass,less}
---type-add=config:*.{json,yaml,yml,toml,ini,conf,cfg}
 ```
 
 ### Bat Configuration
