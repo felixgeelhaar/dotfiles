@@ -18,25 +18,42 @@ config.enable_scroll_bar = false  -- Minimal UI
 -- True color support (essential for Neovim themes)
 config.color_scheme_dirs = {}  -- Use built-in color schemes
 
--- Appearance with Catppuccin theme
-config.color_scheme = "Catppuccin Macchiato"
+-- Appearance with Rose Pine Moon theme
+config.color_scheme = "rose-pine-moon"
 config.window_background_opacity = 0.95
 config.macos_window_background_blur = 20
 
--- Additional Catppuccin styling
+-- Additional Rose Pine Moon styling
 config.colors = {
-	-- The default colors are defined by the Catppuccin Macchiato scheme
-	-- but we can add additional customizations here if needed
-	
-	-- Cursor colors (using Catppuccin Macchiato colors)
-	cursor_bg = '#f4dbd6', -- Rosewater
-	cursor_fg = '#24273a', -- Base
-	cursor_border = '#f4dbd6', -- Rosewater
-	
+	-- Rose Pine Moon custom colors
+	-- More muted, darker than Catppuccin
+
+	-- Cursor colors (using Rose Pine Moon colors)
+	cursor_bg = '#ea9a97', -- Rose
+	cursor_fg = '#232136', -- Base
+	cursor_border = '#ea9a97', -- Rose
+
 	-- Selection colors
-	selection_fg = '#24273a', -- Base
-	selection_bg = '#b7bdf8', -- Lavender
+	selection_fg = '#e0def4', -- Text
+	selection_bg = '#44415a', -- Highlight Med
 }
+
+-- ============================================================================
+-- ALTERNATIVE THEME: Catppuccin Macchiato (Commented Out)
+-- ============================================================================
+-- Uncomment the lines below and comment out Rose Pine Moon above to switch back
+--
+-- config.color_scheme = "Catppuccin Macchiato"
+-- config.colors = {
+-- 	-- Cursor colors (using Catppuccin Macchiato colors)
+-- 	cursor_bg = '#f4dbd6', -- Rosewater
+-- 	cursor_fg = '#24273a', -- Base
+-- 	cursor_border = '#f4dbd6', -- Rosewater
+--
+-- 	-- Selection colors
+-- 	selection_fg = '#24273a', -- Base
+-- 	selection_bg = '#b7bdf8', -- Lavender
+-- }
 
 -- Font configuration with fallbacks
 config.font = wezterm.font_with_fallback({

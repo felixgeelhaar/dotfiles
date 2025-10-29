@@ -1,4 +1,8 @@
-palette = "catppuccin_macchiato"
+# Active Theme: Rose Pine Moon
+palette = "rose_pine_moon"
+
+# Alternative Theme (Catppuccin Macchiato) - Uncomment line below and comment above to switch
+# palette = "catppuccin_macchiato"
 
 format = """
 $username\
@@ -128,6 +132,38 @@ format = "on [$symbol($profile )(\($region\) )]($style)"
 style = "bold blue"
 symbol = "☁️ "
 
+# ============================================================================
+# Rose Pine Moon Color Palette (Active)
+# ============================================================================
+[palettes.rose_pine_moon]
+base = "#232136"
+surface = "#2a273f"
+overlay = "#393552"
+muted = "#6e6a86"
+subtle = "#908caa"
+text = "#e0def4"
+love = "#eb6f92"
+gold = "#f6c177"
+rose = "#ea9a97"
+pine = "#3e8fb0"
+foam = "#9ccfd8"
+iris = "#c4a7e7"
+highlight_low = "#2a283e"
+highlight_med = "#44415a"
+highlight_high = "#56526e"
+
+# Map Rose Pine colors to common Starship color names for compatibility
+red = "#eb6f92"      # love
+green = "#9ccfd8"    # foam
+yellow = "#f6c177"   # gold
+blue = "#3e8fb0"     # pine
+purple = "#c4a7e7"   # iris
+cyan = "#9ccfd8"     # foam
+white = "#e0def4"    # text
+
+# ============================================================================
+# Catppuccin Macchiato Color Palette (Alternative - Commented Out)
+# ============================================================================
 [palettes.catppuccin_macchiato]
 rosewater = "#f4dbd6"
 flamingo = "#f0c6c6"
