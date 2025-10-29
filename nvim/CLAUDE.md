@@ -10,22 +10,29 @@ nvim/
 │   ├── init.lua                    # Main entry point
 │   ├── lazy-lock.json             # Plugin version lockfile
 │   └── lua/
+│       ├── cmds.lua               # Autocommands
 │       ├── keymaps.lua            # Custom key mappings
+│       ├── opts.lua               # Neovim options
+│       ├── custom/
+│       │   └── health.lua         # Custom health checks
 │       └── plugins/
-│           ├── ai-assistant.lua    # AI code assistance
-│           ├── colorscheme.lua     # Theme configuration
-│           ├── debugging.lua       # Debug adapter protocol (DAP)
-│           ├── enhancements.lua    # Quality of life improvements
-│           ├── git.lua            # Git integration
-│           ├── language-servers.lua # LSP configurations
+│           ├── autocomplete.lua   # Blink completion
+│           ├── codecompanion.lua  # AI code assistance
+│           ├── colorscheme.lua    # Theme configuration
+│           ├── conform.lua        # Code formatting
+│           ├── debugging.lua      # Debug Adapter Protocol (DAP)
+│           ├── filetree.lua       # Neo-tree file explorer
+│           ├── git.lua            # Git integration (Gitsigns, Diffview)
 │           ├── lazygit.lua        # LazyGit integration
-│           ├── lsp-config.lua     # Language server setup
-│           ├── session.lua        # Session management
+│           ├── lsp_config.lua     # Language server setup
+│           ├── lsp_servers.lua    # LSP configurations
+│           ├── neotest.lua        # Testing framework
+│           ├── nonels.lua         # None-ls (null-ls fork)
+│           ├── rest_client.lua    # kulala HTTP client
 │           ├── telescope.lua      # Fuzzy finder
-│           ├── tmux-navigator.lua # Tmux integration
+│           ├── tmux_navigator.lua # Tmux integration
 │           ├── treesitter.lua     # Syntax highlighting
-│           ├── trouble.lua        # Diagnostics UI
-│           └── which_key.lua      # Key binding help
+│           └── ... (30+ more)     # Additional plugins
 ```
 
 ## Core Features
@@ -68,10 +75,21 @@ nvim/
 ```lua
 -- Configured DAP adapters:
 - delve (Go debugging)
-- node2 (Node.js/TypeScript debugging)
-- codelldb (Rust debugging)
 - debugpy (Python debugging)
+- codelldb (Rust, C, C++ debugging)
+- js-debug-adapter (JavaScript/TypeScript debugging)
+- node-debug2-adapter (Node.js debugging)
+- bash-debug-adapter (Bash script debugging)
+- php-debug-adapter (PHP debugging with Xdebug)
 ```
+
+**Debugging Support:**
+- **Go**: Full debugging with Delve (breakpoints, step execution, variable inspection)
+- **Python**: Virtual environment aware with debugpy
+- **Rust/C/C++**: LLDB-based debugging with codelldb
+- **JavaScript/TypeScript**: Node.js and Chrome debugging
+- **Bash**: Shell script debugging with bashdb
+- **PHP**: Xdebug integration (default port 9003)
 
 ### Key Mappings (Leader: Space)
 
@@ -296,6 +314,60 @@ vim.keymap.set('n', '<leader>custom', function()
   -- Custom function
 end, { desc = 'Custom function' })
 ```
+
+### Custom Global Settings (vim.g)
+
+You can customize behavior by setting global variables in your `init.lua` or a local config file:
+
+```lua
+-- Custom projects directory (default: ~/projects)
+vim.g.projects_directory = "~/dev/projects"
+
+-- Disable nerd font icons if not using a patched font
+vim.g.have_nerd_font = false
+
+-- Custom leader key (default is already set to <Space>)
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+```
+
+**Available Custom Settings:**
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `vim.g.projects_directory` | `~/projects` | Custom directory for project search (`<leader>fp`) |
+| `vim.g.have_nerd_font` | `true` | Enable/disable Nerd Font icons in UI |
+| `vim.g.mapleader` | `<Space>` | Leader key for custom mappings |
+| `vim.g.maplocalleader` | `<Space>` | Local leader key for filetype-specific mappings |
+| `vim.g.disable_autoformat` | `nil` | Globally disable format-on-save (use `:FormatDisable`) |
+
+**Note:** Buffer-local settings override global settings. Use `:FormatDisable!` for buffer-only format disable.
+
+## Health Checks
+
+Run health checks to verify your configuration:
+
+```bash
+# Check all health status
+:checkhealth
+
+# Check custom configuration health
+:checkhealth custom
+
+# Check specific plugin health
+:checkhealth telescope
+:checkhealth lspconfig
+:checkhealth mason
+```
+
+The custom health check (`lua/custom/health.lua`) verifies:
+- Neovim version compatibility (>= 0.10.0)
+- Required executables (git, curl, rg, fd)
+- Optional tools (formatters, linters, debuggers)
+- LSP servers and DAP adapters installation
+- Core plugin loading status
+- Python debugger setup
+- Custom configuration settings
 
 ## Stow Integration
 

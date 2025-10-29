@@ -47,6 +47,7 @@ return {
             "js-debug-adapter", -- JavaScript/TypeScript
             "node-debug2-adapter", -- Node.js
             "bash-debug-adapter", -- Bash
+            "php-debug-adapter", -- PHP
           },
         },
       },
@@ -258,9 +259,61 @@ return {
           },
         }
       end
+
+      -- Bash DAP Configuration
+      dap.adapters.bashdb = {
+        type = "executable",
+        command = "bash-debug-adapter",
+        name = "bashdb",
+      }
+
+      dap.configurations.sh = {
+        {
+          type = "bashdb",
+          request = "launch",
+          name = "Launch Bash Script",
+          program = "${file}",
+          cwd = "${workspaceFolder}",
+          pathBashdb = vim.fn.stdpath("data") .. "/mason/packages/bash-debug-adapter/extension/bashdb_dir/bashdb",
+          pathBashdbLib = vim.fn.stdpath("data") .. "/mason/packages/bash-debug-adapter/extension/bashdb_dir",
+          pathBash = "bash",
+          pathCat = "cat",
+          pathMkfifo = "mkfifo",
+          pathPkill = "pkill",
+          args = {},
+          env = {},
+          terminalKind = "integrated",
+        },
+      }
+
+      -- PHP DAP Configuration
+      dap.adapters.php = {
+        type = "executable",
+        command = "php-debug-adapter",
+      }
+
+      dap.configurations.php = {
+        {
+          type = "php",
+          request = "launch",
+          name = "Listen for Xdebug",
+          port = 9003, -- Xdebug 3 default port (9000 for Xdebug 2)
+          pathMappings = {
+            ["/var/www/html"] = "${workspaceFolder}",
+          },
+        },
+        {
+          type = "php",
+          request = "launch",
+          name = "Launch currently open script",
+          program = "${file}",
+          cwd = "${workspaceFolder}",
+          port = 9003,
+        },
+      }
     end,
   },
-  
+
   -- Language-specific debugging extensions
   {
     "mfussenegger/nvim-dap-python",
