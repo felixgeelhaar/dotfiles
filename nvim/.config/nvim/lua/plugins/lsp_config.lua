@@ -78,8 +78,6 @@ return {
 				},
 			})
 
-			vim.lsp.inlay_hint.enable(true)
-
 			local handlers = {
 				-- Default handler
 				function(server_name)
@@ -237,18 +235,8 @@ return {
 				}
 			)
 
-			-- Enable native inlay hints (Neovim 0.10+)
-			if vim.fn.has("nvim-0.10") == 1 then
-				vim.lsp.inlay_hint.enable(true)
-			end
-
-			-- Auto-format on save for specific filetypes
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				pattern = { "*.lua", "*.py", "*.go", "*.rs", "*.ts", "*.js" },
-				callback = function()
-					vim.lsp.buf.format({ async = false })
-				end,
-			})
+			-- Note: Auto-format on save is handled by conform.nvim
+			-- See lua/plugins/conform.lua for format configuration
 		end,
 	},
 }

@@ -127,22 +127,36 @@ return {
         end
       end
       
+      -- Helper function to find Python interpreter
+      local function get_python_path()
+        local cwd = vim.fn.getcwd()
+        -- Try common virtual environment locations
+        local python_paths = {
+          cwd .. "/venv/bin/python",
+          cwd .. "/.venv/bin/python",
+          vim.fn.expand("~/.pyenv/shims/python"),
+          "/usr/local/bin/python3",
+          "/usr/bin/python3",
+          "/usr/bin/python",
+        }
+
+        for _, path in ipairs(python_paths) do
+          if vim.fn.executable(path) == 1 then
+            return path
+          end
+        end
+
+        -- Fallback to system python
+        return "python3"
+      end
+
       dap.configurations.python = {
         {
           type = "python",
           request = "launch",
           name = "Launch file",
           program = "${file}",
-          pythonPath = function()
-            local cwd = vim.fn.getcwd()
-            if vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
-              return cwd .. "/venv/bin/python"
-            elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
-              return cwd .. "/.venv/bin/python"
-            else
-              return "/usr/bin/python"
-            end
-          end,
+          pythonPath = get_python_path,
         },
         {
           type = "python",
@@ -153,16 +167,7 @@ return {
             local args_string = vim.fn.input("Arguments: ")
             return vim.split(args_string, " ")
           end,
-          pythonPath = function()
-            local cwd = vim.fn.getcwd()
-            if vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
-              return cwd .. "/venv/bin/python"
-            elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
-              return cwd .. "/.venv/bin/python"
-            else
-              return "/usr/bin/python"
-            end
-          end,
+          pythonPath = get_python_path,
         },
       }
       

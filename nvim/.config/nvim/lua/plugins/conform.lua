@@ -51,18 +51,8 @@ return {
         
         -- Use the "_" filetype to run formatters on filetypes that don't
         -- have other formatters configured (basic cleanup)
-        ["_"] = { "trim_whitespace" },
-      },
-      
-      -- Customize formatters (basic configurations)
-      formatters = {
-        -- Custom formatter for removing trailing whitespace
-        -- Define custom formatter for removing trailing whitespace
-        trim_whitespace = {
-          command = "sed",
-          args = { "-i", "s/[[:space:]]*$//" },
-          stdin = false,
-        },
+        -- Conform has built-in trim_whitespace and trim_newlines formatters
+        ["_"] = { "trim_whitespace", "trim_newlines" },
       },
       
       -- Format on save configuration

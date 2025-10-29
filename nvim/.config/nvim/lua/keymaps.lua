@@ -294,16 +294,23 @@ vim.keymap.set(
 	{ desc = "Find Old Files" }
 )
 vim.keymap.set("n", "<leader>fm", function()
-	require("telescope").extensions.notify.notify()
+	local ok, telescope = pcall(require, "telescope")
+	if ok and telescope.extensions.notify then
+		telescope.extensions.notify.notify()
+	else
+		vim.notify("Telescope notify extension not available", vim.log.levels.WARN)
+	end
 end, { desc = "Find Messages" })
 
 -- ============================================================================
 -- PROJECT MANAGEMENT
 -- ============================================================================
 vim.keymap.set("n", "<leader>fp", function()
+	-- Check for custom projects directory or use default
+	local projects_dir = vim.g.projects_directory or vim.fn.expand("~/projects")
 	require("telescope.builtin").find_files({
 		prompt_title = "Projects",
-		cwd = "~/projects", -- Change to your projects directory
+		cwd = projects_dir,
 		find_command = { "fd", "--type", "d", "--max-depth", "1" },
 	})
 end, { desc = "Find Projects" })
