@@ -69,6 +69,63 @@ if command -v htop >/dev/null 2>&1; then
 fi
 
 # =============================================================================
+# JSON/YAML PROCESSING TOOLS
+# =============================================================================
+
+# jq - JSON processor (if available)
+if command -v jq >/dev/null 2>&1; then
+    alias json="jq -C"  # Colorized JSON output
+    alias jsonless="jq -C | less -R"  # JSON with pagination
+fi
+
+# jless - Interactive JSON viewer (if available)
+if command -v jless >/dev/null 2>&1; then
+    alias jl="jless"
+fi
+
+# yq - YAML processor (if available)
+if command -v yq >/dev/null 2>&1; then
+    alias yaml="yq"
+fi
+
+# =============================================================================
+# DEVELOPER TOOLS
+# =============================================================================
+
+# tldr - Simplified man pages (if available)
+if command -v tldr >/dev/null 2>&1; then
+    alias help="tldr"
+    # Don't override 'man' completely, but provide tldr shortcut
+fi
+
+# hyperfine - Command benchmarking (if available)
+if command -v hyperfine >/dev/null 2>&1; then
+    alias bench="hyperfine"
+fi
+
+# tokei - Code statistics (if available)
+if command -v tokei >/dev/null 2>&1; then
+    alias code-stats="tokei"
+    alias lines="tokei"
+fi
+
+# =============================================================================
+# SYSTEM MONITORING TOOLS
+# =============================================================================
+
+# bottom (btm) - Better top/htop (if available)
+if command -v btm >/dev/null 2>&1; then
+    alias sysmon="btm"
+    # Keep original top available, add btm as alternative
+    alias btop="btm"
+fi
+
+# bandwhich - Network monitoring (if available)
+if command -v bandwhich >/dev/null 2>&1; then
+    alias netmon="sudo bandwhich"
+fi
+
+# =============================================================================
 # GIT ENHANCEMENTS
 # =============================================================================
 
@@ -117,6 +174,13 @@ alias gflff="git flow feature finish"
 alias gflr="git flow release"
 alias gflrs="git flow release start"
 alias gflrf="git flow release finish"
+
+# Git delta integration (enhanced diff pager - already configured in .gitconfig)
+if command -v delta >/dev/null 2>&1; then
+    alias gdelta="git diff | delta"
+    alias gldelta="git log -p | delta"
+    alias gsdelta="git diff --staged | delta"
+fi
 
 # =============================================================================
 # DOCKER ENHANCEMENTS

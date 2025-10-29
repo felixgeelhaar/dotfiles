@@ -1,30 +1,172 @@
-# ripgrep configuration file
+# ripgrep (rg) configuration file
+# Modern, performant search configuration for development workflows
 
-# Always use smart case
+# =============================================================================
+# PERFORMANCE SETTINGS
+# =============================================================================
+
+# Maximum file size to search (10MB - prevents searching large generated files)
+--max-filesize=10M
+
+# Automatically detect encoding
+--encoding=auto
+
+# =============================================================================
+# SEARCH BEHAVIOR
+# =============================================================================
+
+# Smart case: case-insensitive unless pattern contains uppercase
 --smart-case
 
-# Never search inside .git directories
---glob=!.git/*
+# Follow symbolic links
+--follow
 
-# Don't search inside node_modules, target, or dist directories
+# Search hidden files and directories (but respect .gitignore)
+--hidden
+
+# Show 2 lines of context before and after matches
+--context=2
+
+# =============================================================================
+# DISPLAY SETTINGS
+# =============================================================================
+
+# Maximum columns to display per line
+--max-columns=150
+
+# Show column numbers in output
+--max-columns-preview
+
+# =============================================================================
+# COLOR SCHEME (Catppuccin-inspired)
+# =============================================================================
+
+# Line numbers in yellow
+--colors=line:fg:yellow
+
+# File paths in cyan
+--colors=path:fg:cyan
+
+# Match text in red with bold
+--colors=match:fg:red
+--colors=match:style:bold
+
+# Column numbers in blue
+--colors=column:fg:blue
+
+# =============================================================================
+# DIRECTORY EXCLUSIONS
+# =============================================================================
+
+# Version control
+--glob=!.git/*
+--glob=!.svn/*
+--glob=!.hg/*
+
+# Dependency directories
 --glob=!node_modules/*
+--glob=!vendor/*
+--glob=!bower_components/*
+--glob=!jspm_packages/*
+
+# Build outputs
 --glob=!target/*
 --glob=!dist/*
 --glob=!build/*
+--glob=!out/*
 --glob=!.next/*
+--glob=!.nuxt/*
+--glob=!.output/*
+
+# Test coverage
 --glob=!coverage/*
+--glob=!.nyc_output/*
 
-# Ignore binary files
+# Cache directories
+--glob=!.cache/*
+--glob=!.sass-cache/*
+--glob=!__pycache__/*
+--glob=!*.pyc
+--glob=!.pytest_cache/*
+
+# IDE and editor directories
+--glob=!.idea/*
+--glob=!.vscode/*
+--glob=!*.swp
+--glob=!*.swo
+--glob=!*~
+
+# OS-specific
+--glob=!.DS_Store
+--glob=!Thumbs.db
+
+# Package manager locks (usually very large)
+--glob=!package-lock.json
+--glob=!yarn.lock
+--glob=!pnpm-lock.yaml
+--glob=!Cargo.lock
+--glob=!Gemfile.lock
+--glob=!composer.lock
+--glob=!poetry.lock
+
+# Log files
+--glob=!*.log
+--glob=!logs/*
+
+# Temporary files
+--glob=!tmp/*
+--glob=!temp/*
+
+# =============================================================================
+# CUSTOM FILE TYPES
+# =============================================================================
+
+# Web development
+--type-add=web:*.{html,htm,css,scss,sass,less}
+--type-add=js:*.{js,jsx,mjs,cjs}
+--type-add=ts:*.{ts,tsx,mts,cts}
+--type-add=vue:*.vue
+--type-add=svelte:*.svelte
+
+# Configuration files
+--type-add=config:*.{json,yaml,yml,toml,ini,conf,cfg}
+
+# Documentation
+--type-add=docs:*.{md,markdown,rst,txt,adoc}
+
+# Shell scripts
+--type-add=shell:*.{sh,bash,zsh,fish}
+
+# Infrastructure as Code
+--type-add=iac:*.{tf,tfvars,hcl}
+--type-add=k8s:*.{yaml,yml}
+
+# Go
+--type-add=go:*.go
+
+# Rust
+--type-add=rust:*.rs
+
+# Python
+--type-add=python:*.{py,pyw,pyx}
+
+# Ruby
+--type-add=ruby:*.{rb,rake,gemspec}
+
+# PHP
+--type-add=php:*.php
+
+# Java/Kotlin
+--type-add=java:*.java
+--type-add=kotlin:*.{kt,kts}
+
+# C/C++
+--type-add=c:*.{c,h}
+--type-add=cpp:*.{cpp,hpp,cc,cxx,hxx}
+
+# =============================================================================
+# BINARY FILE HANDLING
+# =============================================================================
+
+# Don't search binary files
 --binary
-
-# Add custom types for common files
---type-add=web:*.{html,css,js,jsx,ts,tsx,vue,svelte}
---type-add=config:*.{json,yaml,yml,toml,ini,conf}
---type-add=docs:*.{md,rst,txt}
-
-# Use colors
---colors=line:fg:yellow
---colors=line:style:bold
---colors=path:fg:green
---colors=match:fg:black
---colors=match:bg:yellow

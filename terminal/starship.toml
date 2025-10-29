@@ -41,10 +41,11 @@ symbol = " "
 
 [directory]
 style = "bold blue"
-read_only = ""
-truncation_length = 3
-truncation_symbol = "../"
+read_only = " 🔒"
+truncation_length = 4
+truncation_symbol = "…/"
 truncate_to_repo = true
+home_symbol = "~"
 
 [time]
 disabled = false
@@ -127,12 +128,6 @@ format = "on [$symbol($profile )(\($region\) )]($style)"
 style = "bold blue"
 symbol = "☁️ "
 
-[directory]
-truncation_length = 4
-truncate_to_repo = true
-truncation_symbol = "…/"
-read_only = " 🔒"
-
 [palettes.catppuccin_macchiato]
 rosewater = "#f4dbd6"
 flamingo = "#f0c6c6"
@@ -196,9 +191,6 @@ symbol = "deno "
 
 [dotnet]
 symbol = ".NET "
-
-[directory]
-read_only = " ro"
 
 [docker_context]
 symbol = "docker "
