@@ -8,12 +8,12 @@ return {
   ---@type blink.cmp.Config
   opts = {
     keymap = { preset = "default" },
-    
+
     appearance = {
       nerd_font_variant = "mono",
       use_nvim_cmp_as_default = true,
     },
-    
+
     -- Enable signature help for better development experience
     -- Shows function signatures while typing, positioned above completion menu
     signature = {
@@ -35,7 +35,7 @@ return {
         -- blink.cmp automatically positions signature above completion
       },
     },
-    
+
     -- Optimize completion sources with proper priorities
     sources = {
       default = { "lsp", "path", "snippets", "buffer" },
@@ -55,7 +55,9 @@ return {
           opts = {
             trailing_slash = false,
             label_trailing_slash = true,
-            get_cwd = function(context) return vim.fn.getcwd() end,
+            get_cwd = function(context)
+              return vim.fn.getcwd()
+            end,
             show_hidden_files_by_default = false,
           },
         },
@@ -76,7 +78,7 @@ return {
         },
       },
     },
-    
+
     -- Enhanced completion menu appearance with more type information
     completion = {
       menu = {
@@ -144,9 +146,9 @@ return {
         },
       },
     },
-    
+
     -- Performance optimizations
-    fuzzy = { 
+    fuzzy = {
       implementation = "prefer_rust",
     },
   },

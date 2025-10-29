@@ -41,10 +41,10 @@ return {
     },
     config = function(_, opts)
       require("persisted").setup(opts)
-      
+
       -- Telescope integration
       require("telescope").load_extension("persisted")
-      
+
       -- Keymaps
       vim.keymap.set("n", "<leader>ps", "<cmd>SessionSave<cr>", { desc = "Save Session" })
       vim.keymap.set("n", "<leader>pl", "<cmd>SessionLoad<cr>", { desc = "Load Session" })

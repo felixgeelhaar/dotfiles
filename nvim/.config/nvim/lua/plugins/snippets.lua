@@ -85,8 +85,10 @@ return {
       })
 
       ls.add_snippets("typescriptreact", {
-        s("rfc", fmt(
-          [[
+        s(
+          "rfc",
+          fmt(
+            [[
 import React from 'react';
 
 interface {}Props {{
@@ -101,62 +103,78 @@ export const {}: React.FC<{}Props> = ({{{}}}) => {{
   );
 }};
           ]],
-          { i(1, "Component"), i(2), i(1), i(1), i(3), i(4) }
-        )),
-        s("useState", fmt("const [{}, set{}] = useState{}({});", {
-          i(1, "state"),
-          f(function(args)
-            return args[1][1]:gsub("^%l", string.upper)
-          end, { 1 }),
-          i(2, ""),
-          i(3, ""),
-        })),
+            { i(1, "Component"), i(2), i(1), i(1), i(3), i(4) }
+          )
+        ),
+        s(
+          "useState",
+          fmt("const [{}, set{}] = useState{}({});", {
+            i(1, "state"),
+            f(function(args)
+              return args[1][1]:gsub("^%l", string.upper)
+            end, { 1 }),
+            i(2, ""),
+            i(3, ""),
+          })
+        ),
       })
 
       -- Go snippets
       ls.add_snippets("go", {
         s("err", fmt("if err != nil {{\n  return {}\n}}", { i(1, "err") })),
         s("errp", fmt("if err != nil {{\n  panic(err)\n}}", {})),
-        s("errw", fmt("if err != nil {{\n  return fmt.Errorf(\"{}: %w\", err)\n}}", { i(1, "failed to") })),
+        s("errw", fmt('if err != nil {{\n  return fmt.Errorf("{}: %w", err)\n}}', { i(1, "failed to") })),
         s("func", fmt("func {}({}) {} {{\n  {}\n}}", { i(1, "name"), i(2), i(3), i(4) })),
-        s("method", fmt("func ({} {}) {}({}) {} {{\n  {}\n}}", {
-          i(1, "r"),
-          i(2, "Receiver"),
-          i(3, "Method"),
-          i(4),
-          i(5),
-          i(6),
-        })),
-        s("test", fmt(
-          [[
+        s(
+          "method",
+          fmt("func ({} {}) {}({}) {} {{\n  {}\n}}", {
+            i(1, "r"),
+            i(2, "Receiver"),
+            i(3, "Method"),
+            i(4),
+            i(5),
+            i(6),
+          })
+        ),
+        s(
+          "test",
+          fmt(
+            [[
 func Test{}(t *testing.T) {{
   {}
 }}
           ]],
-          { i(1, "Function"), i(2) }
-        )),
+            { i(1, "Function"), i(2) }
+          )
+        ),
       })
 
       -- Python snippets
       ls.add_snippets("python", {
         s("def", fmt("def {}({}):\n    {}", { i(1, "function"), i(2), i(3, "pass") })),
-        s("class", fmt(
-          [[
+        s(
+          "class",
+          fmt(
+            [[
 class {}:
     def __init__(self{}):
         {}
           ]],
-          { i(1, "ClassName"), i(2), i(3, "pass") }
-        )),
-        s("try", fmt(
-          [[
+            { i(1, "ClassName"), i(2), i(3, "pass") }
+          )
+        ),
+        s(
+          "try",
+          fmt(
+            [[
 try:
     {}
 except {} as e:
     {}
           ]],
-          { i(1), i(2, "Exception"), i(3, "pass") }
-        )),
+            { i(1), i(2, "Exception"), i(3, "pass") }
+          )
+        ),
         s("with", fmt("with {} as {}:\n    {}", { i(1), i(2, "f"), i(3) })),
       })
 
@@ -164,16 +182,25 @@ except {} as e:
       ls.add_snippets("rust", {
         s("fn", fmt("fn {}({}) {} {{\n    {}\n}}", { i(1, "name"), i(2), i(3, ""), i(4) })),
         s("impl", fmt("impl {} {{\n    {}\n}}", { i(1, "Type"), i(2) })),
-        s("match", fmt("match {} {{\n    {} => {},\n    _ => {},\n}}", { i(1, "expr"), i(2, "pattern"), i(3, "value"), i(4, "default") })),
-        s("test", fmt(
-          [[
+        s(
+          "match",
+          fmt(
+            "match {} {{\n    {} => {},\n    _ => {},\n}}",
+            { i(1, "expr"), i(2, "pattern"), i(3, "value"), i(4, "default") }
+          )
+        ),
+        s(
+          "test",
+          fmt(
+            [[
 #[test]
 fn test_{}() {{
     {}
 }}
           ]],
-          { i(1, "name"), i(2) }
-        )),
+            { i(1, "name"), i(2) }
+          )
+        ),
       })
     end,
   },

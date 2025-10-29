@@ -1,45 +1,45 @@
 -- Rose Pine Moon Theme (Active)
 return {
-	"rose-pine/neovim",
-	name = "rose-pine",
-	lazy = false, -- Load immediately for consistent appearance
-	priority = 1000, -- Load before other plugins
-	opts = {
-		variant = "moon", -- moon (darker), main, dawn
-		dark_variant = "moon",
-		disable_background = true, -- Transparent background
-		disable_float_background = false,
-		disable_italics = false,
+  "rose-pine/neovim",
+  name = "rose-pine",
+  lazy = false, -- Load immediately for consistent appearance
+  priority = 1000, -- Load before other plugins
+  opts = {
+    variant = "moon", -- moon (darker), main, dawn
+    dark_variant = "moon",
+    disable_background = true, -- Transparent background
+    disable_float_background = false,
+    disable_italics = false,
 
-		-- Highlight groups
-		highlight_groups = {
-			-- Completion menu
-			Pmenu = { bg = "surface" },
-			PmenuSel = { bg = "pine", fg = "base" },
+    -- Highlight groups
+    highlight_groups = {
+      -- Completion menu
+      Pmenu = { bg = "surface" },
+      PmenuSel = { bg = "pine", fg = "base" },
 
-			-- Floating windows
-			NormalFloat = { bg = "surface" },
-			FloatBorder = { bg = "surface", fg = "muted" },
+      -- Floating windows
+      NormalFloat = { bg = "surface" },
+      FloatBorder = { bg = "surface", fg = "muted" },
 
-			-- Telescope
-			TelescopeNormal = { bg = "surface" },
-			TelescopePromptPrefix = { fg = "foam" },
-			TelescopeSelection = { bg = "overlay", fg = "text" },
-			TelescopeMatching = { fg = "rose" },
-			TelescopeSelectionCaret = { fg = "rose" },
+      -- Telescope
+      TelescopeNormal = { bg = "surface" },
+      TelescopePromptPrefix = { fg = "foam" },
+      TelescopeSelection = { bg = "overlay", fg = "text" },
+      TelescopeMatching = { fg = "rose" },
+      TelescopeSelectionCaret = { fg = "rose" },
 
-			-- Git signs
-			GitSignsChange = { fg = "foam" },
+      -- Git signs
+      GitSignsChange = { fg = "foam" },
 
-			-- LazyGit
-			LazyGitFloat = { bg = "base" },
-			LazyGitBorder = { fg = "muted" },
-		},
-	},
-	config = function(_, opts)
-		require("rose-pine").setup(opts)
-		vim.cmd("colorscheme rose-pine-moon")
-	end,
+      -- LazyGit
+      LazyGitFloat = { bg = "base" },
+      LazyGitBorder = { fg = "muted" },
+    },
+  },
+  config = function(_, opts)
+    require("rose-pine").setup(opts)
+    vim.cmd("colorscheme rose-pine-moon")
+  end,
 }
 
 -- ============================================================================

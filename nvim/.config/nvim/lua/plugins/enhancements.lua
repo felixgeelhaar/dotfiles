@@ -6,7 +6,13 @@ return {
     cmd = "Spectre",
     opts = { open_cmd = "noswapfile vnew" },
     keys = {
-      { "<leader>sr", function() require("spectre").open() end, desc = "Replace in files (Spectre)" },
+      {
+        "<leader>sr",
+        function()
+          require("spectre").open()
+        end,
+        desc = "Replace in files (Spectre)",
+      },
     },
   },
 
@@ -14,13 +20,17 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     keys = {
-      { "<leader>fp", function()
-        require("telescope.builtin").find_files({
-          cwd = vim.fn.expand("~/projects"), -- Adjust to your projects directory
-          find_command = { "fd", "--type", "d", "--max-depth", "2" },
-          prompt_title = "Find Projects",
-        })
-      end, desc = "Find Projects" },
+      {
+        "<leader>fp",
+        function()
+          require("telescope.builtin").find_files({
+            cwd = vim.fn.expand("~/projects"), -- Adjust to your projects directory
+            find_command = { "fd", "--type", "d", "--max-depth", "2" },
+            prompt_title = "Find Projects",
+          })
+        end,
+        desc = "Find Projects",
+      },
     },
   },
 

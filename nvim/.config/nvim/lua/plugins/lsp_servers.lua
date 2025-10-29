@@ -7,72 +7,72 @@ return {
     "b0o/schemastore.nvim",
     lazy = true,
   },
-  
+
   {
     "williamboman/mason.nvim",
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       vim.list_extend(opts.ensure_installed, {
         -- Language servers
-        "pyright",           -- Python
-        "ruff-lsp",          -- Python linting/formatting
-        "gopls",             -- Go
-        "rust-analyzer",     -- Rust
+        "pyright", -- Python
+        "ruff-lsp", -- Python linting/formatting
+        "gopls", -- Go
+        "rust-analyzer", -- Rust
         "java-language-server", -- Java
         "kotlin-language-server", -- Kotlin
-        "clangd",            -- C/C++
+        "clangd", -- C/C++
         "cmake-language-server", -- CMake
         "dockerfile-language-server", -- Docker
         "docker-compose-language-service", -- Docker Compose
         "yaml-language-server", -- YAML
-        "json-lsp",          -- JSON
-        "html-lsp",          -- HTML
-        "css-lsp",           -- CSS
+        "json-lsp", -- JSON
+        "html-lsp", -- HTML
+        "css-lsp", -- CSS
         "tailwindcss-language-server", -- Tailwind CSS
         "svelte-language-server", -- Svelte
         "vue-language-server", -- Vue.js
         "prisma-language-server", -- Prisma
         "graphql-language-service-cli", -- GraphQL
-        "terraform-ls",      -- Terraform
+        "terraform-ls", -- Terraform
         "ansible-language-server", -- Ansible
         "bash-language-server", -- Bash
         "powershell-editor-services", -- PowerShell
-        
+
         -- Formatters
-        "prettier",          -- Web technologies
-        "black",             -- Python
-        "isort",             -- Python imports
-        "gofumpt",           -- Go
-        "rustfmt",           -- Rust
+        "prettier", -- Web technologies
+        "black", -- Python
+        "isort", -- Python imports
+        "gofumpt", -- Go
+        "rustfmt", -- Rust
         "google-java-format", -- Java
-        "clang-format",      -- C/C++
-        "stylua",            -- Lua
-        "shfmt",             -- Shell scripts
-        "terraform-fmt",     -- Terraform
-        "yamlfmt",           -- YAML
-        
+        "clang-format", -- C/C++
+        "stylua", -- Lua
+        "shfmt", -- Shell scripts
+        "terraform-fmt", -- Terraform
+        "yamlfmt", -- YAML
+
         -- Linters
-        "pylint",            -- Python
-        "flake8",            -- Python
-        "mypy",              -- Python type checking
-        "golangci-lint",     -- Go
-        "clippy",            -- Rust
-        "eslint_d",          -- JavaScript/TypeScript
-        "shellcheck",        -- Shell scripts
-        "hadolint",          -- Dockerfile
-        "markdownlint",      -- Markdown
+        "pylint", -- Python
+        "flake8", -- Python
+        "mypy", -- Python type checking
+        "golangci-lint", -- Go
+        "clippy", -- Rust
+        "eslint_d", -- JavaScript/TypeScript
+        "shellcheck", -- Shell scripts
+        "hadolint", -- Dockerfile
+        "markdownlint", -- Markdown
         -- "vale",           -- Prose linting (optional, requires .vale.ini config)
-        
+
         -- Debuggers
-        "debugpy",           -- Python
-        "delve",             -- Go
-        "codelldb",          -- Rust/C/C++
-        "js-debug-adapter",  -- JavaScript/TypeScript
+        "debugpy", -- Python
+        "delve", -- Go
+        "codelldb", -- Rust/C/C++
+        "js-debug-adapter", -- JavaScript/TypeScript
         "node-debug2-adapter", -- Node.js
       })
     end,
   },
-  
+
   {
     "neovim/nvim-lspconfig",
     opts = {
@@ -98,7 +98,7 @@ return {
             },
           },
         },
-        
+
         -- Go
         gopls = {
           settings = {
@@ -138,7 +138,7 @@ return {
             },
           },
         },
-        
+
         -- Rust
         rust_analyzer = {
           settings = {
@@ -163,7 +163,7 @@ return {
             },
           },
         },
-        
+
         -- Java
         jdtls = {
           settings = {
@@ -196,7 +196,7 @@ return {
             },
           },
         },
-        
+
         -- C/C++
         clangd = {
           cmd = {
@@ -214,18 +214,18 @@ return {
             clangdFileStatus = true,
           },
         },
-        
+
         -- Web Technologies
         html = {
           filetypes = { "html", "templ" },
         },
-        
+
         tailwindcss = {
           root_dir = function(...)
             return require("lspconfig.util").root_pattern(".git")(...)
           end,
         },
-        
+
         -- DevOps
         terraformls = {
           settings = {
@@ -236,15 +236,15 @@ return {
             },
           },
         },
-        
+
         dockerls = {},
         docker_compose_language_service = {},
-        
+
         -- Shell
         bashls = {
           filetypes = { "sh", "bash", "zsh" },
         },
-        
+
         -- YAML
         yamlls = {
           settings = {
@@ -265,7 +265,7 @@ return {
             },
           },
         },
-        
+
         -- JSON
         jsonls = {
           settings = {

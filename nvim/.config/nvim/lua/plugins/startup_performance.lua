@@ -6,7 +6,7 @@ return {
     cmd = "StartupTime",
     config = function()
       vim.g.startuptime_tries = 10
-      vim.g.startuptime_exe_args = { '+let g:auto_session_enabled = 0' }
+      vim.g.startuptime_exe_args = { "+let g:auto_session_enabled = 0" }
     end,
   },
 
@@ -46,9 +46,27 @@ return {
       options = { "buffers", "curdir", "tabpages", "winsize" },
     },
     keys = {
-      { "<leader>qs", function() require("persistence").load() end, desc = "Restore Session" },
-      { "<leader>ql", function() require("persistence").load({ last = true }) end, desc = "Restore Last Session" },
-      { "<leader>qd", function() require("persistence").stop() end, desc = "Don't Save Current Session" },
+      {
+        "<leader>qs",
+        function()
+          require("persistence").load()
+        end,
+        desc = "Restore Session",
+      },
+      {
+        "<leader>ql",
+        function()
+          require("persistence").load({ last = true })
+        end,
+        desc = "Restore Last Session",
+      },
+      {
+        "<leader>qd",
+        function()
+          require("persistence").stop()
+        end,
+        desc = "Don't Save Current Session",
+      },
     },
   },
 }
