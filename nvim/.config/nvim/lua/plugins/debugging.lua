@@ -104,6 +104,7 @@ return {
       end
       
       -- Python DAP Configuration
+      -- Use Mason-installed debugpy adapter
       dap.adapters.python = function(cb, config)
         if config.request == "attach" then
           local port = (config.connect or config).port
@@ -117,9 +118,12 @@ return {
             },
           })
         else
+          -- Use Mason-installed debugpy-adapter
+          local mason_registry = require("mason-registry")
+          local debugpy_adapter = mason_registry.get_package("debugpy"):get_install_path() .. "/venv/bin/python"
           cb({
             type = "executable",
-            command = "python",
+            command = debugpy_adapter,
             args = { "-m", "debugpy.adapter" },
             options = {
               source_filetype = "python",
@@ -261,9 +265,10 @@ return {
       end
 
       -- Bash DAP Configuration
+      -- Use Mason-installed bash-debug-adapter with proper path expansion
       dap.adapters.bashdb = {
         type = "executable",
-        command = "bash-debug-adapter",
+        command = vim.fn.stdpath("data") .. "/mason/bin/bash-debug-adapter",
         name = "bashdb",
       }
 
@@ -323,7 +328,10 @@ return {
       "rcarriga/nvim-dap-ui",
     },
     config = function()
-      require("dap-python").setup("python")
+      -- Use Mason-installed debugpy
+      local mason_registry = require("mason-registry")
+      local debugpy_path = mason_registry.get_package("debugpy"):get_install_path() .. "/venv/bin/python"
+      require("dap-python").setup(debugpy_path)
     end,
   },
   
