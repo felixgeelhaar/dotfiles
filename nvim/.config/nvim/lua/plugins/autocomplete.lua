@@ -50,7 +50,7 @@ return {
         },
         path = {
           name = "Path",
-          module = "blink.cmp.sources.path", 
+          module = "blink.cmp.sources.path",
           score_offset = 3,
           opts = {
             trailing_slash = false,
@@ -68,6 +68,11 @@ return {
           name = "Buffer",
           module = "blink.cmp.sources.buffer",
           score_offset = 5, -- Lower priority for buffer words
+        },
+        lazydev = {
+          name = "LazyDev",
+          module = "lazydev.integrations.blink",
+          score_offset = 100, -- Highest priority for Neovim Lua API
         },
       },
     },
