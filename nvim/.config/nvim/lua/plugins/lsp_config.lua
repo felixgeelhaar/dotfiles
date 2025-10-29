@@ -42,12 +42,9 @@ return {
 
       require("mason-null-ls").setup({
         ensure_installed = {},
-        automatic_installation = true,
-        -- Exclude stylua - it's handled by conform.nvim, not null-ls
-        -- Modern stylua doesn't support --lsp flag that null-ls expects
-        handlers = {
-          stylua = function() end, -- Disable stylua from null-ls
-        },
+        -- Disable automatic installation to prevent stylua from being auto-configured
+        -- stylua is handled by conform.nvim as a formatter, not null-ls as LSP
+        automatic_installation = false,
       })
 
       mason_tool_install.setup({
