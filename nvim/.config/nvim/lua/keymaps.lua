@@ -141,6 +141,9 @@ vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, { desc = "Go to Type Defi
 -- Core documentation/information
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Symbol Documentation" })
 
+-- Quick hover documentation in insert mode (peek type info while typing)
+vim.keymap.set("i", "<C-h>", vim.lsp.buf.hover, { desc = "Hover Documentation" })
+
 -- Manual signature help trigger - simplified version
 vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
 vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })

@@ -48,7 +48,7 @@ nvim/
 - **Supported Languages**: Go, TypeScript/JavaScript, Rust, Python, Lua, JSON, YAML
 - **Debugging**: Debug Adapter Protocol (DAP) for multiple languages
 - **Syntax Highlighting**: Tree-sitter for accurate syntax highlighting
-- **Auto-completion**: Intelligent completion with nvim-cmp
+- **Auto-completion**: Fast, modern completion with blink.cmp (100ms doc preview, signature help above menu)
 
 ### Development Tools
 - **Git Integration**: Gitsigns for inline git information
@@ -105,12 +105,15 @@ nvim/
 - `<leader>gb` - Git branches
 - `<leader>gd` - Git diff
 
-#### Code Navigation
+#### Code Navigation & Information
 - `<leader>ca` - Code actions
 - `<leader>cf` - Format code
 - `<leader>cr` - Rename symbol
 - `gd` - Go to definition
 - `gr` - Go to references
+- `K` - Hover documentation (normal mode)
+- `<C-h>` - Hover documentation (insert mode, peek while typing)
+- `<C-k>` - Signature help (shows function parameters)
 
 #### Debugging
 - `<F5>` - Start/continue debugging
@@ -197,6 +200,29 @@ pip install debugpy
 - **Formatting**: Black and isort integration
 - **Virtual environments**: Automatic venv detection
 - **Jupyter**: Basic notebook support
+
+## Code Completion & Real-time Intelligence
+
+### Blink Completion Engine (blink.cmp)
+**Optimized for understanding code while typing:**
+
+- **Fast Documentation Preview**: 100ms delay for immediate feedback on function/object expectations
+- **Signature Help Positioning**: Function signatures display above completion menu for simultaneous visibility
+- **Enhanced Type Information**: Completion menu shows:
+  - Kind icon (visual indicator)
+  - Full function/variable name
+  - Complete type signature and parameters
+  - Kind text (Function, Variable, Method, etc.)
+  - Source ([LSP], [Snippets], [Buffer])
+- **Insert Mode Intelligence**:
+  - `<C-h>` - Quick hover to peek at full type definitions without leaving insert mode
+  - `<C-k>` - Trigger signature help to see parameter expectations
+  - Auto-show signature on function call entry
+- **Smart Prioritization**: LSP completions (score 90) > Snippets (85) > Buffer words (5)
+- **Ghost Text**: Inline completion preview for faster coding
+- **Auto Brackets**: Automatic bracket pairing with cursor positioning
+
+**Performance**: Rust-based fuzzy matching for instant filtering across large completion lists.
 
 ## AI-Powered Development
 
