@@ -1,44 +1,20 @@
 -- REST client for API development
 return {
-  {
-    "rest-nvim/rest.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    ft = { "http", "rest" },
-    keys = {
-      { "<leader>hr", "<Plug>RestNvim", desc = "Run REST Request" },
-      { "<leader>hp", "<Plug>RestNvimPreview", desc = "Preview REST Request" },
-      { "<leader>hl", "<Plug>RestNvimLast", desc = "Run Last REST Request" },
-    },
-    config = function()
-      require("rest-nvim").setup({
-        result_split_horizontal = false,
-        result_split_in_place = false,
-        skip_ssl_verification = false,
-        encode_url = true,
-        highlight = {
-          enabled = true,
-          timeout = 150,
-        },
-        result = {
-          show_url = true,
-          show_curl_command = true,
-          show_http_info = true,
-          show_headers = true,
-          formatters = {
-            json = "jq",
-            html = function(body)
-              return vim.fn.system({ "tidy", "-i", "-q", "-" }, body)
-            end,
-          },
-        },
-        jump_to_request = false,
-        env_file = ".env",
-        custom_dynamic_variables = {},
-        yank_dry_run = true,
-        search_back = true,
-      })
-    end,
-  },
+	{
+		"mistweaverco/kulala.nvim",
+		ft = { "http", "rest" },
+		keys = {
+			{ "<leader>hr", "<cmd>lua require('kulala').run()<cr>", desc = "Run REST Request" },
+			{ "<leader>hp", "<cmd>lua require('kulala').replay()<cr>", desc = "Replay Last Request" },
+			{ "<leader>ht", "<cmd>lua require('kulala').toggle_view()<cr>", desc = "Toggle Headers/Body" },
+			{ "<leader>hc", "<cmd>lua require('kulala').copy()<cr>", desc = "Copy as cURL" },
+			{ "<leader>hi", "<cmd>lua require('kulala').inspect()<cr>", desc = "Inspect Request" },
+		},
+		opts = {
+			default_view = "body",
+			split_direction = "vertical",
+			default_env = "dev",
+			debug = false,
+		},
+	},
 }
