@@ -46,7 +46,7 @@ return {
         "rustfmt", -- Rust
         "google-java-format", -- Java
         "clang-format", -- C/C++
-        "stylua", -- Lua
+        -- stylua - installed via Homebrew, not Mason (to avoid LSP conflicts)
         "shfmt", -- Shell scripts
         "terraform-fmt", -- Terraform
         "yamlfmt", -- YAML
