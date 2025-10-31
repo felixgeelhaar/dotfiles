@@ -66,7 +66,19 @@ ZSH_CUSTOM=$ZSH/custom
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Removed nvm from plugins for lazy loading
-plugins=(gh brew history minikube kubectl helm node npm python pip golang rust docker ansible terraform xcode tmux httpie zsh-history-substring-search zsh-autosuggestions colored-man-pages)
+# PERFORMANCE OPTIMIZATION: Reduced plugin count from 21 to essential plugins
+# Removed language-specific plugins that only provide aliases: node, npm, python, pip, golang, rust
+# Removed tool plugins that provide minimal value: xcode, httpie
+# Keep: core tools (git via gh, brew), container tools (docker, kubectl, helm, minikube),
+#       IaC tools (terraform, ansible), terminal tools (tmux, history, colored-man-pages),
+#       and productivity plugins (zsh-history-substring-search, zsh-autosuggestions)
+plugins=(gh brew history docker kubectl helm minikube terraform ansible tmux zsh-history-substring-search zsh-autosuggestions colored-man-pages)
+
+# PERFORMANCE: Configure autosuggestions for better performance
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1  # Disable automatic widget re-binding
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20  # Don't suggest on large buffers
+ZSH_AUTOSUGGEST_USE_ASYNC=1  # Use async suggestions to prevent blocking
+ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|ls *|ll *|exit|clear|history"  # Ignore simple commands
 
 # User configuration
 
@@ -161,7 +173,18 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
 # Syntax highlighting loaded via Homebrew installation
+# PERFORMANCE OPTIMIZATION: Syntax highlighting can cause significant typing lag
+# Configuring for better performance before loading
+ZSH_HIGHLIGHT_MAXLENGTH=300  # Don't highlight lines longer than 300 characters
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)  # Only use main and brackets highlighters
+
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Additional performance settings for syntax highlighting
+typeset -gA ZSH_HIGHLIGHT_STYLES
+# Disable expensive highlighting patterns
+ZSH_HIGHLIGHT_STYLES[path]='none'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='none'
 
 # [ALIASES]
 # Basic navigation - keep only essential ones here

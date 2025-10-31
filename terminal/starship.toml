@@ -4,6 +4,9 @@ palette = "rose_pine_moon"
 # Alternative Theme (Catppuccin Macchiato) - Uncomment line below and comment above to switch
 # palette = "catppuccin_macchiato"
 
+# Performance optimization: increase timeout for slow commands
+command_timeout = 1000
+
 format = """
 $username\
 $directory\
@@ -101,9 +104,13 @@ style = "bold blue"
 # Language-specific optimizations
 [nodejs]
 format = "via [$symbol($version )]($style)"
-detect_extensions = ["js", "mjs", "cjs", "ts", "mts", "cts"]
-detect_files = ["package.json", ".nvmrc"]
+# Only detect Node.js in actual Node.js projects to improve performance
+# Removed general JS extensions to prevent detection in every directory
+detect_extensions = []
+detect_files = ["package.json", ".nvmrc", "package-lock.json", "yarn.lock"]
 detect_folders = ["node_modules"]
+# Disable by default, only show in Node.js project directories
+disabled = false
 
 [python]
 format = "via [$symbol$pyenv_prefix($version )(\($virtualenv\) )]($style)"
