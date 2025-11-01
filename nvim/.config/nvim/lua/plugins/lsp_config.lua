@@ -99,65 +99,40 @@ return {
         end
       end
 
+      -- Shared on_attach function for language-specific handlers
+      local function common_on_attach(client, bufnr)
+        -- Enable semantic tokens if available
+        if client.server_capabilities.semanticTokensProvider then
+          vim.lsp.semantic_tokens.start(bufnr, client.id)
+        end
+
+        -- Enable inlay hints if available (Neovim 0.10+)
+        if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+          vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+        end
+
+        -- Auto-import on save
+        if client.server_capabilities.codeActionProvider then
+          local augroup = vim.api.nvim_create_augroup("LspAutoImport_" .. bufnr, { clear = true })
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            group = augroup,
+            buffer = bufnr,
+            callback = function()
+              organize_imports_sync(bufnr, 1000)
+            end,
+            desc = "Auto-organize imports on save",
+          })
+        end
+      end
+
       local handlers = {
         -- Default handler
         function(server_name)
           require("lspconfig")[server_name].setup({
             capabilities = lsp_capabilities,
-            on_attach = function(client, bufnr)
-              -- Enable semantic tokens if available
-              if client.server_capabilities.semanticTokensProvider then
-                vim.lsp.semantic_tokens.start(bufnr, client.id)
-              end
-
-              -- Enable inlay hints if available (Neovim 0.10+)
-              if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-                vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-              end
-
-              -- Auto-import on save
-              -- Only set up if the LSP supports code actions
-              if client.server_capabilities.codeActionProvider then
-                local augroup = vim.api.nvim_create_augroup("LspAutoImport_" .. bufnr, { clear = true })
-                vim.api.nvim_create_autocmd("BufWritePre", {
-                  group = augroup,
-                  buffer = bufnr,
-                  callback = function()
-                    -- Organize imports before format
-                    organize_imports_sync(bufnr, 1000)
-                  end,
-                  desc = "Auto-organize imports on save",
-                })
-              end
-            end,
+            on_attach = common_on_attach,
           })
         end,
-
-        -- Shared on_attach function for language-specific handlers
-        local function common_on_attach(client, bufnr)
-          -- Enable semantic tokens if available
-          if client.server_capabilities.semanticTokensProvider then
-            vim.lsp.semantic_tokens.start(bufnr, client.id)
-          end
-
-          -- Enable inlay hints if available (Neovim 0.10+)
-          if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-          end
-
-          -- Auto-import on save
-          if client.server_capabilities.codeActionProvider then
-            local augroup = vim.api.nvim_create_augroup("LspAutoImport_" .. bufnr, { clear = true })
-            vim.api.nvim_create_autocmd("BufWritePre", {
-              group = augroup,
-              buffer = bufnr,
-              callback = function()
-                organize_imports_sync(bufnr, 1000)
-              end,
-              desc = "Auto-organize imports on save",
-            })
-          end
-        end
 
         ["lua_ls"] = function()
           lspconfig.lua_ls.setup({
