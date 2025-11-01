@@ -88,12 +88,20 @@ return {
           return
         end
 
+        -- Only apply the first successful action to avoid duplicates from multiple LSP clients
+        local applied = false
         for _, res in pairs(result) do
-          for _, action in pairs(res.result or {}) do
-            if action.edit then
-              vim.lsp.util.apply_workspace_edit(action.edit, "utf-8")
-            elseif action.command then
-              vim.lsp.buf.execute_command(action.command)
+          if not applied then
+            for _, action in pairs(res.result or {}) do
+              if action.edit then
+                vim.lsp.util.apply_workspace_edit(action.edit, "utf-8")
+                applied = true
+                break
+              elseif action.command then
+                vim.lsp.buf.execute_command(action.command)
+                applied = true
+                break
+              end
             end
           end
         end
@@ -112,7 +120,10 @@ return {
         end
 
         -- Auto-import on save
-        if client.server_capabilities.codeActionProvider then
+        -- Check if code actions are supported (can be boolean or table)
+        local supports_code_action = client.server_capabilities.codeActionProvider
+
+        if supports_code_action ~= nil and supports_code_action ~= false then
           local augroup = vim.api.nvim_create_augroup("LspAutoImport_" .. bufnr, { clear = true })
           vim.api.nvim_create_autocmd("BufWritePre", {
             group = augroup,
@@ -128,6 +139,10 @@ return {
       local handlers = {
         -- Default handler
         function(server_name)
+          -- Skip gopls - handled explicitly after mason_lsp.setup()
+          if server_name == "gopls" then
+            return
+          end
           require("lspconfig")[server_name].setup({
             capabilities = lsp_capabilities,
             on_attach = common_on_attach,
@@ -158,13 +173,6 @@ return {
           })
         end,
 
-        ["gopls"] = function()
-          lspconfig.gopls.setup({
-            capabilities = lsp_capabilities,
-            on_attach = common_on_attach,
-            settings = require("plugins.lsp_lang_settings.gopls").settings,
-          })
-        end,
 
         ["ansiblels"] = function()
           lspconfig.ansiblels.setup({
@@ -226,6 +234,14 @@ return {
       }
 
       mason_lsp.setup({ handlers = handlers })
+
+      -- WORKAROUND: gopls isn't being configured through handlers
+      -- Force explicit setup with on_attach
+      lspconfig.gopls.setup({
+        capabilities = lsp_capabilities,
+        on_attach = common_on_attach,
+        settings = require("plugins.lsp_lang_settings.gopls").settings,
+      })
 
       vim.diagnostic.config({
         signs = {
