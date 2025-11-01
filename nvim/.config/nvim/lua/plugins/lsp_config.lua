@@ -237,11 +237,15 @@ return {
 
       -- WORKAROUND: gopls isn't being configured through handlers
       -- Force explicit setup with on_attach
+      -- NOTE: Suppress deprecation warning until mason-lspconfig migrates to vim.lsp.config
+      local notify = vim.notify
+      vim.notify = function() end
       lspconfig.gopls.setup({
         capabilities = lsp_capabilities,
         on_attach = common_on_attach,
         settings = require("plugins.lsp_lang_settings.gopls").settings,
       })
+      vim.notify = notify
 
       vim.diagnostic.config({
         signs = {
