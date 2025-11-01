@@ -49,6 +49,7 @@ nvim/
 - **Debugging**: Debug Adapter Protocol (DAP) for multiple languages
 - **Syntax Highlighting**: Tree-sitter for accurate syntax highlighting
 - **Auto-completion**: Fast, modern completion with blink.cmp (100ms doc preview, signature help above menu)
+- **Auto-import on Save**: Automatically organizes and adds missing imports when saving files (works for Go, TypeScript, JavaScript, Rust, Python, and more)
 
 ### Development Tools
 - **Git Integration**: Gitsigns for inline git information
@@ -177,29 +178,77 @@ pip install debugpy
 - **LSP**: Full Go language support with gopls
 - **Debugging**: Delve integration for breakpoint debugging
 - **Testing**: Test running and coverage display
-- **Formatting**: Automatic gofmt on save
-- **Imports**: Auto-import organization
+- **Formatting**: Automatic gofmt on save (via conform.nvim)
+- **Imports**: Auto-organize imports on save (adds missing imports, removes unused)
 
 ### TypeScript/JavaScript Development
 - **LSP**: TypeScript language server with full IntelliSense
 - **Debugging**: Node.js debugging with breakpoints
 - **Linting**: ESLint integration
-- **Formatting**: Prettier integration
+- **Formatting**: Prettier integration on save
+- **Imports**: Auto-organize imports on save (adds missing imports, removes unused)
 - **React/Vue**: JSX/TSX support with proper highlighting
 
 ### Rust Development
 - **LSP**: rust-analyzer with cargo integration
 - **Debugging**: LLDB-based debugging
-- **Formatting**: rustfmt on save
+- **Formatting**: rustfmt on save (via conform.nvim)
+- **Imports**: Auto-organize imports on save (adds missing imports, removes unused)
 - **Cargo**: Integrated cargo commands
 - **Clippy**: Lint suggestions and fixes
 
 ### Python Development
 - **LSP**: Pyright for type checking and completion
 - **Debugging**: debugpy for Python debugging
-- **Formatting**: Black and isort integration
+- **Formatting**: Black and isort integration on save
+- **Imports**: Auto-organize imports on save (adds missing imports, removes unused)
 - **Virtual environments**: Automatic venv detection
 - **Jupyter**: Basic notebook support
+
+## Auto-Import & Auto-Format on Save
+
+### How It Works
+When you save a file (`:w` or `<leader>w`), Neovim automatically performs two actions in sequence:
+
+1. **Organize Imports** (via LSP code actions)
+   - Adds missing imports for undefined symbols
+   - Removes unused imports
+   - Sorts imports according to language conventions
+   - Runs before formatting to ensure clean results
+
+2. **Format Code** (via conform.nvim)
+   - Applies language-specific formatters
+   - Enforces consistent code style
+   - Runs after import organization
+
+### Language Support
+Auto-import works with any language server that supports the `source.organizeImports` code action:
+
+- ✅ **Go** (gopls) - Adds missing imports, removes unused, groups by standard/external/local
+- ✅ **TypeScript/JavaScript** (ts_ls) - Organizes ES6 imports, removes unused
+- ✅ **Rust** (rust_analyzer) - Adds missing crates and modules, removes unused
+- ✅ **Python** (pyright) - Organizes imports, removes unused (when supported)
+- ✅ **C/C++** (clangd) - Adds missing headers via IWYU integration
+
+### Manual Import Organization
+If you want to organize imports without saving:
+```vim
+:lua vim.lsp.buf.code_action({ context = { only = { "source.organizeImports" } }, apply = true })
+```
+
+### Performance
+- **Timeout**: Import organization has a 1-second timeout to prevent blocking
+- **Async**: Non-blocking operation, won't freeze editor
+- **Smart Detection**: Only runs if LSP server supports code actions
+
+### Disabling Auto-Import
+If you want to disable auto-import for a specific buffer:
+```vim
+" Disable auto-import for current buffer
+:autocmd! LspAutoImport_{bufnr}
+```
+
+To disable globally, comment out the auto-import section in `lua/plugins/lsp_config.lua`.
 
 ## Code Completion & Real-time Intelligence
 

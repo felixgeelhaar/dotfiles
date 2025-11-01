@@ -78,6 +78,27 @@ return {
         },
       })
 
+      -- Helper function to organize imports before save
+      local function organize_imports_sync(bufnr, timeout_ms)
+        local params = vim.lsp.util.make_range_params()
+        params.context = { only = { "source.organizeImports" } }
+
+        local result = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, timeout_ms or 3000)
+        if not result or vim.tbl_isempty(result) then
+          return
+        end
+
+        for _, res in pairs(result) do
+          for _, action in pairs(res.result or {}) do
+            if action.edit then
+              vim.lsp.util.apply_workspace_edit(action.edit, "utf-8")
+            elseif action.command then
+              vim.lsp.buf.execute_command(action.command)
+            end
+          end
+        end
+      end
+
       local handlers = {
         -- Default handler
         function(server_name)
@@ -93,13 +114,55 @@ return {
               if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
                 vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
               end
+
+              -- Auto-import on save
+              -- Only set up if the LSP supports code actions
+              if client.server_capabilities.codeActionProvider then
+                local augroup = vim.api.nvim_create_augroup("LspAutoImport_" .. bufnr, { clear = true })
+                vim.api.nvim_create_autocmd("BufWritePre", {
+                  group = augroup,
+                  buffer = bufnr,
+                  callback = function()
+                    -- Organize imports before format
+                    organize_imports_sync(bufnr, 1000)
+                  end,
+                  desc = "Auto-organize imports on save",
+                })
+              end
             end,
           })
         end,
 
+        -- Shared on_attach function for language-specific handlers
+        local function common_on_attach(client, bufnr)
+          -- Enable semantic tokens if available
+          if client.server_capabilities.semanticTokensProvider then
+            vim.lsp.semantic_tokens.start(bufnr, client.id)
+          end
+
+          -- Enable inlay hints if available (Neovim 0.10+)
+          if client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+          end
+
+          -- Auto-import on save
+          if client.server_capabilities.codeActionProvider then
+            local augroup = vim.api.nvim_create_augroup("LspAutoImport_" .. bufnr, { clear = true })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              group = augroup,
+              buffer = bufnr,
+              callback = function()
+                organize_imports_sync(bufnr, 1000)
+              end,
+              desc = "Auto-organize imports on save",
+            })
+          end
+        end
+
         ["lua_ls"] = function()
           lspconfig.lua_ls.setup({
             capabilities = lsp_capabilities,
+            on_attach = common_on_attach,
             settings = require("plugins.lsp_lang_settings.lua_ls").settings,
           })
         end,
@@ -107,6 +170,7 @@ return {
         ["jsonls"] = function()
           lspconfig.jsonls.setup({
             capabilities = lsp_capabilities,
+            on_attach = common_on_attach,
             settings = require("plugins.lsp_lang_settings.jsonls").settings,
           })
         end,
@@ -114,6 +178,7 @@ return {
         ["yamlls"] = function()
           lspconfig.yamlls.setup({
             capabilities = lsp_capabilities,
+            on_attach = common_on_attach,
             settings = require("plugins.lsp_lang_settings.yamlls").settings,
           })
         end,
@@ -121,6 +186,7 @@ return {
         ["gopls"] = function()
           lspconfig.gopls.setup({
             capabilities = lsp_capabilities,
+            on_attach = common_on_attach,
             settings = require("plugins.lsp_lang_settings.gopls").settings,
           })
         end,
@@ -128,24 +194,28 @@ return {
         ["ansiblels"] = function()
           lspconfig.ansiblels.setup({
             capabilities = lsp_capabilities,
+            on_attach = common_on_attach,
             settings = require("plugins.lsp_lang_settings.ansible").settings,
           })
         end,
         ["ts_ls"] = function()
           lspconfig.ts_ls.setup({
             capabilities = lsp_capabilities,
+            on_attach = common_on_attach,
             settings = require("plugins.lsp_lang_settings.typescript").settings,
           })
         end,
         ["rust_analyzer"] = function()
           lspconfig.rust_analyzer.setup({
             capabilities = lsp_capabilities,
+            on_attach = common_on_attach,
             settings = require("plugins.lsp_lang_settings.rust").settings,
           })
         end,
         ["pyright"] = function()
           lspconfig.pyright.setup({
             capabilities = lsp_capabilities,
+            on_attach = common_on_attach,
             settings = {
               python = {
                 analysis = {
@@ -161,6 +231,7 @@ return {
         ["clangd"] = function()
           lspconfig.clangd.setup({
             capabilities = lsp_capabilities,
+            on_attach = common_on_attach,
             cmd = {
               "clangd",
               "--background-index",
