@@ -103,9 +103,18 @@ return {
                 applied = true
                 break
               elseif action.command then
-                vim.lsp.buf.execute_command(action.command)
-                applied = true
-                break
+                -- Handle command execution (command can be a table with command/arguments)
+                local cmd = type(action.command) == "table" and action.command.command or action.command
+                if cmd and type(cmd) == "string" then
+                  local args = type(action.command) == "table" and action.command.arguments or nil
+                  if args then
+                    vim.lsp.buf.execute_command({ command = cmd, arguments = args })
+                  else
+                    vim.lsp.buf.execute_command(cmd)
+                  end
+                  applied = true
+                  break
+                end
               end
             end
           end
