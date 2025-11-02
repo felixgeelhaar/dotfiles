@@ -16,6 +16,38 @@
 -- Note: Window navigation uses tmux-navigator plugin for seamless tmux integration
 -- ============================================================================
 
+-- Helper function to check LSP capability support before calling LSP functions
+local function lsp_buf_with_capability_check(capability_name, lsp_function, action_name)
+  return function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+    -- Check if any client supports the capability
+    local has_capability = false
+    for _, client in pairs(clients) do
+      if client.server_capabilities[capability_name] then
+        has_capability = true
+        break
+      end
+    end
+
+    if not has_capability then
+      if #clients == 0 then
+        vim.notify("No LSP clients attached to this buffer", vim.log.levels.WARN, { title = action_name })
+      else
+        vim.notify(
+          string.format("No LSP server supports %s for this buffer", action_name:lower()),
+          vim.log.levels.WARN,
+          { title = action_name }
+        )
+      end
+      return
+    end
+
+    lsp_function()
+  end
+end
+
 -- Clear search highlights
 vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
 
@@ -154,8 +186,19 @@ vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Hel
 vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
 
 -- [C]ode operations with leader prefixes
-vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename Symbol" })
-vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
+vim.keymap.set(
+  "n",
+  "<leader>cr",
+  lsp_buf_with_capability_check("renameProvider", vim.lsp.buf.rename, "Rename"),
+  { desc = "Rename Symbol" }
+)
+vim.keymap.set(
+  { "n", "v" },
+  "<leader>ca",
+  lsp_buf_with_capability_check("codeActionProvider", vim.lsp.buf.code_action, "Code Action"),
+  { desc = "Code Action" }
+)
+
 vim.keymap.set("n", "<leader>cf", function()
   vim.lsp.buf.format({ async = true })
 end, { desc = "Format Document" })

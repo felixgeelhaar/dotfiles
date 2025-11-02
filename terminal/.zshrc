@@ -362,6 +362,14 @@ serve() {
 # =============================================================================
 # Automatically load language tools when entering project directories
 
+# Helper function for PATH management (must be defined before use)
+path_prepend() {
+  case ":$PATH:" in
+    *":$1:"*) ;;
+    *) PATH="$1:$PATH" ;;
+  esac
+}
+
 auto_load_project_tools() {
   # Node.js projects - load NVM if package.json exists
   if [[ -f package.json || -f .nvmrc ]] && ! command -v node >/dev/null 2>&1; then
@@ -416,6 +424,10 @@ add-zsh-hook chpwd auto_load_project_tools
 # Run on current directory when shell starts
 auto_load_project_tools
 
+# TTY and Signal Configuration
+# Ensure proper signal handling for interactive programs
+stty intr ^C 2>/dev/null || true
+
 # GPG configuration
 export GPG_TTY=$(tty)
 
@@ -460,12 +472,7 @@ fi
 fpath=(~/.config/zsh/completions $fpath)
 
 # PATH consolidation and deduplication
-path_prepend() {
-  case ":$PATH:" in
-    *":$1:"*) ;;
-    *) PATH="$1:$PATH" ;;
-  esac
-}
+# Note: path_prepend is now defined earlier in the file (before auto_load_project_tools)
 
 # Add language-specific paths
 path_prepend "$(go env GOPATH)/bin"

@@ -11,7 +11,7 @@ config.status_update_interval = 500
 
 -- Terminal features for Neovim and development
 config.enable_kitty_graphics = true  -- Support for image rendering
--- config.term = "wezterm"  -- DISABLED: Causes character duplication on macOS
+config.term = "xterm-256color"  -- Explicitly set for better signal handling
 config.scrollback_lines = 10000  -- Large scrollback for debugging
 config.enable_scroll_bar = false  -- Minimal UI
 

@@ -85,37 +85,65 @@ return {
 
       -- Helper function to organize imports before save
       local function organize_imports_sync(bufnr, timeout_ms)
-        local params = vim.lsp.util.make_range_params()
-        params.context = { only = { "source.organizeImports" } }
+        -- Get clients that support code actions
+        local clients = vim.lsp.get_clients({ bufnr = bufnr })
+        local code_action_clients = {}
 
-        local result = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, timeout_ms or 3000)
-        if not result or vim.tbl_isempty(result) then
+        for _, client in pairs(clients) do
+          if client.server_capabilities.codeActionProvider then
+            table.insert(code_action_clients, client)
+          end
+        end
+
+        -- If no clients support code actions, return early
+        if #code_action_clients == 0 then
+          return
+        end
+
+        -- Request code actions from each client that supports them
+        local all_actions = {}
+        for _, client in ipairs(code_action_clients) do
+          -- Use the position encoding of this specific client
+          local position_encoding = client.offset_encoding or "utf-16"
+          local params = vim.lsp.util.make_range_params(nil, position_encoding)
+          params.context = { only = { "source.organizeImports" } }
+
+          -- Request from this specific client only
+          local result = vim.lsp.buf_request_sync(
+            bufnr,
+            "textDocument/codeAction",
+            params,
+            timeout_ms or 3000,
+            client.id  -- KEY FIX: Only query this specific client
+          )
+
+          -- Collect actions from this client
+          if result and result[client.id] and result[client.id].result then
+            vim.list_extend(all_actions, result[client.id].result)
+          end
+        end
+
+        -- If no actions returned, exit early
+        if #all_actions == 0 then
           return
         end
 
         -- Only apply the first successful action to avoid duplicates from multiple LSP clients
-        local applied = false
-        for _, res in pairs(result) do
-          if not applied then
-            for _, action in pairs(res.result or {}) do
-              if action.edit then
-                vim.lsp.util.apply_workspace_edit(action.edit, "utf-8")
-                applied = true
-                break
-              elseif action.command then
-                -- Handle command execution (command can be a table with command/arguments)
-                local cmd = type(action.command) == "table" and action.command.command or action.command
-                if cmd and type(cmd) == "string" then
-                  local args = type(action.command) == "table" and action.command.arguments or nil
-                  if args then
-                    vim.lsp.buf.execute_command({ command = cmd, arguments = args })
-                  else
-                    vim.lsp.buf.execute_command(cmd)
-                  end
-                  applied = true
-                  break
-                end
+        for _, action in ipairs(all_actions) do
+          if action.edit then
+            vim.lsp.util.apply_workspace_edit(action.edit, "utf-8")
+            break  -- Only apply first action
+          elseif action.command then
+            -- Handle command execution (command can be a table with command/arguments)
+            local cmd = type(action.command) == "table" and action.command.command or action.command
+            if cmd and type(cmd) == "string" then
+              local args = type(action.command) == "table" and action.command.arguments or nil
+              if args then
+                vim.lsp.buf.execute_command({ command = cmd, arguments = args })
+              else
+                vim.lsp.buf.execute_command(cmd)
               end
+              break  -- Only apply first action
             end
           end
         end
