@@ -4,95 +4,108 @@
 # Performance profiling (uncomment to profile startup time with: zsh -i -c exit)
 # zmodload zsh/zprof
 
+# =============================================================================
+# COMPLETION SETUP (must be early)
+# =============================================================================
+
 # Docker CLI completions (must be before compinit)
-fpath=(/Users/felixgeelhaar/.docker/completions $fpath)
+[[ -d "$HOME/.docker/completions" ]] && fpath=("$HOME/.docker/completions" $fpath)
+
+# Custom completions
+[[ -d "$HOME/.config/zsh/completions" ]] && fpath=("$HOME/.config/zsh/completions" $fpath)
+
+# Ensure cache directory exists
+[[ -d ~/.zsh/cache ]] || mkdir -p ~/.zsh/cache
 
 # Performance optimization: Skip security check for faster startup
 autoload -Uz compinit
 if [[ -n ${ZDOTDIR}/.zcompdump(#qNmh+24) ]]; then
-  compinit
+    compinit
 else
-  compinit -C
+    compinit -C
 fi
 
-# Path to your oh-my-zsh configuration.
-export ZSH="$HOME/.oh-my-zsh"
+# =============================================================================
+# ENVIRONMENT VARIABLES
+# =============================================================================
+
+# XDG Base Directory
 export XDG_CONFIG_HOME="$HOME/.config"
+
+# Editor configuration
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+# Locale
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# Tool configurations
 export BAT_THEME="gruvbox-dark"
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export GNUPGHOME="$HOME/.gnupg"
 
-# Set to this to use case-sensitive completion
-CASE_SENSITIVE="false"
+# =============================================================================
+# OH-MY-ZSH CONFIGURATION
+# =============================================================================
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-HYPHEN_INSENSITIVE="false"
-
-# Uncomment this to disable update prompt
-DISABLE_UPDATE_PROMPT="false"
-
-# Uncomment this to disable bi-weekly auto-update checks
-DISABLE_AUTO_UPDATE="false"
-
-# Uncomment to change how often before auto-updates occur? (in days)
-export UPDATE_ZSH_DAYS=13
-
-# Uncomment following line if you want to disable colors in ls
-DISABLE_LS_COLORS="false"
-
-# Uncomment following line if you want to disable autosetting terminal title.
-DISABLE_AUTO_TITLE="false"
-
-# Uncomment following line if you want to disable command autocorrection
-DISABLE_CORRECTION="false"
-
-# Uncomment following line if you want red dots to be displayed while waiting for completion
-COMPLETION_WAITING_DOTS="true"
-
-# Uncomment following line if you want to disable marking untracked files under
-# VCS as dirty. This makes repository status check for large repositories much,
-# much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="false"
-
-# Uncomment following line if you want to  shown in the command execution time stamp
-# in the history command output. The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|
-# yyyy-mm-dd
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
+export ZSH="$HOME/.oh-my-zsh"
 ZSH_CUSTOM=$ZSH/custom
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Removed nvm from plugins for lazy loading
-# PERFORMANCE OPTIMIZATION: Reduced plugin count from 21 to essential plugins
-# Removed language-specific plugins that only provide aliases: node, npm, python, pip, golang, rust
-# Removed tool plugins that provide minimal value: xcode, httpie
-# Keep: core tools (git via gh, brew), container tools (docker, kubectl, helm, minikube),
-#       IaC tools (terraform, ansible), terminal tools (tmux, history, colored-man-pages),
-#       and productivity plugins (zsh-history-substring-search, zsh-autosuggestions)
-plugins=(gh brew history docker kubectl helm minikube terraform ansible tmux zsh-history-substring-search zsh-autosuggestions colored-man-pages)
+# OMZ Settings
+CASE_SENSITIVE="false"
+HYPHEN_INSENSITIVE="false"
+DISABLE_UPDATE_PROMPT="false"
+DISABLE_AUTO_UPDATE="false"
+export UPDATE_ZSH_DAYS=13
+DISABLE_LS_COLORS="false"
+DISABLE_AUTO_TITLE="false"
+DISABLE_CORRECTION="false"
+COMPLETION_WAITING_DOTS="true"
+DISABLE_UNTRACKED_FILES_DIRTY="false"
 
-# PERFORMANCE: Configure autosuggestions for better performance
-ZSH_AUTOSUGGEST_MANUAL_REBIND=1  # Disable automatic widget re-binding
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20  # Don't suggest on large buffers
-ZSH_AUTOSUGGEST_USE_ASYNC=1  # Use async suggestions to prevent blocking
-ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|ls *|ll *|exit|clear|history"  # Ignore simple commands
+# Plugins - kept minimal for performance
+# Core: gh, brew, history, tmux
+# Containers: docker, kubectl, helm, minikube
+# IaC: terraform, ansible
+# Productivity: zsh-history-substring-search, zsh-autosuggestions
+plugins=(
+    gh
+    brew
+    history
+    tmux
+    docker
+    kubectl
+    helm
+    minikube
+    terraform
+    ansible
+    zsh-history-substring-search
+    zsh-autosuggestions
+)
 
-# User configuration
+# Autosuggestions performance tuning
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *|ls *|ll *|exit|clear|history"
 
-# PATH Configuration - organized by purpose
-export PATH="$HOME/bin:/usr/local/bin:$PATH"
+# WezTerm-compatible colored man pages
+export MANPAGER="less -R --use-color -Dd+r -Du+b"
+export MANROFFOPT="-P -c"
 
-source $ZSH/oh-my-zsh.sh
+# Load Oh-My-Zsh
+source "$ZSH/oh-my-zsh.sh"
 
-# Enhanced History Configuration
-HISTSIZE=50000                   # Number of commands in memory
-SAVEHIST=50000                   # Number of commands saved to file
-HISTFILE=~/.zsh_history          # History file location
+# =============================================================================
+# SHELL OPTIONS
+# =============================================================================
 
-# History behavior options
+# History
+HISTSIZE=50000
+SAVEHIST=50000
+HISTFILE=~/.zsh_history
+
 setopt EXTENDED_HISTORY          # Record timestamp of command
 setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming
 setopt HIST_FIND_NO_DUPS         # Don't display duplicates when searching
@@ -102,102 +115,139 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks from history
 setopt HIST_SAVE_NO_DUPS         # Don't save duplicates to history file
 setopt HIST_VERIFY               # Show command with history expansion before running
 setopt SHARE_HISTORY             # Share history between all sessions
-setopt INC_APPEND_HISTORY        # Write to history file immediately, not on shell exit
+setopt INC_APPEND_HISTORY        # Write to history file immediately
 
-# Better glob patterns
+# Globbing
 setopt EXTENDED_GLOB             # Use extended globbing syntax
 setopt GLOB_DOTS                 # Include dotfiles in globbing
 setopt NO_CASE_GLOB              # Case insensitive globbing
 
-# Improved directory navigation
+# Directory navigation
 setopt AUTO_PUSHD                # Push directories onto stack
 setopt PUSHD_IGNORE_DUPS         # Don't push duplicate directories
 setopt PUSHD_MINUS               # Exchange meanings of + and -
 
-# Enhanced Completion Configuration
+# Misc
+setopt CORRECT                   # Spell correction for commands
+setopt INTERACTIVE_COMMENTS      # Allow comments in interactive shell
+setopt NO_BEEP                   # Disable beep on error
+setopt PROMPT_SUBST              # Enable prompt substitution
+
+# =============================================================================
+# COMPLETION CONFIGURATION
+# =============================================================================
+
 zstyle ':completion:*' use-cache yes
 zstyle ':completion:*' cache-path ~/.zsh/cache
 zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-
-# Advanced completion settings
-zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*:match:*' original only
-zstyle ':completion:*:approximate:*' max-errors 1 numeric
 zstyle ':completion:*' group-name ''
-zstyle ':completion:*:descriptions' format '%B%F{blue}%d%f%b'
-zstyle ':completion:*:messages' format '%F{yellow}%d%f'
-zstyle ':completion:*:warnings' format '%F{red}No matches for: %d%f'
-zstyle ':completion:*:corrections' format '%B%F{green}%d (errors: %e)%f%b'
 
-# Enhanced listing with colors
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-
-# Partial word completion
+# Case-insensitive and partial matching
 zstyle ':completion:*' matcher-list '' \
     'm:{a-z\-}={A-Z\_}' \
     'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
     'r:|?=** m:{a-z\-}={A-Z\_}'
 
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+# Completion display formatting
+zstyle ':completion:*:descriptions' format '%B%F{blue}%d%f%b'
+zstyle ':completion:*:messages' format '%F{yellow}%d%f'
+zstyle ':completion:*:warnings' format '%F{red}No matches for: %d%f'
+zstyle ':completion:*:corrections' format '%B%F{green}%d (errors: %e)%f%b'
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+# Approximate matching
+zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*:match:*' original only
+zstyle ':completion:*:approximate:*' max-errors 1 numeric
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# Colors in completion
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+# =============================================================================
+# KEY BINDINGS
+# =============================================================================
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-# alias vim=nvim
-
-
-# Key bindings for zsh-history-substring-search (plugin handles sourcing)
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
-# Syntax highlighting loaded via Homebrew installation
-# PERFORMANCE OPTIMIZATION: Syntax highlighting can cause significant typing lag
-# Configuring for better performance before loading
-ZSH_HIGHLIGHT_MAXLENGTH=300  # Don't highlight lines longer than 300 characters
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)  # Only use main and brackets highlighters
+# =============================================================================
+# SYNTAX HIGHLIGHTING (loaded via Homebrew)
+# =============================================================================
 
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Performance settings (must be before sourcing)
+ZSH_HIGHLIGHT_MAXLENGTH=300
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 
-# Additional performance settings for syntax highlighting
-typeset -gA ZSH_HIGHLIGHT_STYLES
-# Disable expensive highlighting patterns
-ZSH_HIGHLIGHT_STYLES[path]='none'
-ZSH_HIGHLIGHT_STYLES[path_prefix]='none'
+if [[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# [ALIASES]
-# Basic navigation - keep only essential ones here
+    # Disable expensive highlighting patterns
+    typeset -gA ZSH_HIGHLIGHT_STYLES
+    ZSH_HIGHLIGHT_STYLES[path]='none'
+    ZSH_HIGHLIGHT_STYLES[path_prefix]='none'
+fi
+
+# =============================================================================
+# ALIASES
+# =============================================================================
+
+# Navigation & basics
 alias tree="tree -C"
 alias reload="source ~/.zshrc"
 
-# Quick edit aliases
-alias zshrc="nvim ~/.zshrc"
-alias vimrc="nvim ~/.config/nvim/init.lua"
-alias gitconfig="nvim ~/.gitconfig"
+# Quick edit
+alias zshrc="$EDITOR ~/.zshrc"
+alias vimrc="$EDITOR ~/.config/nvim/init.lua"
+alias gitconfig="$EDITOR ~/.gitconfig"
 
-# [FUNCTIONS]
-# Functions specific to .zshrc - others moved to modern-aliases.zsh
+# Go
+alias gofmt="gofmt -l -w"
+alias gotest="go test -v"
+alias gobuild="go build -v"
+alias gorun="go run"
+alias gomod="go mod"
+alias gotidy="go mod tidy"
+
+# Rust
+alias cb="cargo build"
+alias cr="cargo run"
+alias ct="cargo test"
+alias cc="cargo check"
+alias cw="cargo watch -x run"
+alias clippy="cargo clippy"
+alias rustfmt="cargo fmt"
+
+# Node.js/TypeScript
+alias ni="npm install"
+alias nr="npm run"
+alias ns="npm start"
+alias nt="npm test"
+alias nb="npm run build"
+alias nd="npm run dev"
+alias yb="yarn build"
+alias ys="yarn start"
+alias yt="yarn test"
+alias yd="yarn dev"
+alias tsx="npx tsx"
+alias ts-node="npx ts-node"
+
+# Python
+alias python="python3"
+alias pip="pip3"
+alias venv="python3 -m venv"
+alias activate="source venv/bin/activate"
+alias req="pip freeze > requirements.txt"
+alias install-req="pip install -r requirements.txt"
+alias pytest="python3 -m pytest"
+
+# Docker (using Compose V2)
+alias ddev="docker compose -f docker-compose.dev.yml"
+alias dprod="docker compose -f docker-compose.prod.yml"
+alias dtest="docker compose -f docker-compose.test.yml"
+
+# =============================================================================
+# FUNCTIONS
+# =============================================================================
 
 # Find process by name
 psgrep() {
@@ -205,12 +255,11 @@ psgrep() {
     ps aux | grep -v grep | grep "$@" -i --color=auto
 }
 
-
 # Git commit with ticket number from branch
 gcticket() {
     local branch_name=$(git branch --show-current)
-    local ticket=$(echo $branch_name | grep -o -E '[A-Z]+-[0-9]+')
-    if [ -n "$ticket" ]; then
+    local ticket=$(echo "$branch_name" | grep -o -E '[A-Z]+-[0-9]+')
+    if [[ -n "$ticket" ]]; then
         git commit -m "$ticket: $1"
     else
         git commit -m "$1"
@@ -220,14 +269,14 @@ gcticket() {
 # Quick project navigation
 proj() {
     local project_dir="$HOME/projects"
-    if [ -z "$1" ]; then
+    if [[ -z "$1" ]]; then
         ls -la "$project_dir"
     else
-        cd "$project_dir/$1"
+        cd "$project_dir/$1" || return 1
     fi
 }
 
-# Weather function
+# Weather
 weather() {
     curl -s "wttr.in/${1:-}"
 }
@@ -244,177 +293,158 @@ sysinfo() {
     df -h
 }
 
-### [LANGUAGES]
-# [GOLANG]
-export GOPATH=$HOME/Developer/go
-export GO111MODULE=on
-alias air=$GOPATH/bin/air
-alias gofmt="gofmt -l -w"
-alias gotest="go test -v"
-alias gobuild="go build -v"
-alias gorun="go run"
-alias gomod="go mod"
-alias gotidy="go mod tidy"
-
-# Go development helpers
+# Go coverage report
 gocover() {
     go test -coverprofile=coverage.out && go tool cover -html=coverage.out -o coverage.html
 }
 
-# [RUST]
-export CARGO_HOME="$HOME/.cargo"
-alias cb="cargo build"
-alias cr="cargo run"
-alias ct="cargo test"
-alias cc="cargo check"
-alias cw="cargo watch -x run"
-alias clippy="cargo clippy"
-alias rustfmt="cargo fmt"
-
-# [NODE.JS/TYPESCRIPT]
-alias ni="npm install"
-alias nr="npm run"
-alias ns="npm start"
-alias nt="npm test"
-alias nb="npm run build"
-alias nd="npm run dev"
-alias nrd="npm run dev"
-alias nrb="npm run build"
-alias nrt="npm run test"
-alias yb="yarn build"
-alias ys="yarn start"
-alias yt="yarn test"
-alias yd="yarn dev"
-
-# Quick TypeScript execution
-alias tsx="npx tsx"
-alias ts-node="npx ts-node"
-
-# [PYTHON]
-alias python="python3"
-alias pip="pip3"
-alias venv="python3 -m venv"
-alias activate="source venv/bin/activate"
-alias req="pip freeze > requirements.txt"
-alias install-req="pip install -r requirements.txt"
-
-# Python development helpers
-pytest() {
-    python3 -m pytest "$@"
-}
-
+# Python HTTP server
 pyserve() {
     python3 -m http.server "${1:-8000}"
 }
 
-# [DOCKER DEVELOPMENT]
-alias ddev="docker-compose -f docker-compose.dev.yml"
-alias dprod="docker-compose -f docker-compose.prod.yml"
-alias dtest="docker-compose -f docker-compose.test.yml"
-
-# Docker cleanup
+# Docker cleanup (with confirmation)
 dclean() {
-    docker system prune -a --volumes
+    echo "This will remove all unused containers, networks, images, and volumes."
+    read -q "REPLY?Are you sure? (y/n) "
+    echo
+    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+        docker system prune -a --volumes
+    fi
 }
 
-# [PROJECT HELPERS]
 # Quick project setup
 mkproject() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: mkproject <name>"
+        return 1
+    fi
     mkdir -p "$1" && cd "$1" && git init
 }
 
-# Find and kill process on port
+# Find and kill process on port (safe version)
 killport() {
-    if [ -z "$1" ]; then
+    if [[ -z "$1" ]]; then
         echo "Usage: killport <port>"
         return 1
     fi
-    lsof -ti:"$1" | xargs kill -9
+    local pids=$(lsof -ti:"$1" 2>/dev/null)
+    if [[ -z "$pids" ]]; then
+        echo "No process found on port $1"
+        return 1
+    fi
+    echo "Found processes on port $1: $pids"
+    read -q "REPLY?Kill these processes? (y/n) "
+    echo
+    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+        echo "$pids" | xargs kill -15
+        echo "Sent SIGTERM to processes"
+    fi
 }
 
 # Quick server start based on project type
 serve() {
-    if [ -f "package.json" ]; then
-        if jq -e '.scripts.dev' package.json >/dev/null; then
+    if [[ -f "package.json" ]]; then
+        if jq -e '.scripts.dev' package.json >/dev/null 2>&1; then
             npm run dev
-        elif jq -e '.scripts.start' package.json >/dev/null; then
+        elif jq -e '.scripts.start' package.json >/dev/null 2>&1; then
             npm start
         else
             echo "No dev or start script found in package.json"
         fi
-    elif [ -f "Cargo.toml" ]; then
+    elif [[ -f "Cargo.toml" ]]; then
         cargo run
-    elif [ -f "go.mod" ]; then
+    elif [[ -f "go.mod" ]]; then
         go run .
-    elif [ -f "requirements.txt" ]; then
+    elif [[ -f "requirements.txt" || -f "pyproject.toml" ]]; then
         python3 -m http.server 8000
     else
         python3 -m http.server 8000
     fi
 }
 
-# [NVM] - Lazy loaded via lazy-loading.zsh for better performance
-# NVM will be loaded on first use of node/npm/nvm commands
-# Project-based auto-loading handled by auto_load_project_tools function below
+# =============================================================================
+# LANGUAGE ENVIRONMENTS
+# =============================================================================
+
+# Go
+export GOPATH="$HOME/Developer/go"
+export GO111MODULE=on
+[[ -d "$GOPATH/bin" ]] && alias air="$GOPATH/bin/air"
+
+# Rust
+export CARGO_HOME="$HOME/.cargo"
+
+# =============================================================================
+# PATH MANAGEMENT
+# =============================================================================
+
+path_prepend() {
+    case ":$PATH:" in
+        *":$1:"*) ;;
+        *) PATH="$1:$PATH" ;;
+    esac
+}
+
+# Add paths (only if they exist)
+[[ -d "$HOME/bin" ]] && path_prepend "$HOME/bin"
+[[ -d "/usr/local/bin" ]] && path_prepend "/usr/local/bin"
+[[ -d "$GOPATH/bin" ]] && path_prepend "$GOPATH/bin"
+[[ -d "$CARGO_HOME/bin" ]] && path_prepend "$CARGO_HOME/bin"
+[[ -d "/opt/homebrew/opt/ruby/bin" ]] && path_prepend "/opt/homebrew/opt/ruby/bin"
+[[ -d "/opt/homebrew/opt/rustup/bin" ]] && path_prepend "/opt/homebrew/opt/rustup/bin"
+
+# PATH Sanitization - remove duplicates and non-existent directories
+typeset -U path
+path=($^path(N-/))
+export PATH
 
 # =============================================================================
 # PROJECT-BASED TOOL AUTO-LOADING
 # =============================================================================
-# Automatically load language tools when entering project directories
-
-# Helper function for PATH management (must be defined before use)
-path_prepend() {
-  case ":$PATH:" in
-    *":$1:"*) ;;
-    *) PATH="$1:$PATH" ;;
-  esac
-}
 
 auto_load_project_tools() {
-  # Node.js projects - load NVM if package.json exists
-  if [[ -f package.json || -f .nvmrc ]] && ! command -v node >/dev/null 2>&1; then
-    # Trigger lazy loading if nvm function exists
-    if typeset -f load_nvm >/dev/null 2>&1; then
-      load_nvm
+    # Node.js projects - load NVM if package.json exists
+    if [[ -f package.json || -f .nvmrc ]] && ! command -v node >/dev/null 2>&1; then
+        if typeset -f load_nvm >/dev/null 2>&1; then
+            load_nvm
+        fi
     fi
-  fi
 
-  # Python projects - load pyenv if Python project files exist
-  if [[ -f requirements.txt || -f pyproject.toml || -f setup.py || -f Pipfile ]]; then
-    # Trigger lazy loading if pyenv function exists
-    if typeset -f load_pyenv >/dev/null 2>&1 && ! command -v pyenv >/dev/null 2>&1; then
-      load_pyenv
+    # Python projects - load pyenv and auto-activate venv
+    if [[ -f requirements.txt || -f pyproject.toml || -f setup.py || -f Pipfile ]]; then
+        if typeset -f load_pyenv >/dev/null 2>&1 && ! command -v pyenv >/dev/null 2>&1; then
+            load_pyenv
+        fi
+        # Auto-activate venv if present and not already activated
+        if [[ -d "venv" ]] && [[ -z "$VIRTUAL_ENV" ]]; then
+            source venv/bin/activate
+        elif [[ -d ".venv" ]] && [[ -z "$VIRTUAL_ENV" ]]; then
+            source .venv/bin/activate
+        fi
     fi
-  fi
 
-  # Go projects - ensure GOPATH is set
-  if [[ -f go.mod || -f go.sum ]]; then
-    export GOPATH="${GOPATH:-$HOME/Developer/go}"
-    path_prepend "$GOPATH/bin"
-  fi
-
-  # Rust projects - ensure cargo is in PATH
-  if [[ -f Cargo.toml ]]; then
-    export CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
-    path_prepend "$CARGO_HOME/bin"
-  fi
-
-  # Kubernetes projects - load kubectl/helm if k8s files exist
-  if [[ -f kubernetes.yaml || -f k8s.yaml || -d k8s/ || -d kubernetes/ ]]; then
-    # Trigger lazy loading if kubectl function exists
-    if typeset -f load_kubectl >/dev/null 2>&1 && ! command -v kubectl >/dev/null 2>&1; then
-      load_kubectl
+    # Go projects - ensure GOPATH is set
+    if [[ -f go.mod || -f go.sum ]]; then
+        export GOPATH="${GOPATH:-$HOME/Developer/go}"
+        path_prepend "$GOPATH/bin"
     fi
-    if typeset -f load_helm >/dev/null 2>&1 && ! command -v helm >/dev/null 2>&1; then
-      load_helm
-    fi
-  fi
 
-  # Docker projects - helpful to have docker compose available
-  if [[ -f docker-compose.yml || -f docker-compose.yaml || -f Dockerfile ]]; then
-    # Docker should already be available, just a marker for future enhancements
-    :
-  fi
+    # Rust projects - ensure cargo is in PATH
+    if [[ -f Cargo.toml ]]; then
+        export CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
+        path_prepend "$CARGO_HOME/bin"
+    fi
+
+    # Kubernetes projects - load kubectl/helm if k8s files exist
+    if [[ -f kubernetes.yaml || -f k8s.yaml || -d k8s/ || -d kubernetes/ ]]; then
+        if typeset -f load_kubectl >/dev/null 2>&1 && ! command -v kubectl >/dev/null 2>&1; then
+            load_kubectl
+        fi
+        if typeset -f load_helm >/dev/null 2>&1 && ! command -v helm >/dev/null 2>&1; then
+            load_helm
+        fi
+    fi
 }
 
 # Hook auto-loading into directory changes
@@ -424,80 +454,70 @@ add-zsh-hook chpwd auto_load_project_tools
 # Run on current directory when shell starts
 auto_load_project_tools
 
-# TTY and Signal Configuration
-# Ensure proper signal handling for interactive programs
-stty intr ^C 2>/dev/null || true
+# =============================================================================
+# GPG CONFIGURATION
+# =============================================================================
 
-# GPG configuration
 export GPG_TTY=$(tty)
 
-# Refresh GPG agent tty in case user switches into an X session
+# Refresh GPG agent tty
 gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
 
 # Start gpg-agent if not running
-if ! pgrep -x "gpg-agent" > /dev/null; then
+if ! pgrep -x "gpg-agent" >/dev/null; then
     gpg-connect-agent --quiet /bye >/dev/null 2>&1
 fi
 
-# Tool configurations
-export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+# TTY signal configuration
+stty intr ^C 2>/dev/null || true
+
+# =============================================================================
+# FZF CONFIGURATION
+# =============================================================================
+
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 
-# Zoxide configuration
+# Preview options for better UX
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :500 {} 2>/dev/null || cat {}'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always --level=2 {} 2>/dev/null || ls -la {}'"
+
+if command -v fzf >/dev/null 2>&1; then
+    source <(fzf --zsh)
+fi
+
+# =============================================================================
+# ZOXIDE CONFIGURATION
+# =============================================================================
+
 export _ZO_FZF_OPTS="--height=40% --layout=reverse --border --info=inline"
 export _ZO_RESOLVE_SYMLINKS=1
 export _ZO_EXCLUDE_DIRS="$HOME/.Trash:$HOME/.npm:$HOME/.cache:*/node_modules:*/.git:*/.svn:*/.hg"
 
-# Initialize tools with error handling
+# =============================================================================
+# TOOL INITIALIZATION
+# =============================================================================
+
+# Starship prompt
 if command -v starship >/dev/null 2>&1; then
     eval "$(starship init zsh)"
-else
-    echo "Warning: starship not found, using default prompt"
 fi
 
-if command -v fzf >/dev/null 2>&1; then
-    source <(fzf --zsh)
-else
-    echo "Warning: fzf not found, fuzzy finding disabled"
-fi
-
-
-# Load performance optimizations and modern aliases
+# Load lazy loading and modern aliases
 [[ -f "$HOME/.config/zsh/lazy-loading.zsh" ]] && source "$HOME/.config/zsh/lazy-loading.zsh"
 [[ -f "$HOME/.config/zsh/modern-aliases.zsh" ]] && source "$HOME/.config/zsh/modern-aliases.zsh"
 
-# Load custom completions
-fpath=(~/.config/zsh/completions $fpath)
-
-# PATH consolidation and deduplication
-# Note: path_prepend is now defined earlier in the file (before auto_load_project_tools)
-
-# Add language-specific paths
-path_prepend "$(go env GOPATH)/bin"
-path_prepend "/opt/homebrew/opt/ruby/bin"
-path_prepend "/opt/homebrew/opt/rustup/bin"
-
-# PATH Sanitization - remove duplicates and non-existent directories
-typeset -U path                  # Remove duplicate entries from path array
-path=($^path(N-/))               # Keep only existing directories
-
-export PATH
-
-# Initialize zoxide - MUST be at the end of the file
+# Zoxide - MUST be at the end (after cd aliases are set up)
 if command -v zoxide >/dev/null 2>&1; then
     eval "$(zoxide init zsh)"
-else
-    echo "Warning: zoxide not found, smart directory navigation disabled"
 fi
 
-# Local machine-specific configuration override
-# Create ~/.zshrc.local for machine-specific customizations
+# =============================================================================
+# LOCAL OVERRIDES (machine-specific)
+# =============================================================================
+
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
-# Performance profiling output (uncomment the zmodload at top to enable)
+# Performance profiling output (uncomment zmodload at top to enable)
 # zprof
-
-# Claude CLI - local symlink points to global installation
-# ~/.claude/local/claude -> ~/.nvm/versions/node/v22.17.0/bin/claude

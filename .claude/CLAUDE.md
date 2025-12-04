@@ -8,19 +8,27 @@ This directory contains stowable configuration files for Claude Code (claude.ai/
 .claude/
 ├── CLAUDE.md                        # This file - Claude Code configuration documentation
 ├── .claude/                         # Stowable Claude Code configuration
-│   ├── agents/                      # Custom agent configurations (STOWABLE)
-│   │   ├── backend-development-specialist.md
-│   │   ├── code-review-quality-assurance-specialist.md
-│   │   ├── devops-infrastructure-specialist.md
-│   │   ├── frontend-ui-ux-development-specialist.md
-│   │   ├── go-backend-specialist.md
-│   │   ├── product-design-strategist.md
-│   │   ├── project-management-specialist.md
-│   │   ├── strategic-product-management-specialist.md
-│   │   └── typescript-javascript-specialist.md
-│   └── settings.json                # Claude Code global settings (STOWABLE)
+│   └── agents/                      # Custom agent configurations (STOWABLE)
+│       ├── code-review-specialist.md
+│       ├── database-architecture-specialist.md
+│       ├── devops-infrastructure-specialist.md
+│       ├── frontend-ui-ux-specialist.md
+│       ├── go-backend-expert.md
+│       ├── governance-standards-enforcer.md
+│       ├── performance-engineering-specialist.md
+│       ├── playwright-qa-specialist.md
+│       ├── product-strategy-manager.md
+│       ├── python-backend-specialist.md
+│       ├── security-compliance-specialist.md
+│       ├── tdd-testing-specialist.md
+│       ├── technical-architect.md
+│       └── typescript-node-specialist.md
 └── .config/claude/                  # Stowable system-wide reference
     └── CLAUDE.md                    # Comprehensive best practices guide (STOWABLE)
+
+# NOTE: settings.json is NOT managed by dotfiles
+# Claude Code dynamically writes to ~/.claude/settings.json
+# Managing it via stow causes conflicts during Claude updates
 
 # Runtime directories (NOT in dotfiles, live in ~/.claude):
 # ~/.claude/skills/                  # Personal skills (global, available across all projects)
@@ -52,16 +60,18 @@ This directory contains stowable configuration files for Claude Code (claude.ai/
 To apply the Claude Code configuration:
 
 ```bash
-# Apply Claude Code configuration (agents, settings.json, and global CLAUDE.md)
+# Apply Claude Code configuration (agents and global CLAUDE.md)
 stow .claude
 
 # This creates:
 # ~/.claude/agents/                   # Custom agent configurations
-# ~/.claude/settings.json             # Global Claude Code settings
 # ~/.config/claude/CLAUDE.md          # System-wide best practices reference
 ```
 
-**Important:** Runtime files (local/, projects/, shell-snapshots/, statsig/, todos/, mcp.json, settings.local.json) remain in ~/.claude and are NOT managed by stow.
+**Important:**
+- `settings.json` is NOT managed by stow - Claude Code dynamically manages this file
+- Runtime files (local/, projects/, shell-snapshots/, statsig/, todos/, mcp.json, settings.local.json) remain in ~/.claude and are NOT managed by stow
+- If you need to share base settings, use `settings.local.json` for local overrides
 
 ## Configuration Files
 
@@ -78,28 +88,26 @@ Comprehensive system-wide best practices guide covering:
 
 #### `~/.claude/agents/` (Stowable)
 Custom agent definitions for specialized development tasks:
-- **backend-development-specialist.md**: Server-side architecture and database design
-- **code-review-quality-assurance-specialist.md**: Code quality and security reviews  
+- **code-review-specialist.md**: Code quality and security reviews
+- **database-architecture-specialist.md**: Database design and optimization
 - **devops-infrastructure-specialist.md**: Deployment and infrastructure management
-- **frontend-ui-ux-development-specialist.md**: UI/UX development and design systems
-- **go-backend-specialist.md**: Go-specific backend development patterns
-- **product-design-strategist.md**: Product design and user experience strategy
-- **project-management-specialist.md**: Project planning and delivery management
-- **strategic-product-management-specialist.md**: Product strategy and roadmap planning
-- **typescript-javascript-specialist.md**: TypeScript/JavaScript development expertise
+- **frontend-ui-ux-specialist.md**: UI/UX development and design systems
+- **go-backend-expert.md**: Go-specific backend development patterns
+- **governance-standards-enforcer.md**: Standards compliance and governance
+- **performance-engineering-specialist.md**: Performance optimization
+- **playwright-qa-specialist.md**: End-to-end testing with Playwright
+- **product-strategy-manager.md**: Product strategy and roadmap planning
+- **python-backend-specialist.md**: Python backend development
+- **security-compliance-specialist.md**: Security auditing and compliance
+- **tdd-testing-specialist.md**: Test-driven development
+- **technical-architect.md**: System architecture and design
+- **typescript-node-specialist.md**: TypeScript/JavaScript development expertise
 
-#### `~/.claude/settings.json` (Stowable)
-Global Claude Code settings with security-focused configuration:
-- **Tool Permissions**: Allows all standard tools by default, with specific denials for:
-  - File deletion commands (`rm`, `rm -rf`)
-  - Privilege escalation (`sudo`)
-  - Dangerous permission changes (`chmod 777`)
-  - Unsafe script execution (`curl/wget | bash`)
-- **Privacy Settings**:
-  - Telemetry disabled (`CLAUDE_NO_TELEMETRY`)
-  - Co-authored-by disabled (`includeCoAuthoredBy: false`)
-- **Environment**: Sets nvim as default editor
-- **MCP Security**: Requires manual approval for project MCP servers
+#### `~/.claude/settings.json` (NOT Stowable - Runtime Managed)
+Claude Code dynamically manages `settings.json` - do NOT include it in dotfiles:
+- Claude writes to this file during normal operation
+- Symlinks get overwritten, causing conflicts
+- Use `settings.local.json` for machine-specific overrides instead
 
 #### `~/.claude/skills/` (Personal Skills)
 Global skills that extend Claude's capabilities across all projects:

@@ -12,10 +12,13 @@ terminal/
 │   └── zsh/
 │       ├── lazy-loading.zsh    # Performance optimization scripts
 │       └── modern-aliases.zsh  # Modern CLI tool aliases
-├── .oh-my-zsh/             # Oh My Zsh framework and plugins
 ├── .ripgreprc              # Ripgrep search configuration
 ├── .zshrc                  # Main Zsh configuration
 └── starship.toml           # Starship prompt configuration
+
+# NOTE: Oh-My-Zsh is installed separately at ~/.oh-my-zsh (not in dotfiles)
+# This avoids merge conflicts when updating OMZ from upstream
+# Custom plugins are cloned directly into ~/.oh-my-zsh/custom/plugins/
 ```
 
 ## Key Files
@@ -61,6 +64,19 @@ terminal/
 - **Theme support**: Customizable themes with Git integration
 - **Auto-completion**: Intelligent completion for commands and arguments
 - **History management**: Advanced history search and sharing
+
+**Installation (not managed by dotfiles):**
+```bash
+# Install Oh-My-Zsh
+git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+
+# Install custom plugins
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-history-substring-search ~/.oh-my-zsh/custom/plugins/zsh-history-substring-search
+
+# Update Oh-My-Zsh (no merge conflicts!)
+cd ~/.oh-my-zsh && git pull
+```
 
 ### Prompt (Starship)
 - **Performance**: Written in Rust for minimal startup time
