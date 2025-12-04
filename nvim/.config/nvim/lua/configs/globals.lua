@@ -125,9 +125,8 @@ end
 ---@param bg? boolean Whether to get the background color instead
 ---@return string? The color in hex format or nil if not found
 function M.color(name, bg)
-  ---@type {foreground?:number}?
-  local hl = vim.api.nvim_get_hl and vim.api.nvim_get_hl(0, { name = name, link = false })
-    or vim.api.nvim_get_hl_by_name(name, true)
+  ---@type {foreground?:number, background?:number, fg?:number, bg?:number}?
+  local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
   ---@type string?
   local color = nil
   if hl then

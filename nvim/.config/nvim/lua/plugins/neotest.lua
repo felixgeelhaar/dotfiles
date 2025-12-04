@@ -32,7 +32,7 @@ return {
       {
         "<leader>ta",
         function()
-          require("neotest").run.run(vim.loop.cwd())
+          require("neotest").run.run(vim.uv.cwd())
         end,
         desc = "Run All Tests",
       },
@@ -74,7 +74,7 @@ return {
       {
         "<leader>tW",
         function()
-          require("neotest").watch.toggle(vim.loop.cwd())
+          require("neotest").watch.toggle(vim.uv.cwd())
         end,
         desc = "Watch All Tests",
       },

@@ -38,38 +38,24 @@ return {
       select = {
         enabled = true,
         backend = { "telescope", "builtin" },
-        telescope = require("telescope.themes").get_dropdown(),
+        -- Telescope theme is set dynamically when loaded
+        get_config = function(opts)
+          if opts.kind == "codeaction" then
+            return {
+              backend = "telescope",
+              telescope = require("telescope.themes").get_cursor(),
+            }
+          end
+          return {
+            backend = "telescope",
+            telescope = require("telescope.themes").get_dropdown(),
+          }
+        end,
       },
     },
   },
 
-  -- Indent guides
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
-    event = { "BufReadPost", "BufNewFile" },
-    opts = {
-      indent = {
-        char = "│",
-      },
-      scope = {
-        enabled = false,
-      },
-      exclude = {
-        filetypes = {
-          "help",
-          "alpha",
-          "dashboard",
-          "neo-tree",
-          "Trouble",
-          "lazy",
-          "mason",
-          "notify",
-          "toggleterm",
-        },
-      },
-    },
-  },
+  -- Note: Indent guides configured in indent_line.lua
 
   -- Code folding
   {

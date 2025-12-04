@@ -1,13 +1,6 @@
 -- Performance optimizations
 return {
-  -- Startup time profiling
-  {
-    "dstein64/vim-startuptime",
-    cmd = "StartupTime",
-    config = function()
-      vim.g.startuptime_tries = 10
-    end,
-  },
+  -- Note: vim-startuptime is configured in startup_performance.lua
 
   -- Session management for quick project switching
   {
