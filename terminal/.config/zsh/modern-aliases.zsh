@@ -38,14 +38,16 @@ else
     alias ccat="cat"
 fi
 
-# Use fd instead of find (if available)
+# fd - modern find alternative (don't shadow 'find' as it breaks scripts)
 if command -v fd >/dev/null 2>&1; then
-    alias find="fd"
+    alias fdfind="fd"
+    alias search="fd"  # Convenient alias for searching
 fi
 
-# Use ripgrep instead of grep (if available)
+# ripgrep - modern grep alternative (don't shadow 'grep' as it breaks scripts)
 if command -v rg >/dev/null 2>&1; then
-    alias grep="rg"
+    alias rgrep="rg"
+    alias sgrep="rg"  # Convenient alias for searching
 fi
 
 # Use duf instead of df (if available)
@@ -162,8 +164,7 @@ alias gstl="git stash list"
 alias gstp="git stash pop"
 alias gsts="git stash show --text"
 alias gm="git merge"
-alias gss="git stash save"
-alias gsp="git stash pop"
+alias gstsh="git stash save"  # Renamed from gss to avoid conflict with git status --short
 
 # Git flow aliases
 alias gfl="git flow"
@@ -312,10 +313,10 @@ alias psg="ps aux | grep"
 alias killall="killall"
 alias jobs="jobs -l"
 
-# File searching (use modern tools if available)
+# File searching fallbacks (when modern tools not available)
 if ! command -v fd >/dev/null 2>&1; then
     alias ff="find . -type f -name"
-    alias fd="find . -type d -name"
+    alias findd="find . -type d -name"  # Don't use 'fd' to avoid confusion with fd tool
 fi
 
 # =============================================================================

@@ -168,5 +168,5 @@
 # BINARY FILE HANDLING
 # =============================================================================
 
-# Don't search binary files
---binary
+# Don't search binary files (skip them)
+--no-binary

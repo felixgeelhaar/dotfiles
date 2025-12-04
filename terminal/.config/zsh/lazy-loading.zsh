@@ -26,32 +26,42 @@ lazy_load() {
 # NVM Lazy Loading
 if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
     export NVM_DIR="$HOME/.nvm"
-    
+
+    # Track if NVM is loaded
+    _nvm_loaded=0
+
     # Lazy load nvm
     nvm() {
         unfunction nvm
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+        _nvm_loaded=1
         nvm "$@"
     }
-    
-    # Auto-use .nvmrc if available
+
+    # Auto-use .nvmrc if available (only triggers if .nvmrc exists)
     autoload -U add-zsh-hook
     load-nvmrc() {
-        local node_version="$(nvm version 2>/dev/null)"
-        local nvmrc_path="$(nvm_find_nvmrc 2>/dev/null)"
-        
-        if [ -n "$nvmrc_path" ]; then
+        # Check for .nvmrc BEFORE loading nvm to avoid triggering lazy load in every directory
+        local nvmrc_path="$PWD/.nvmrc"
+        [[ ! -f "$nvmrc_path" ]] && nvmrc_path="$(command git rev-parse --show-toplevel 2>/dev/null)/.nvmrc"
+
+        if [[ -f "$nvmrc_path" ]]; then
+            # Only now load nvm if not already loaded
+            if (( _nvm_loaded == 0 )); then
+                unfunction nvm 2>/dev/null
+                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                _nvm_loaded=1
+            fi
+
             local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")" 2>/dev/null)
-            
+            local node_version="$(nvm version 2>/dev/null)"
+
             if [ "$nvmrc_node_version" = "N/A" ]; then
                 nvm install
             elif [ "$nvmrc_node_version" != "$node_version" ]; then
                 nvm use
             fi
-        elif [ "$node_version" != "$(nvm version default 2>/dev/null)" ]; then
-            echo "Reverting to nvm default version"
-            nvm use default
         fi
     }
     add-zsh-hook chpwd load-nvmrc
@@ -85,28 +95,18 @@ if [[ -d "$HOME/.pyenv" ]]; then
     }
 fi
 
-# Poetry lazy loading
-if command -v poetry >/dev/null 2>&1; then
-    poetry() {
-        unfunction poetry
-        export PATH="$HOME/.local/bin:$PATH"
-        source "$HOME/.poetry/env" 2>/dev/null || true
-        poetry "$@"
-    }
+# Poetry - no lazy loading needed (modern poetry installs to ~/.local/bin)
+# Just ensure PATH includes poetry location
+if [[ -d "$HOME/.local/bin" ]]; then
+    export PATH="$HOME/.local/bin:$PATH"
 fi
 
 # =============================================================================
 # CONTAINERIZATION TOOLS
 # =============================================================================
 
-# Docker Compose lazy loading (if using standalone)
-if command -v docker-compose >/dev/null 2>&1; then
-    docker-compose() {
-        unfunction docker-compose
-        # Load any docker-compose specific configurations
-        docker-compose "$@"
-    }
-fi
+# Note: Docker Compose V2 is integrated with `docker compose` (no separate lazy loading needed)
+# Standalone docker-compose V1 is deprecated
 
 # =============================================================================
 # CLOUD TOOLS
