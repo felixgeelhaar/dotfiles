@@ -296,10 +296,10 @@ To disable globally, comment out the auto-import section in `lua/plugins/lsp_con
 
 ## Theme and Appearance
 
-### Catppuccin Theme
-- **Variant**: Mocha (dark theme)
-- **Integration**: Consistent with terminal and other tools
-- **Customization**: Optimized for code readability
+### Rose Pine Theme
+- **Variant**: Moon (dark theme with transparent background)
+- **Alternative**: Catppuccin Macchiato available in colorscheme.lua (commented out)
+- **Customization**: Custom highlight groups for completion, telescope, and git signs
 - **Syntax highlighting**: Enhanced with Tree-sitter
 
 ### UI Enhancements

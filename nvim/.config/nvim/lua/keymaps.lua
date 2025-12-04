@@ -76,15 +76,7 @@ vim.keymap.set("n", "<A-l>", "<C-w>l", { desc = "Go to Right Window", remap = tr
 
 -- Alternative Ctrl+hjkl for window navigation (disabled for tmux-navigator integration)
 -- tmux-navigator plugin handles <C-h>, <C-j>, <C-l> and uses <A-k> for up navigation
--- vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
--- vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
--- vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
-vim.keymap.set(
-  "n",
-  "<C-w>k",
-  "<C-w>k",
-  { desc = "Go to Upper Window (use C-w+k, C-k reserved for signature help)", remap = true }
-)
+-- Note: <C-k> is reserved for signature help, use <C-w>k for window navigation
 
 -- Window resizing
 vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
@@ -322,26 +314,40 @@ vim.keymap.set("n", "<leader>ge", "<cmd>Neotree git_status toggle<CR>", { desc =
 -- ============================================================================
 -- FUZZY FINDER KEYMAPS (Telescope)
 -- ============================================================================
-local builtin = require("telescope.builtin")
+-- Note: Using functions to lazy-load telescope.builtin (avoids require at module level)
 vim.keymap.set(
   "n",
   "<leader>ff",
   "<cmd>Telescope find_files theme=dropdown previewer=false<cr>",
   { desc = "Find Files" }
 )
-vim.keymap.set("n", "<leader>fs", builtin.live_grep, { desc = "Find String" })
-vim.keymap.set("n", "<leader>fg", builtin.git_files, { desc = "Find Git Files" })
-vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "Find Word Under Cursor" })
-vim.keymap.set("x", "<leader>fs", builtin.grep_string, { desc = "Find Selection" })
-vim.keymap.set("n", "<leader>gf", builtin.git_status, { desc = "Find Modified File" })
+vim.keymap.set("n", "<leader>fs", function()
+  require("telescope.builtin").live_grep()
+end, { desc = "Find String" })
+vim.keymap.set("n", "<leader>fg", function()
+  require("telescope.builtin").git_files()
+end, { desc = "Find Git Files" })
+vim.keymap.set("n", "<leader>fw", function()
+  require("telescope.builtin").grep_string()
+end, { desc = "Find Word Under Cursor" })
+vim.keymap.set("x", "<leader>fs", function()
+  require("telescope.builtin").grep_string()
+end, { desc = "Find Selection" })
+vim.keymap.set("n", "<leader>gf", function()
+  require("telescope.builtin").git_status()
+end, { desc = "Find Modified File" })
 vim.keymap.set(
   "n",
   "<leader>fb",
   "<cmd>Telescope buffers sort_mru=true sort_lastused=true theme=dropdown previewer=false<cr>",
   { desc = "Find Buffers" }
 )
-vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Find Help" })
-vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "Find Keymaps" })
+vim.keymap.set("n", "<leader>fh", function()
+  require("telescope.builtin").help_tags()
+end, { desc = "Find Help" })
+vim.keymap.set("n", "<leader>fk", function()
+  require("telescope.builtin").keymaps()
+end, { desc = "Find Keymaps" })
 vim.keymap.set(
   "n",
   "<leader>fo",

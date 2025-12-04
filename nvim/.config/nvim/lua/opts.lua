@@ -64,11 +64,10 @@ vim.opt.iskeyword:append("-") -- Treat dash-separated words as single words
 
 -- Performance
 vim.opt.lazyredraw = false -- Don't redraw screen during macros (set to false for modern Neovim)
-vim.opt.ttyfast = true -- Faster terminal connection
 vim.opt.backup = false -- Don't create backup files
 vim.opt.writebackup = false -- Don't create backup files
 vim.opt.swapfile = false -- Don't create swap files
-vim.opt.undodir = vim.fn.expand("~/.vim/undodir") -- Centralized undo directory
+vim.opt.undodir = vim.fn.stdpath("state") .. "/undo" -- XDG-compliant undo directory
 vim.opt.undolevels = 10000 -- Maximum number of changes that can be undone
 
 -- Better command line
@@ -79,21 +78,8 @@ vim.opt.ruler = false -- Don't show cursor position in status line
 -- Nerd font support
 vim.g.have_nerd_font = true
 
--- Disable some built-in plugins for better performance
-vim.g.loaded_gzip = 1
-vim.g.loaded_zip = 1
-vim.g.loaded_zipPlugin = 1
-vim.g.loaded_tar = 1
-vim.g.loaded_tarPlugin = 1
-vim.g.loaded_getScript = 1
-vim.g.loaded_getScriptPlugin = 1
-vim.g.loaded_vimball = 1
-vim.g.loaded_vimballPlugin = 1
-vim.g.loaded_2html_plugin = 1
-vim.g.loaded_matchit = 1
-vim.g.loaded_matchparen = 1
-vim.g.loaded_logiPat = 1
-vim.g.loaded_rrhelper = 1
-vim.g.loaded_netrw = 1 -- We use neo-tree
-vim.g.loaded_netrwPlugin = 1 -- We use neo-tree
-vim.g.loaded_netrwSettings = 1 -- We use neo-tree
+-- Note: Built-in plugins are disabled via lazy.nvim's disabled_plugins in init.lua
+-- Additional netrw disabling for neo-tree
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_netrwSettings = 1

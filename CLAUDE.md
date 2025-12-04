@@ -136,7 +136,7 @@ The configuration is optimized for modern development with full LSP support:
 
 - **Terminal**: Catppuccin Macchiato in WezTerm and terminal colors
 - **Shell**: Starship prompt with Catppuccin Macchiato theme
-- **Editor**: Neovim with Catppuccin Mocha for optimal code readability
+- **Editor**: Neovim with Rose Pine Moon for optimal code readability
 - **Multiplexer**: Tmux with Catppuccin theme matching terminal
 - **Git TUI**: LazyGit with Catppuccin colors for consistent interface
 

@@ -8,7 +8,6 @@ return {
     "gwinn/none-ls-jsonlint.nvim",
   },
   config = function()
-    local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
     local none_ls = require("null-ls")
 
     -- Function to conditionally enable sources based on available executables

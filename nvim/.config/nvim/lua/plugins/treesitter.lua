@@ -60,7 +60,7 @@ return {
           -- Disable slow treesitter highlight for large files
           disable = function(lang, buf)
             local max_filesize = 100 * 1024 -- 100 KB
-            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+            local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
             if ok and stats and stats.size > max_filesize then
               return true
             end
@@ -122,15 +122,8 @@ return {
         -- Auto-install additional parsers
         auto_install = true,
 
-        -- Improve folding using treesitter
-        fold = {
-          enable = true,
-        },
-
-        -- Enable autotag for HTML tags
-        autotag = {
-          enable = true,
-        },
+        -- Note: Folding is configured in opts.lua via foldexpr
+        -- Note: For HTML autotag, install nvim-ts-autotag plugin separately
       })
 
       -- Modern treesitter folding is now handled in opts.lua
@@ -153,7 +146,7 @@ return {
         -- Disable in very large files for performance
         local max_filesize = 100 * 1024 -- 100 KB
         local filename = vim.api.nvim_buf_get_name(buf)
-        local ok, stats = pcall(vim.loop.fs_stat, filename)
+        local ok, stats = pcall(vim.uv.fs_stat, filename)
         if ok and stats and stats.size > max_filesize then
           return false
         end
